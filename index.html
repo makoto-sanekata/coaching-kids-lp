@@ -127,10 +127,12 @@
     transition: transform 0.7s cubic-bezier(0.3, 1.2, 0.4, 1);
     transform-style: preserve-3d;
   }
+  /* めくる操作はタップ（クリック）のトグルのみ。hoverではめくらない（カード同士が干渉しないように） */
   .flip-card.flipped .flip-inner { transform: rotateY(180deg); }
-  /* hoverでのめくりはマウス操作デバイス限定（スマホはタップのトグルのみ。hoverが残って戻らなくなるのを防ぐ） */
+  /* PCではhover時にふわっと浮かせて「押せる」ことだけ伝える */
+  .flip-card { transition: transform 0.25s; }
   @media (hover: hover) and (pointer: fine) {
-    .flip-card:hover .flip-inner { transform: rotateY(180deg); }
+    .flip-card:hover { transform: translateY(-8px); }
   }
   .flip-face {
     position: absolute; inset: 0; backface-visibility: hidden;
@@ -377,7 +379,7 @@
 <section class="reveal">
   <span class="section-label">STEP 2</span>
   <h2>まほうの<span class="marker">ことば図鑑</span> 📖</h2>
-  <p class="lead">コーチングには、ふしぎな専門用語がいっぱい。カードに<b>マウスをのせて（スマホはタップして）</b>、意味をめくってみよう！</p>
+  <p class="lead">コーチングには、ふしぎな専門用語がいっぱい。カードを<b>タップ（クリック）</b>して、意味をめくってみよう！もう一度タップすると元に戻るよ。</p>
 
   <div class="flip-grid">
     <div class="flip-card" onclick="this.classList.toggle('flipped')">
