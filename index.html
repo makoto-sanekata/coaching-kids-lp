@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>きみの脳にはスイッチがある — コーチングを楽しく学ぼう</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+  /* ===== 基本設定 ===== */
+  :root {
+    --purple: #7c5cff;
+    --blue: #4db5ff;
+    --pink: #ff6fa5;
+    --yellow: #ffd34d;
+    --green: #4dd599;
+    --red: #ff5a5a;
+    --ink: #2d2a45;
+    --paper: #fffdf7;
+    --card: #ffffff;
+    --shadow: 0 10px 30px rgba(45, 42, 69, 0.12);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", "Hiragino Sans", sans-serif;
+    color: var(--ink);
+    background: var(--paper);
+    overflow-x: hidden;
+    line-height: 1.8;
+  }
+
+  /* ===== スクロール進捗バー ===== */
+  #progressBar {
+    position: fixed; top: 0; left: 0; height: 6px; width: 0%;
+    background: linear-gradient(90deg, var(--purple), var(--pink), var(--yellow));
+    z-index: 1000; border-radius: 0 3px 3px 0;
+    transition: width 0.1s linear;
+  }
+
+  /* ===== ヒーロー ===== */
+  .hero {
+    min-height: 100vh;
+    background: linear-gradient(160deg, #6a4cff 0%, #8e5cff 40%, #4db5ff 100%);
+    color: #fff;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    text-align: center; padding: 60px 20px; position: relative; overflow: hidden;
+  }
+  .hero .float-emoji {
+    position: absolute; font-size: 42px; opacity: 0.85;
+    animation: floaty 6s ease-in-out infinite;
+    user-select: none; pointer-events: none;
+  }
+  @keyframes floaty {
+    0%, 100% { transform: translateY(0) rotate(-6deg); }
+    50% { transform: translateY(-28px) rotate(8deg); }
+  }
+  .hero h1 {
+    font-size: clamp(30px, 6vw, 58px); font-weight: 900; line-height: 1.4;
+    text-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    animation: popIn 0.9s cubic-bezier(0.18, 1.4, 0.4, 1) both;
+  }
+  .hero p.sub {
+    margin-top: 22px; font-size: clamp(15px, 2.5vw, 20px); font-weight: 700;
+    background: rgba(255,255,255,0.18); padding: 12px 26px; border-radius: 999px;
+    backdrop-filter: blur(4px);
+    animation: popIn 0.9s 0.25s cubic-bezier(0.18, 1.4, 0.4, 1) both;
+  }
+  @keyframes popIn {
+    from { opacity: 0; transform: scale(0.7) translateY(30px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+  }
+  .hero .brain {
+    font-size: clamp(70px, 12vw, 120px); margin-bottom: 10px;
+    animation: brainPulse 2.4s ease-in-out infinite;
+    filter: drop-shadow(0 8px 24px rgba(0,0,0,0.25));
+  }
+  @keyframes brainPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.12) rotate(3deg); }
+  }
+  .hero .cta {
+    margin-top: 40px; display: inline-block; text-decoration: none;
+    background: var(--yellow); color: var(--ink); font-weight: 900;
+    font-size: 18px; padding: 16px 40px; border-radius: 999px;
+    box-shadow: 0 8px 0 #d9ab1f; transition: transform 0.15s, box-shadow 0.15s;
+    animation: popIn 0.9s 0.5s cubic-bezier(0.18, 1.4, 0.4, 1) both;
+  }
+  .hero .cta:hover { transform: translateY(-4px); box-shadow: 0 12px 0 #d9ab1f; }
+  .hero .cta:active { transform: translateY(4px); box-shadow: 0 2px 0 #d9ab1f; }
+  .hero .scroll-hint { margin-top: 50px; font-size: 14px; opacity: 0.85; animation: bounceDown 1.6s infinite; }
+  @keyframes bounceDown { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(10px); } }
+
+  /* ===== セクション共通 ===== */
+  section { padding: 90px 20px; max-width: 1080px; margin: 0 auto; }
+  .section-label {
+    display: inline-block; background: var(--purple); color: #fff;
+    font-weight: 900; font-size: 14px; padding: 6px 18px; border-radius: 999px;
+    margin-bottom: 14px; letter-spacing: 2px;
+  }
+  h2 { font-size: clamp(24px, 4.5vw, 38px); font-weight: 900; line-height: 1.5; margin-bottom: 18px; }
+  h2 .marker { background: linear-gradient(transparent 60%, var(--yellow) 60%); padding: 0 4px; }
+  .lead { font-size: clamp(15px, 2.2vw, 18px); margin-bottom: 40px; max-width: 720px; }
+
+  .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.7s, transform 0.7s; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ===== 3つのポイント ===== */
+  .points { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 24px; }
+  .point-card {
+    background: var(--card); border-radius: 24px; padding: 32px 26px;
+    box-shadow: var(--shadow); text-align: center;
+    transition: transform 0.25s, box-shadow 0.25s; cursor: default;
+    border: 3px solid transparent;
+  }
+  .point-card:hover { transform: translateY(-10px) rotate(-1deg); box-shadow: 0 20px 40px rgba(45,42,69,0.2); border-color: var(--yellow); }
+  .point-card .icon { font-size: 52px; display: block; margin-bottom: 14px; transition: transform 0.3s; }
+  .point-card:hover .icon { transform: scale(1.3) rotate(10deg); }
+  .point-card h3 { font-size: 19px; font-weight: 900; margin-bottom: 10px; color: var(--purple); }
+  .point-card p { font-size: 14.5px; }
+
+  /* ===== フリップカード（用語） ===== */
+  .flip-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; }
+  .flip-card { perspective: 1200px; height: 250px; cursor: pointer; }
+  .flip-inner {
+    position: relative; width: 100%; height: 100%;
+    transition: transform 0.7s cubic-bezier(0.3, 1.2, 0.4, 1);
+    transform-style: preserve-3d;
+  }
+  .flip-card:hover .flip-inner, .flip-card.flipped .flip-inner { transform: rotateY(180deg); }
+  .flip-face {
+    position: absolute; inset: 0; backface-visibility: hidden;
+    border-radius: 24px; padding: 26px; display: flex; flex-direction: column;
+    justify-content: center; align-items: center; text-align: center;
+    box-shadow: var(--shadow);
+  }
+  .flip-front { background: var(--card); border: 3px dashed #d9d4f5; }
+  .flip-front .icon { font-size: 54px; margin-bottom: 12px; }
+  .flip-front h3 { font-size: 21px; font-weight: 900; color: var(--purple); }
+  .flip-front .hint { font-size: 12px; color: #9a94c2; margin-top: 10px; }
+  .flip-back { background: linear-gradient(150deg, var(--purple), var(--blue)); color: #fff; transform: rotateY(180deg); }
+  .flip-back p { font-size: 14px; font-weight: 700; line-height: 1.7; }
+  .flip-back .ex { margin-top: 12px; font-size: 12.5px; background: rgba(255,255,255,0.2); border-radius: 12px; padding: 8px 12px; }
+
+  /* ===== 体験ボックス共通 ===== */
+  .lab {
+    background: var(--card); border-radius: 28px; padding: 40px 30px;
+    box-shadow: var(--shadow); border: 3px solid #efeafd;
+  }
+  .lab-title { font-size: 20px; font-weight: 900; margin-bottom: 6px; }
+  .lab-title .badge {
+    background: var(--pink); color: #fff; font-size: 12px;
+    padding: 4px 12px; border-radius: 999px; margin-right: 10px; vertical-align: middle;
+  }
+  .btn {
+    display: inline-block; border: none; cursor: pointer;
+    font-family: inherit; font-weight: 900; font-size: 16px;
+    background: var(--purple); color: #fff; padding: 13px 30px;
+    border-radius: 999px; box-shadow: 0 6px 0 #5a3fd6;
+    transition: transform 0.12s, box-shadow 0.12s, background 0.2s; margin: 6px;
+  }
+  .btn:hover { transform: translateY(-3px); box-shadow: 0 9px 0 #5a3fd6; }
+  .btn:active { transform: translateY(3px); box-shadow: 0 1px 0 #5a3fd6; }
+  .btn.yellow { background: var(--yellow); color: var(--ink); box-shadow: 0 6px 0 #d9ab1f; }
+  .btn.yellow:hover { box-shadow: 0 9px 0 #d9ab1f; }
+  .btn.yellow:active { box-shadow: 0 1px 0 #d9ab1f; }
+  .btn.ghost { background: #eceaf8; color: var(--purple); box-shadow: 0 6px 0 #cdc7ec; }
+
+  .result-msg {
+    margin-top: 18px; padding: 16px 20px; border-radius: 16px;
+    font-weight: 700; font-size: 15px; display: none;
+    animation: popIn 0.5s cubic-bezier(0.18, 1.4, 0.4, 1) both;
+  }
+  .result-msg.show { display: block; }
+  .result-msg.good { background: #e4f9ef; color: #1d8a5c; border: 2px solid var(--green); }
+  .result-msg.info { background: #fff6dc; color: #9a7400; border: 2px solid var(--yellow); }
+
+  /* ===== スコトーマ実験 ===== */
+  .scotoma-text {
+    font-size: clamp(17px, 3vw, 23px); font-weight: 700; line-height: 2.2;
+    background: #f7f5ff; border-radius: 18px; padding: 26px; margin: 22px 0;
+  }
+  .scotoma-text .hit { transition: background 0.4s, color 0.4s; border-radius: 4px; padding: 0 2px; }
+  .scotoma-text.revealed .hit { background: var(--yellow); color: #7a5c00; font-weight: 900; animation: hitPop 0.5s both; }
+  @keyframes hitPop { 0% { transform: scale(1); } 50% { transform: scale(1.5); } 100% { transform: scale(1); } }
+  .answer-btns { display: flex; flex-wrap: wrap; gap: 4px; }
+
+  /* ===== RAS実験 ===== */
+  .ras-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(52px, 1fr));
+    gap: 12px; margin: 26px 0; background: #f7f5ff; border-radius: 18px; padding: 22px;
+  }
+  .ras-dot {
+    aspect-ratio: 1; border-radius: 50%;
+    transition: opacity 0.5s, transform 0.5s, filter 0.5s;
+  }
+  .ras-grid.focused .ras-dot:not(.target) { opacity: 0.12; filter: grayscale(0.9); transform: scale(0.8); }
+  .ras-grid.focused .ras-dot.target { animation: rasPop 0.9s ease-in-out infinite; box-shadow: 0 0 0 4px rgba(255,255,255,0.6), 0 6px 18px rgba(0,0,0,0.25); }
+  @keyframes rasPop { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.25); } }
+
+  /* ===== コンフォートゾーン実験 ===== */
+  .cz-stage { position: relative; height: 170px; background: linear-gradient(90deg, #e8f6ff, #fff3f8); border-radius: 18px; margin: 26px 0 10px; overflow: hidden; }
+  .cz-zone {
+    position: absolute; top: 0; bottom: 0; width: 38%;
+    background: rgba(77, 213, 153, 0.25); border-right: 3px dashed var(--green);
+    display: flex; align-items: flex-start; justify-content: center;
+    font-size: 12px; font-weight: 900; color: #1d8a5c; padding-top: 8px;
+    transition: left 1s cubic-bezier(0.5, 0, 0.2, 1);
+    left: 0;
+  }
+  .cz-goal { position: absolute; right: 18px; top: 50%; transform: translateY(-58%); font-size: 44px; }
+  .cz-char {
+    position: absolute; top: 50%; left: 10%; transform: translate(-50%, -42%);
+    font-size: 46px; transition: left 0.15s; z-index: 2;
+  }
+  .cz-char.struggle { animation: struggle 0.4s infinite; }
+  @keyframes struggle { 0%, 100% { transform: translate(-50%, -42%) rotate(-8deg); } 50% { transform: translate(-50%, -42%) rotate(8deg); } }
+  .cz-band {
+    position: absolute; top: 50%; height: 6px; background: repeating-linear-gradient(90deg, var(--red), var(--red) 8px, #ffb3b3 8px, #ffb3b3 16px);
+    border-radius: 3px; transform: translateY(-50%); opacity: 0; transition: opacity 0.3s; z-index: 1;
+  }
+  .cz-slider { width: 100%; margin-top: 8px; }
+  input[type="range"] {
+    -webkit-appearance: none; appearance: none; height: 14px; border-radius: 7px;
+    background: linear-gradient(90deg, var(--green), var(--yellow), var(--pink)); outline: none; cursor: pointer;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none; appearance: none; width: 34px; height: 34px; border-radius: 50%;
+    background: #fff; border: 4px solid var(--purple); box-shadow: 0 4px 10px rgba(0,0,0,0.25); cursor: grab;
+    transition: transform 0.15s;
+  }
+  input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.15); }
+  .cz-status { min-height: 64px; margin-top: 14px; font-weight: 900; font-size: 16px; padding: 14px 18px; border-radius: 14px; background: #f7f5ff; transition: background 0.3s; }
+
+  /* ===== エフィカシーメーター ===== */
+  .eff-face { font-size: 90px; text-align: center; margin: 10px 0; transition: transform 0.3s; }
+  .eff-bar-wrap { background: #eceaf8; border-radius: 999px; height: 30px; overflow: hidden; margin: 18px 0; }
+  .eff-bar {
+    height: 100%; width: 30%; border-radius: 999px;
+    background: linear-gradient(90deg, var(--blue), var(--purple), var(--pink));
+    transition: width 0.3s ease-out;
+    display: flex; align-items: center; justify-content: flex-end;
+    color: #fff; font-weight: 900; font-size: 13px; padding-right: 12px;
+  }
+  .eff-msg { text-align: center; font-weight: 900; font-size: clamp(16px, 3vw, 20px); min-height: 60px; padding: 10px; }
+
+  /* ===== セルフトーク変換 ===== */
+  .talk-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; margin-top: 24px; }
+  .talk-chip {
+    position: relative; cursor: pointer; border-radius: 18px; padding: 22px 20px;
+    font-weight: 900; font-size: 16px; text-align: center;
+    background: #ffe7e7; color: #c0392b; border: 3px solid #ffb3b3;
+    transition: transform 0.2s, background 0.4s, color 0.4s, border-color 0.4s;
+    user-select: none;
+  }
+  .talk-chip:hover { transform: scale(1.04) rotate(-1deg); }
+  .talk-chip .tap-hint { display: block; font-size: 11px; font-weight: 700; margin-top: 8px; opacity: 0.7; }
+  .talk-chip.flipped { background: #e4f9ef; color: #1d8a5c; border-color: var(--green); animation: chipFlip 0.5s; }
+  @keyframes chipFlip { 0% { transform: rotateX(0); } 50% { transform: rotateX(90deg) scale(1.1); } 100% { transform: rotateX(0); } }
+
+  /* ===== ゴール設定ルール ===== */
+  .rules { display: grid; gap: 20px; counter-reset: rule; }
+  .rule {
+    background: var(--card); border-radius: 20px; padding: 26px 26px 26px 90px;
+    box-shadow: var(--shadow); position: relative; transition: transform 0.2s;
+  }
+  .rule:hover { transform: translateX(10px); }
+  .rule::before {
+    counter-increment: rule; content: counter(rule);
+    position: absolute; left: 22px; top: 50%; transform: translateY(-50%);
+    width: 48px; height: 48px; border-radius: 50%;
+    background: var(--yellow); color: var(--ink);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px; font-weight: 900; box-shadow: 0 4px 0 #d9ab1f;
+  }
+  .rule h3 { font-size: 18px; font-weight: 900; color: var(--purple); margin-bottom: 6px; }
+  .rule p { font-size: 14.5px; }
+
+  /* ===== クイズ ===== */
+  .quiz-q { background: var(--card); border-radius: 22px; padding: 30px; box-shadow: var(--shadow); margin-bottom: 24px; }
+  .quiz-q h3 { font-size: 17px; font-weight: 900; margin-bottom: 16px; }
+  .quiz-q h3 .qnum { color: var(--pink); margin-right: 8px; }
+  .quiz-opts { display: grid; gap: 10px; }
+  .quiz-opt {
+    text-align: left; font-family: inherit; font-size: 15px; font-weight: 700;
+    background: #f7f5ff; border: 3px solid transparent; border-radius: 14px;
+    padding: 13px 18px; cursor: pointer; transition: all 0.2s;
+  }
+  .quiz-opt:hover { border-color: var(--purple); transform: translateX(6px); }
+  .quiz-opt.correct { background: #e4f9ef; border-color: var(--green); color: #1d8a5c; }
+  .quiz-opt.wrong { background: #ffe7e7; border-color: var(--red); color: #c0392b; animation: shake 0.4s; }
+  .quiz-opt:disabled { cursor: default; }
+  @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-8px); } 75% { transform: translateX(8px); } }
+  .quiz-fb { margin-top: 12px; font-weight: 900; font-size: 14px; display: none; }
+  .quiz-fb.show { display: block; animation: popIn 0.4s both; }
+  .quiz-score {
+    text-align: center; font-size: 22px; font-weight: 900;
+    background: linear-gradient(150deg, var(--purple), var(--blue)); color: #fff;
+    border-radius: 22px; padding: 30px; display: none;
+  }
+  .quiz-score.show { display: block; animation: popIn 0.6s both; }
+
+  /* ===== まとめ・フッター ===== */
+  .summary {
+    background: linear-gradient(160deg, #6a4cff, #4db5ff);
+    border-radius: 32px; color: #fff; padding: 60px 30px; text-align: center;
+  }
+  .summary h2 { color: #fff; }
+  .summary .takeaways { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-top: 30px; text-align: left; }
+  .takeaway { background: rgba(255,255,255,0.15); border-radius: 16px; padding: 18px; font-weight: 700; font-size: 14.5px; backdrop-filter: blur(4px); }
+  .takeaway .big { font-size: 24px; display: block; margin-bottom: 6px; }
+  footer { text-align: center; padding: 40px 20px 60px; font-size: 13px; color: #9a94c2; }
+
+  /* ===== 紙吹雪 ===== */
+  .confetti { position: fixed; width: 12px; height: 12px; top: -20px; z-index: 999; pointer-events: none; animation: confettiFall linear forwards; }
+  @keyframes confettiFall {
+    to { transform: translateY(110vh) rotate(720deg); opacity: 0.6; }
+  }
+
+  @media (max-width: 600px) {
+    section { padding: 60px 16px; }
+    .rule { padding-left: 80px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="progressBar"></div>
+
+<!-- ================= ヒーロー ================= -->
+<header class="hero">
+  <span class="float-emoji" style="top:12%; left:8%;">⭐</span>
+  <span class="float-emoji" style="top:20%; right:10%; animation-delay:1s;">🚀</span>
+  <span class="float-emoji" style="bottom:18%; left:12%; animation-delay:2s;">💡</span>
+  <span class="float-emoji" style="bottom:25%; right:14%; animation-delay:0.5s;">🌈</span>
+  <span class="float-emoji" style="top:45%; left:4%; animation-delay:1.5s;">🎯</span>
+
+  <div class="brain">🧠</div>
+  <h1>きみの脳には、<br>まだ知らない「スイッチ」がある。</h1>
+  <p class="sub">「コーチング」を、あそびながら学ぼう！</p>
+  <a href="#what" class="cta">🎮 さっそく体験スタート！</a>
+  <div class="scroll-hint">▼ 下にスクロールしてね ▼</div>
+</header>
+
+<!-- ================= 認知科学コーチングとは ================= -->
+<section id="what" class="reveal">
+  <span class="section-label">STEP 1</span>
+  <h2>コーチングって、<span class="marker">なに？</span></h2>
+  <p class="lead">
+    ひとことで言うと——<b>「脳のしくみを使って、なりたい自分になる方法」</b>だよ。<br>
+    がんばって根性で変わるんじゃなくて、脳の「クセ」を知って、それを味方につけるんだ。
+  </p>
+  <div class="points">
+    <div class="point-card">
+      <span class="icon">🔍</span>
+      <h3>脳は「ぜんぶ」見ていない</h3>
+      <p>目に入っていても、脳が「大事じゃない」と思ったものは見えない。だから「何を大事と思うか」がすごく重要！</p>
+    </div>
+    <div class="point-card">
+      <span class="icon">🎯</span>
+      <h3>ゴールが先、方法はあと</h3>
+      <p>「どうやるか」より先に「どこへ行きたいか」を決める。ゴールを決めると、脳が勝手に方法を探しはじめるんだ。</p>
+    </div>
+    <div class="point-card">
+      <span class="icon">💪</span>
+      <h3>「できる！」が燃料</h3>
+      <p>「自分ならできる」という気持ち（エフィカシー）が高い人ほど、本当にできるようになる。脳はそういう仕組みなんだ。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 用語フリップカード ================= -->
+<section class="reveal">
+  <span class="section-label">STEP 2</span>
+  <h2>まほうの<span class="marker">ことば図鑑</span> 📖</h2>
+  <p class="lead">コーチングには、ふしぎな専門用語がいっぱい。カードに<b>マウスをのせて（スマホはタップして）</b>、意味をめくってみよう！</p>
+
+  <div class="flip-grid">
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner">
+        <div class="flip-face flip-front">
+          <span class="icon">🙈</span><h3>スコトーマ</h3>
+          <span class="hint">▶ めくって意味を見る</span>
+        </div>
+        <div class="flip-face flip-back">
+          <p>「心理的盲点（もうてん）」のこと。目の前にあるのに、脳が「関係ない」と判断して<b>見えなくなっているもの</b>。</p>
+          <div class="ex">🍮 例：冷蔵庫にプリンがあっても、「ある」と聞くまで気づかない！</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner">
+        <div class="flip-face flip-front">
+          <span class="icon">📡</span><h3>RAS（ラス）</h3>
+          <span class="hint">▶ めくって意味を見る</span>
+        </div>
+        <div class="flip-face flip-back">
+          <p>脳の「検索フィルター」。自分が<b>大事だと思った情報だけ</b>を通して、あとはカットする門番さん。</p>
+          <div class="ex">⚽ 例：サッカーを好きになると、街でサッカーの看板ばかり目に入る！</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner">
+        <div class="flip-face flip-front">
+          <span class="icon">🛋️</span><h3>コンフォートゾーン</h3>
+          <span class="hint">▶ めくって意味を見る</span>
+        </div>
+        <div class="flip-face flip-back">
+          <p>「居心地（いごこち）のいい場所」。脳はここから出ると不安になって、<b>元にもどろうとする</b>。</p>
+          <div class="ex">🏠 例：いつもの席、いつもの友だち、いつもの点数…が落ちつくのはこれ！</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner">
+        <div class="flip-face flip-front">
+          <span class="icon">⚖️</span><h3>ホメオスタシス</h3>
+          <span class="hint">▶ めくって意味を見る</span>
+        </div>
+        <div class="flip-face flip-back">
+          <p>「元にもどす力」。体温をいつも36度くらいに保つみたいに、<b>心も「いつもの自分」にもどそうとする</b>働き。</p>
+          <div class="ex">🔄 例：三日ぼうずは意志が弱いんじゃなくて、この力のしわざ！</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner">
+        <div class="flip-face flip-front">
+          <span class="icon">🔥</span><h3>エフィカシー</h3>
+          <span class="hint">▶ めくって意味を見る</span>
+        </div>
+        <div class="flip-face flip-back">
+          <p>「自分はゴールを達成できる！」という<b>自分への自信の点数</b>。コーチングでいちばん大事なもの。</p>
+          <div class="ex">💯 例：テストの点じゃなくて「自分ならできる」と思える心の点数！</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner">
+        <div class="flip-face flip-front">
+          <span class="icon">😈</span><h3>ドリームキラー</h3>
+          <span class="hint">▶ めくって意味を見る</span>
+        </div>
+        <div class="flip-face flip-back">
+          <p>「そんなの無理だよ」と<b>夢をこわしてくる人</b>。悪気がない家族や先生のことも多い。だから大きなゴールはむやみに話さない。</p>
+          <div class="ex">🤫 例：「プロゲーマーになる！」→「現実を見なさい」…これがドリームキラー！</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= スコトーマ体験 ================= -->
+<section class="reveal">
+  <span class="section-label">STEP 3</span>
+  <h2>たいけん①：きみの<span class="marker">スコトーマ</span>を見つけよう 🙈</h2>
+  <p class="lead">さっそく実験！ 下の文章の中に、ひらがなの「<b>の</b>」は<b>何回</b>出てくるかな？ 1回だけ読んで、すぐ答えてね！</p>
+
+  <div class="lab">
+    <div class="lab-title"><span class="badge">実験</span>「の」をかぞえよう！</div>
+    <div class="scotoma-text" id="scotomaText">
+      き<span class="hit">の</span>う<span class="hit">の</span>よる、ぼくはノート<span class="hit">の</span>すみに、ゆめ<span class="hit">の</span>ちずをかいた。そ<span class="hit">の</span>ちず<span class="hit">の</span>まんなかには、みらい<span class="hit">の</span>ぼくがわらっていた。
+    </div>
+    <p style="font-weight:900; margin-bottom:10px;">「の」はいくつあった？</p>
+    <div class="answer-btns" id="scotomaBtns">
+      <button class="btn ghost" onclick="scotomaAnswer(4, this)">4こ</button>
+      <button class="btn ghost" onclick="scotomaAnswer(5, this)">5こ</button>
+      <button class="btn ghost" onclick="scotomaAnswer(6, this)">6こ</button>
+      <button class="btn ghost" onclick="scotomaAnswer(7, this)">7こ</button>
+      <button class="btn ghost" onclick="scotomaAnswer(8, this)">8こ</button>
+    </div>
+    <div class="result-msg" id="scotomaResult"></div>
+  </div>
+</section>
+
+<!-- ================= RAS体験 ================= -->
+<section class="reveal">
+  <span class="section-label">STEP 4</span>
+  <h2>たいけん②：<span class="marker">RAS</span>のスイッチを入れよう 📡</h2>
+  <p class="lead">
+    RASは脳の「検索フィルター」。<b>「これが大事！」と決めたものだけ</b>が、ぱっと目に飛びこんでくるようになる。<br>
+    下のボタンで、きみのRASに色をセットしてみよう！
+  </p>
+
+  <div class="lab">
+    <div class="lab-title"><span class="badge">実験</span>RASに「大事な色」をセット！</div>
+    <div style="margin-top:10px;">
+      <button class="btn" style="background:var(--red); box-shadow:0 6px 0 #c43d3d;" onclick="setRas('red', this)">🔴 赤をセット</button>
+      <button class="btn" style="background:#3a8de0; box-shadow:0 6px 0 #2a6cb0;" onclick="setRas('blue', this)">🔵 青をセット</button>
+      <button class="btn yellow" onclick="setRas('yellow', this)">🟡 黄色をセット</button>
+      <button class="btn ghost" onclick="setRas(null, this)">スイッチを切る</button>
+    </div>
+    <div class="ras-grid" id="rasGrid"></div>
+    <div class="result-msg info show" id="rasMsg">👆 ボタンを押す前は、ぜんぶの色が同じように見えているよね。</div>
+  </div>
+</section>
+
+<!-- ================= コンフォートゾーン体験 ================= -->
+<section class="reveal">
+  <span class="section-label">STEP 5</span>
+  <h2>たいけん③：<span class="marker">コンフォートゾーン</span>から出てみよう 🛋️</h2>
+  <p class="lead">
+    スライダーを動かして、男の子をゴール🏆まで歩かせてみよう。<br>
+    とちゅうで<b>ふしぎな力</b>を感じるはず…！
+  </p>
+
+  <div class="lab">
+    <div class="lab-title"><span class="badge">実験</span>ゴールまで歩けるかな？</div>
+    <div class="cz-stage" id="czStage">
+      <div class="cz-zone" id="czZone">🛋️ コンフォートゾーン</div>
+      <div class="cz-band" id="czBand"></div>
+      <div class="cz-char" id="czChar">🚶</div>
+      <div class="cz-goal">🏆</div>
+    </div>
+    <input type="range" class="cz-slider" id="czSlider" min="0" max="100" value="10">
+    <div class="cz-status" id="czStatus">🛋️ いごこちいい〜。脳はリラックスしているよ。スライダーで右へ進んでみて！</div>
+    <div style="margin-top:16px;">
+      <button class="btn yellow" id="czMagicBtn" onclick="czMagic()">✨ ひみつのワザ：「ゴール側の自分」を強くイメージする</button>
+    </div>
+    <div class="result-msg good" id="czMagicMsg">
+      🎉 コンフォートゾーンがゴール側に引っこしした！<br>
+      ゴールの世界を<b>リアルに想像（臨場感）</b>すると、脳は「そっちが本当の自分だ」と思いこむ。すると今度はホメオスタシスが<b>ゴールに向かって引っぱってくれる</b>ようになるんだ。これがコーチングの最大のヒミツ！
+    </div>
+  </div>
+</section>
+
+<!-- ================= エフィカシー体験 ================= -->
+<section class="reveal">
+  <span class="section-label">STEP 6</span>
+  <h2>たいけん④：<span class="marker">エフィカシー</span>メーター 🔥</h2>
+  <p class="lead">
+    エフィカシーは「自分はゴールを達成できる！」という自信の強さ。<br>
+    スライダーを動かして、エフィカシーが変わると<b>世界の見え方がどう変わるか</b>見てみよう。
+  </p>
+
+  <div class="lab">
+    <div class="lab-title"><span class="badge">実験</span>きみのエフィカシーは今いくつ？</div>
+    <div class="eff-face" id="effFace">😟</div>
+    <input type="range" id="effSlider" min="0" max="100" value="30" style="width:100%;">
+    <div class="eff-bar-wrap"><div class="eff-bar" id="effBar">30</div></div>
+    <div class="eff-msg" id="effMsg">「どうせむり…」 — 脳がチャレンジの方法をさがすのをやめちゃう😢</div>
+  </div>
+</section>
+
+<!-- ================= セルフトーク体験 ================= -->
+<section class="reveal">
+  <span class="section-label">STEP 7</span>
+  <h2>たいけん⑤：<span class="marker">セルフトーク</span>へんかん機 🗣️</h2>
+  <p class="lead">
+    人は1日に<b>何万回</b>も、心の中で自分に話しかけている。これが「セルフトーク」。<br>
+    この言葉が「自分はこういう人間だ」というイメージを作るんだ。<b>赤いカードをタップして</b>、言葉を変換してみよう！
+  </p>
+
+  <div class="talk-grid">
+    <div class="talk-chip" data-neg="😞 どうせぼくには無理だよ" data-pos="😆 ぼくらしくないな。ぼくならできる！" onclick="flipTalk(this)">
+      😞 どうせぼくには無理だよ<span class="tap-hint">👆 タップして変換！</span>
+    </div>
+    <div class="talk-chip" data-neg="😰 また失敗しちゃった…" data-pos="😄 次はもっとうまくやれるぞ！" onclick="flipTalk(this)">
+      😰 また失敗しちゃった…<span class="tap-hint">👆 タップして変換！</span>
+    </div>
+    <div class="talk-chip" data-neg="😣 算数はニガテだから…" data-pos="🤩 算数が得意になっていく自分っていいな！" onclick="flipTalk(this)">
+      😣 算数はニガテだから…<span class="tap-hint">👆 タップして変換！</span>
+    </div>
+    <div class="talk-chip" data-neg="😟 あの子はすごいなあ、それにくらべて…" data-pos="😎 ぼくにはぼくのすごさがある！" onclick="flipTalk(this)">
+      😟 あの子はすごいなあ、それにくらべて…<span class="tap-hint">👆 タップして変換！</span>
+    </div>
+  </div>
+  <div class="result-msg good" id="talkAllDone" style="margin-top:24px;">
+    🎉 全部へんかんできた！ ポイントは、失敗しても「<b>自分らしくないな</b>」と言うこと。「できる自分」のほうを本物にしちゃうのが、苫米地式のセルフトークだよ。
+  </div>
+</section>
+
+<!-- ================= ゴール設定 ================= -->
+<section class="reveal">
+  <span class="section-label">STEP 8</span>
+  <h2>ゴール設定 <span class="marker">3つのルール</span> 🎯</h2>
+  <p class="lead">最後に、いちばん大事な「ゴールの決め方」。苫米地式には、はっきりしたルールがあるよ。</p>
+
+  <div class="rules">
+    <div class="rule">
+      <h3>「今のまま」ではぜったい届かない場所に置く（現状の外側）</h3>
+      <p>「テストで90点」みたいに今のままでも届きそうなゴールはNG。「えっ、どうやるの！？」と方法がわからないくらい大きなゴールだから、スコトーマが外れて新しい世界が見えてくるんだ。</p>
+    </div>
+    <div class="rule">
+      <h3>「やりたい！」（want to）で決める。「やらなきゃ」（have to）はダメ</h3>
+      <p>人にやらされることだと、脳は本気を出さない。心の底から「やりたい！」と思えることだけが、脳のフルパワーを引き出すよ。</p>
+    </div>
+    <div class="rule">
+      <h3>ゴールはたくさん持つ（勉強・あそび・家族・健康…ぜんぶ！）</h3>
+      <p>ゴールは1個じゃなくていい。人生のいろんな分野（バランスホイール）にゴールを置くと、見える世界がもっと広がって、毎日がわくわくになる。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= クイズ ================= -->
+<section class="reveal">
+  <span class="section-label">STEP 9</span>
+  <h2>そうしあげ！<span class="marker">脳マスタークイズ</span> 📝</h2>
+  <p class="lead">3問ぜんぶ正解で、きみも今日から「コーチングキッズ」だ！</p>
+
+  <div class="quiz-q">
+    <h3><span class="qnum">Q1.</span>「スコトーマ」ってどういう意味？</h3>
+    <div class="quiz-opts">
+      <button class="quiz-opt" onclick="quizAnswer(this, false)">A. 目の病気のこと</button>
+      <button class="quiz-opt" onclick="quizAnswer(this, true)">B. 脳が「関係ない」と思って、見えなくなっているもの</button>
+      <button class="quiz-opt" onclick="quizAnswer(this, false)">C. こわい夢のこと</button>
+    </div>
+    <div class="quiz-fb"></div>
+  </div>
+
+  <div class="quiz-q">
+    <h3><span class="qnum">Q2.</span>三日ぼうずになっちゃうのは、なぜ？</h3>
+    <div class="quiz-opts">
+      <button class="quiz-opt" onclick="quizAnswer(this, false)">A. 意志が弱くて、ダメな人間だから</button>
+      <button class="quiz-opt" onclick="quizAnswer(this, false)">B. 才能がないから</button>
+      <button class="quiz-opt" onclick="quizAnswer(this, true)">C. ホメオスタシスが「いつもの自分」に引きもどすから</button>
+    </div>
+    <div class="quiz-fb"></div>
+  </div>
+
+  <div class="quiz-q">
+    <h3><span class="qnum">Q3.</span>いいゴールの決め方はどれ？</h3>
+    <div class="quiz-opts">
+      <button class="quiz-opt" onclick="quizAnswer(this, false)">A. 今のままでも届きそうな、安全なゴールにする</button>
+      <button class="quiz-opt" onclick="quizAnswer(this, true)">B. やり方がわからないくらい大きくて、心から「やりたい！」と思えるゴールにする</button>
+      <button class="quiz-opt" onclick="quizAnswer(this, false)">C. 大人に決めてもらったゴールをがんばる</button>
+    </div>
+    <div class="quiz-fb"></div>
+  </div>
+
+  <div class="quiz-score" id="quizScore"></div>
+</section>
+
+<!-- ================= まとめ ================= -->
+<section class="reveal">
+  <div class="summary">
+    <h2>🌟 きょうのまとめ 🌟</h2>
+    <p style="font-weight:700; opacity:0.95;">コーチングは「根性」じゃなくて「脳のしくみ」。これだけ覚えて帰ってね！</p>
+    <div class="takeaways">
+      <div class="takeaway"><span class="big">🎯</span>ゴールは「現状の外側」に、「やりたい！」で決める。</div>
+      <div class="takeaway"><span class="big">📡</span>ゴールを決めると、RASがスコトーマを外して、必要なものが見えはじめる。</div>
+      <div class="takeaway"><span class="big">🛋️</span>ゴール側の自分をリアルに想像すれば、ホメオスタシスが味方になる。</div>
+      <div class="takeaway"><span class="big">🔥</span>エフィカシーを高く！「自分ならできる」が、ぜんぶの燃料。</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  このページは苫米地英人氏の提唱するコーチング理論（ルー・タイス氏のプログラムが源流）を、学習用にやさしく要約したものです。
+</footer>
+
+<script>
+  /* ===== スクロール進捗バー ===== */
+  window.addEventListener('scroll', function () {
+    const h = document.documentElement;
+    const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+    document.getElementById('progressBar').style.width = pct + '%';
+  });
+
+  /* ===== スクロールで出現 ===== */
+  const observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) e.target.classList.add('visible');
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(function (el) { observer.observe(el); });
+
+  /* ===== 紙吹雪 ===== */
+  const CONFETTI_COLORS = ['#7c5cff', '#4db5ff', '#ff6fa5', '#ffd34d', '#4dd599', '#ff5a5a'];
+  function confetti(count) {
+    for (let i = 0; i < count; i++) {
+      const c = document.createElement('div');
+      c.className = 'confetti';
+      c.style.left = Math.random() * 100 + 'vw';
+      c.style.background = CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)];
+      c.style.animationDuration = (1.8 + Math.random() * 1.6) + 's';
+      c.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+      document.body.appendChild(c);
+      setTimeout(function () { c.remove(); }, 4000);
+    }
+  }
+
+  /* ===== スコトーマ実験 ===== */
+  const SCOTOMA_CORRECT = 7;
+  function scotomaAnswer(n, btn) {
+    const text = document.getElementById('scotomaText');
+    const result = document.getElementById('scotomaResult');
+    document.querySelectorAll('#scotomaBtns .btn').forEach(function (b) { b.disabled = true; b.style.opacity = 0.5; });
+    btn.style.opacity = 1;
+    text.classList.add('revealed');
+    result.classList.add('show');
+    if (n === SCOTOMA_CORRECT) {
+      result.className = 'result-msg good show';
+      result.innerHTML = '🎉 大正解！ ひらがなの「の」は <b>7こ</b>。ちなみに「ノート」の「ノ」はカタカナだから入らないよ。文章の<b>意味</b>を読もうとすると、1文字1文字はスコトーマに隠れて見えなくなる——脳は「大事だと思ったもの」しか見ていない証拠だね！';
+      confetti(60);
+    } else {
+      result.className = 'result-msg info show';
+      result.innerHTML = '正解は <b>7こ</b> でした（黄色く光っているところ）！ まちがえても大丈夫——むしろ大発見だよ。文章の<b>意味</b>を読もうとすると、1文字1文字は脳のスコトーマに隠れて見えなくなる。<b>脳は「大事だと思ったもの」しか見ていない</b>んだ！';
+    }
+  }
+
+  /* ===== RAS実験 ===== */
+  const RAS_PALETTE = [
+    { key: 'red',    color: '#ff5a5a' },
+    { key: 'blue',   color: '#3a8de0' },
+    { key: 'yellow', color: '#ffd34d' },
+    { key: 'green',  color: '#4dd599' },
+    { key: 'purple', color: '#9b7bff' },
+    { key: 'pink',   color: '#ff8fc0' }
+  ];
+  const RAS_DOT_COUNT = 48;
+  (function buildRasGrid() {
+    const grid = document.getElementById('rasGrid');
+    /* 各色が必ず混ざるように順番に置いてからシャッフルする */
+    const dots = [];
+    for (let i = 0; i < RAS_DOT_COUNT; i++) dots.push(RAS_PALETTE[i % RAS_PALETTE.length]);
+    for (let i = dots.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [dots[i], dots[j]] = [dots[j], dots[i]];
+    }
+    dots.forEach(function (d) {
+      const el = document.createElement('div');
+      el.className = 'ras-dot';
+      el.dataset.colorKey = d.key;
+      el.style.background = d.color;
+      grid.appendChild(el);
+    });
+  })();
+  const RAS_LABELS = { red: '赤', blue: '青', yellow: '黄色' };
+  function setRas(colorKey, btn) {
+    const grid = document.getElementById('rasGrid');
+    const msg = document.getElementById('rasMsg');
+    grid.querySelectorAll('.ras-dot').forEach(function (d) {
+      d.classList.toggle('target', d.dataset.colorKey === colorKey);
+    });
+    if (colorKey) {
+      grid.classList.add('focused');
+      msg.className = 'result-msg good show';
+      msg.innerHTML = '✨ <b>' + RAS_LABELS[colorKey] + 'だけが目に飛びこんでくる！</b> これがRASの力。「' + RAS_LABELS[colorKey] + 'が大事」とセットしたとたん、他の色はスコトーマに隠れた。<b>ゴールを決める＝RASに「大事なもの」をセットする</b>ってことなんだ。';
+    } else {
+      grid.classList.remove('focused');
+      msg.className = 'result-msg info show';
+      msg.innerHTML = 'スイッチを切ったよ。ぜんぶの色が同じように見えるね。ゴールがない状態だと、脳はこんなふうに「ぜんぶ平等＝なにも特別じゃない」世界を見ているんだ。';
+    }
+  }
+
+  /* ===== コンフォートゾーン実験 ===== */
+  const CZ_ZONE_END = 38;        /* ゾーンの右端（%） */
+  const CZ_GOAL_POS = 90;        /* ゴール位置（%） */
+  let czShifted = false;
+  const czSlider = document.getElementById('czSlider');
+  const czChar = document.getElementById('czChar');
+  const czBand = document.getElementById('czBand');
+  const czZone = document.getElementById('czZone');
+  const czStatus = document.getElementById('czStatus');
+
+  czSlider.addEventListener('input', function () {
+    const pos = Number(czSlider.value) * 0.9 + 5;  /* 5%〜95%にマップ */
+    czChar.style.left = pos + '%';
+    updateCzStatus(pos);
+  });
+
+  function updateCzStatus(pos) {
+    const zoneStart = czShifted ? 55 : 0;
+    const zoneEnd = czShifted ? 93 : CZ_ZONE_END;
+    const inZone = pos >= zoneStart && pos <= zoneEnd;
+
+    if (inZone) {
+      czChar.classList.remove('struggle');
+      czBand.style.opacity = 0;
+      if (czShifted && pos > 80) {
+        czChar.textContent = '🏃';
+        czStatus.innerHTML = '🏆 <b>ゴールとうちゃく！</b> コンフォートゾーンの中だから、ぜんぜん苦しくない。「がんばる」じゃなくて「自然にそうなる」——これが理想の状態！';
+        czStatus.style.background = '#e4f9ef';
+        if (!czStatus.dataset.celebrated) { confetti(80); czStatus.dataset.celebrated = '1'; }
+      } else {
+        czChar.textContent = czShifted ? '🏃' : '🚶';
+        czStatus.innerHTML = czShifted
+          ? '😊 ふしぎ！ さっきまで苦しかった場所が、いごこちよくなってる。どんどんゴールへ進もう！'
+          : '🛋️ いごこちいい〜。脳はリラックスしているよ。スライダーで右へ進んでみて！';
+        czStatus.style.background = '#f7f5ff';
+      }
+    } else {
+      czChar.textContent = '😖';
+      czChar.classList.add('struggle');
+      /* ゴムバンドをゾーン中心からキャラまで描く */
+      const bandStart = czShifted ? 74 : 19;
+      const left = Math.min(bandStart, pos);
+      const width = Math.abs(pos - bandStart);
+      czBand.style.left = left + '%';
+      czBand.style.width = width + '%';
+      czBand.style.opacity = 1;
+      czStatus.innerHTML = '😖 <b>うわっ、ゴムバンドみたいな力に引っぱられる！</b> これが<b>ホメオスタシス</b>。コンフォートゾーンの外に出ると、脳が「もどっておいで〜！」と全力で引きもどそうとするんだ。根性で進もうとしても、いつか負けちゃう…。<br>👇 そこで下の「ひみつのワザ」を使ってみよう！';
+      czStatus.style.background = '#ffe7e7';
+    }
+  }
+
+  function czMagic() {
+    czShifted = true;
+    czZone.style.left = '55%';
+    czZone.style.width = '38%';
+    czZone.innerHTML = '🛋️ コンフォートゾーン（引っこし！）';
+    document.getElementById('czMagicMsg').classList.add('show');
+    document.getElementById('czMagicBtn').disabled = true;
+    document.getElementById('czMagicBtn').style.opacity = 0.5;
+    confetti(50);
+    updateCzStatus(Number(czSlider.value) * 0.9 + 5);
+  }
+
+  /* ===== エフィカシーメーター ===== */
+  const EFF_LEVELS = [
+    { min: 0,  face: '😢', msg: '「どうせむり…」 — 脳がチャレンジの方法をさがすのをやめちゃう😢' },
+    { min: 21, face: '😟', msg: '「できるかなあ…」 — 脳はまだ半分ねむったまま。' },
+    { min: 41, face: '🙂', msg: '「やってみようかな」 — RASが少しずつチャンスを見つけはじめた！' },
+    { min: 61, face: '😄', msg: '「ぼくならできる！」 — 失敗しても「自分らしくないな」と思えるレベル！' },
+    { min: 81, face: '🤩', msg: '「できるに決まってる！」 — 脳がフルパワーで方法をさがしまくる。これが最強状態🔥' }
+  ];
+  const effSlider = document.getElementById('effSlider');
+  effSlider.addEventListener('input', function () {
+    const v = Number(effSlider.value);
+    const level = EFF_LEVELS.slice().reverse().find(function (l) { return v >= l.min; });
+    document.getElementById('effFace').textContent = level.face;
+    document.getElementById('effFace').style.transform = 'scale(' + (0.8 + v / 250) + ')';
+    document.getElementById('effBar').style.width = Math.max(v, 8) + '%';
+    document.getElementById('effBar').textContent = v;
+    document.getElementById('effMsg').textContent = level.msg;
+    if (v === 100 && !effSlider.dataset.maxed) { confetti(40); effSlider.dataset.maxed = '1'; }
+  });
+
+  /* ===== セルフトーク変換 ===== */
+  function flipTalk(chip) {
+    if (chip.classList.contains('flipped')) {
+      chip.classList.remove('flipped');
+      chip.innerHTML = chip.dataset.neg + '<span class="tap-hint">👆 タップして変換！</span>';
+    } else {
+      chip.classList.add('flipped');
+      chip.innerHTML = chip.dataset.pos + '<span class="tap-hint">✨ へんかん成功！</span>';
+      const all = document.querySelectorAll('.talk-chip');
+      const done = document.querySelectorAll('.talk-chip.flipped');
+      if (all.length === done.length) {
+        document.getElementById('talkAllDone').classList.add('show');
+        confetti(60);
+      }
+    }
+  }
+
+  /* ===== クイズ ===== */
+  const QUIZ_TOTAL = 3;
+  let quizAnswered = 0;
+  let quizCorrect = 0;
+  function quizAnswer(btn, isCorrect) {
+    const q = btn.closest('.quiz-q');
+    if (q.dataset.done) return;
+    q.dataset.done = '1';
+    quizAnswered++;
+    const fb = q.querySelector('.quiz-fb');
+    q.querySelectorAll('.quiz-opt').forEach(function (b) { b.disabled = true; });
+    if (isCorrect) {
+      quizCorrect++;
+      btn.classList.add('correct');
+      fb.textContent = '⭕ せいかい！すごい！';
+      fb.style.color = '#1d8a5c';
+    } else {
+      btn.classList.add('wrong');
+      q.querySelectorAll('.quiz-opt').forEach(function (b) {
+        if (b.getAttribute('onclick').includes('true')) b.classList.add('correct');
+      });
+      fb.textContent = '❌ ざんねん！ 緑のが正解だよ。';
+      fb.style.color = '#c0392b';
+    }
+    fb.classList.add('show');
+    if (quizAnswered === QUIZ_TOTAL) showQuizScore();
+  }
+  function showQuizScore() {
+    const score = document.getElementById('quizScore');
+    score.classList.add('show');
+    if (quizCorrect === QUIZ_TOTAL) {
+      score.innerHTML = '🏆 ' + quizCorrect + '/' + QUIZ_TOTAL + ' 問正解！<br>パーフェクト！きみは今日から「コーチングキッズ」だ！🎉';
+      confetti(120);
+    } else if (quizCorrect >= 2) {
+      score.innerHTML = '🎖️ ' + quizCorrect + '/' + QUIZ_TOTAL + ' 問正解！<br>おしい！もう一度カードをめくって復習したら、きみもコーチングキッズだ！';
+      confetti(40);
+    } else {
+      score.innerHTML = '💪 ' + quizCorrect + '/' + QUIZ_TOTAL + ' 問正解！<br>だいじょうぶ、「まだ知らないだけ」。上のカードをめくり直してみよう。エフィカシー高く、もう一回！';
+    }
+  }
+</script>
+</body>
+</html>
