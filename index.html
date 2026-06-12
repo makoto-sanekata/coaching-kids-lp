@@ -127,7 +127,11 @@
     transition: transform 0.7s cubic-bezier(0.3, 1.2, 0.4, 1);
     transform-style: preserve-3d;
   }
-  .flip-card:hover .flip-inner, .flip-card.flipped .flip-inner { transform: rotateY(180deg); }
+  .flip-card.flipped .flip-inner { transform: rotateY(180deg); }
+  /* hoverでのめくりはマウス操作デバイス限定（スマホはタップのトグルのみ。hoverが残って戻らなくなるのを防ぐ） */
+  @media (hover: hover) and (pointer: fine) {
+    .flip-card:hover .flip-inner { transform: rotateY(180deg); }
+  }
   .flip-face {
     position: absolute; inset: 0; backface-visibility: hidden;
     border-radius: 24px; padding: 26px; display: flex; flex-direction: column;
