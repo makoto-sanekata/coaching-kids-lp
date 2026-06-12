@@ -306,6 +306,48 @@
   }
   .quiz-score.show { display: block; animation: popIn 0.6s both; }
 
+  /* ===== ぼうけんマップ（スタンプラリー） ===== */
+  .map-board {
+    background: linear-gradient(160deg, #2d2a45, #4a3f8f);
+    border-radius: 32px; padding: 50px 30px; color: #fff;
+  }
+  .map-board h2 { color: #fff; }
+  .stamp-count {
+    display: inline-block; background: rgba(255,255,255,0.15); border-radius: 999px;
+    padding: 10px 26px; font-weight: 900; font-size: 17px; margin-bottom: 26px;
+    border: 2px dashed rgba(255,255,255,0.4);
+  }
+  .map-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
+  .map-card {
+    position: relative; display: block; text-decoration: none; color: var(--ink);
+    background: var(--card); border-radius: 22px; padding: 26px 22px 22px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3); transition: transform 0.25s;
+  }
+  .map-card:hover { transform: translateY(-10px) rotate(-1deg); }
+  .map-card .map-icon { font-size: 46px; display: block; margin-bottom: 8px; }
+  .map-card h3 { font-size: 17px; font-weight: 900; color: var(--purple); margin-bottom: 6px; }
+  .map-card p { font-size: 13px; font-weight: 700; }
+  .map-card .stamp-slot {
+    position: absolute; top: 14px; right: 14px; width: 52px; height: 52px;
+    border-radius: 50%; border: 3px dashed #cdc7ec;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px; background: #f7f5ff;
+  }
+  .map-card .stamp-slot.got {
+    border: 3px solid var(--yellow); background: #fff6dc;
+    animation: stampSpin 0.8s cubic-bezier(0.18, 1.4, 0.4, 1) both;
+  }
+  @keyframes stampSpin { from { transform: scale(0) rotate(-540deg); } to { transform: scale(1) rotate(0); } }
+  .map-card .go-tag { display: inline-block; margin-top: 12px; background: var(--yellow); color: var(--ink); font-size: 12px; font-weight: 900; padding: 4px 14px; border-radius: 999px; }
+  .master-cert {
+    display: none; margin-top: 28px; text-align: center;
+    background: linear-gradient(150deg, var(--yellow), #ffbe3d); color: #6b4d00;
+    border-radius: 22px; padding: 30px; font-weight: 900; font-size: 19px;
+    box-shadow: 0 10px 30px rgba(255, 190, 61, 0.4);
+  }
+  .master-cert.show { display: block; animation: popIn 0.6s both; }
+  .master-cert .big { font-size: 56px; display: block; margin-bottom: 6px; }
+
   /* ===== まとめ・フッター ===== */
   .summary {
     background: linear-gradient(160deg, #6a4cff, #4db5ff);
@@ -599,7 +641,7 @@
     </div>
     <div class="rule">
       <h3>ゴールはたくさん持つ（勉強・あそび・家族・健康…ぜんぶ！）</h3>
-      <p>ゴールは1個じゃなくていい。人生のいろんな分野（バランスホイール）にゴールを置くと、見える世界がもっと広がって、毎日がわくわくになる。</p>
+      <p>ゴールは1個じゃなくていい。人生のいろんな分野（<a href="pages/balance-wheel.html" style="color:var(--purple); font-weight:900;">バランスホイール🎡</a>）にゴールを置くと、見える世界がもっと広がって、毎日がわくわくになる。</p>
     </div>
   </div>
 </section>
@@ -641,6 +683,53 @@
   </div>
 
   <div class="quiz-score" id="quizScore"></div>
+</section>
+
+<!-- ================= ぼうけんマップ ================= -->
+<section id="map" class="reveal">
+  <div class="map-board">
+    <span class="section-label" style="background:var(--yellow); color:var(--ink);">NEXT STAGE</span>
+    <h2>🗺️ コーチングぼうけんマップ</h2>
+    <p style="font-weight:700; margin-bottom:18px;">ここから先は、もっと深いぼうけん！ 4つのステージをクリアしてスタンプを集めると、<b>「コーチングマスター」認定</b>だ！</p>
+    <div class="stamp-count" id="stampCount">あつめたスタンプ：0 / 4</div>
+
+    <div class="map-grid">
+      <a class="map-card" href="pages/authentic.html">
+        <span class="stamp-slot" data-stamp="authentic"></span>
+        <span class="map-icon">🤝</span>
+        <h3>ほんもののコーチングって？</h3>
+        <p>コーチは答えを教えない！？ ほんもの／ニセモノを見やぶる判定ゲームに挑戦！</p>
+        <span class="go-tag">▶ ステージ1へ</span>
+      </a>
+      <a class="map-card" href="pages/goal.html">
+        <span class="stamp-slot" data-stamp="goal"></span>
+        <span class="map-icon">🎯</span>
+        <h3>ゴール設定のひみつ</h3>
+        <p>「現状の外」＆「100%やりたい！」。want to／have to 仕分けゲームに挑戦！</p>
+        <span class="go-tag">▶ ステージ2へ</span>
+      </a>
+      <a class="map-card" href="pages/balance-wheel.html">
+        <span class="stamp-slot" data-stamp="wheel"></span>
+        <span class="map-icon">🎡</span>
+        <h3>バランスホイール</h3>
+        <p>ゴールは人生8分野ぜんぶに置く！ 観覧車をタップして回そう！</p>
+        <span class="go-tag">▶ ステージ3へ</span>
+      </a>
+      <a class="map-card" href="pages/abstraction.html">
+        <span class="stamp-slot" data-stamp="abstract"></span>
+        <span class="map-icon">🔭</span>
+        <h3>あたまのメガネと抽象度</h3>
+        <p>思いこみのメガネ（ブリーフシステム）と、抽象度エレベーターを体験！</p>
+        <span class="go-tag">▶ ステージ4へ</span>
+      </a>
+    </div>
+
+    <div class="master-cert" id="masterCert">
+      <span class="big">🏆</span>
+      おめでとう！ スタンプ4個コンプリート！<br>
+      きみを「コーチングマスター」に認定します！🎉
+    </div>
+  </div>
 </section>
 
 <!-- ================= まとめ ================= -->
@@ -896,6 +985,36 @@
       score.innerHTML = '💪 ' + quizCorrect + '/' + QUIZ_TOTAL + ' 問正解！<br>だいじょうぶ、「まだ知らないだけ」。上のカードをめくり直してみよう。エフィカシー高く、もう一回！';
     }
   }
+
+  /* ===== ぼうけんマップ：スタンプラリー表示 ===== */
+  const STAMP_EMOJI = { authentic: '🤝', goal: '🎯', wheel: '🎡', abstract: '🔭' };
+  function renderStamps() {
+    let stamps = {};
+    try { stamps = JSON.parse(localStorage.getItem('coachingStamps') || '{}'); } catch (e) { stamps = {}; }
+    let got = 0;
+    document.querySelectorAll('.stamp-slot').forEach(function (slot) {
+      const key = slot.dataset.stamp;
+      if (stamps[key]) {
+        got++;
+        slot.textContent = STAMP_EMOJI[key];
+        slot.classList.add('got');
+      } else {
+        slot.textContent = '';
+        slot.classList.remove('got');
+      }
+    });
+    document.getElementById('stampCount').textContent = 'あつめたスタンプ：' + got + ' / 4';
+    if (got === 4) {
+      const cert = document.getElementById('masterCert');
+      if (!cert.classList.contains('show')) {
+        cert.classList.add('show');
+        confetti(120);
+      }
+    }
+  }
+  renderStamps();
+  /* 別タブ・別ページでスタンプを取って戻ってきたときも反映する */
+  window.addEventListener('pageshow', renderStamps);
 </script>
 </body>
 </html>

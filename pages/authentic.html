@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ほんもののコーチングって？ — コーチングぼうけん</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/style.css">
+<style>
+  .judge-card {
+    background: var(--card); border-radius: 22px; padding: 26px;
+    box-shadow: var(--shadow); margin-bottom: 20px; transition: opacity 0.3s;
+  }
+  .judge-card .statement { font-size: 16.5px; font-weight: 900; margin-bottom: 16px; }
+  .judge-card .statement .num { color: var(--pink); margin-right: 8px; }
+  .judge-btns { display: flex; gap: 10px; flex-wrap: wrap; }
+  .judge-card .fb { margin-top: 14px; font-weight: 700; font-size: 14px; display: none; padding: 12px 16px; border-radius: 12px; }
+  .judge-card .fb.show { display: block; animation: popIn 0.4s both; }
+  .judge-card.done-right { border: 3px solid var(--green); }
+  .judge-card.done-right .fb { background: #e4f9ef; color: #1d8a5c; }
+  .judge-card.done-wrong { border: 3px solid var(--red); }
+  .judge-card.done-wrong .fb { background: #ffe7e7; color: #c0392b; }
+  .vs-table { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 26px; }
+  .vs-col { border-radius: 22px; padding: 26px 22px; }
+  .vs-col h3 { font-size: 18px; font-weight: 900; margin-bottom: 14px; text-align: center; }
+  .vs-col ul { list-style: none; }
+  .vs-col li { font-size: 14px; font-weight: 700; padding: 8px 0 8px 30px; position: relative; }
+  .vs-col.fake { background: #ffe9ee; color: #b03052; }
+  .vs-col.real { background: #e7f5ff; color: #1565a8; }
+  .vs-col.fake li::before { content: '💧'; position: absolute; left: 0; }
+  .vs-col.real li::before { content: '🔥'; position: absolute; left: 0; }
+  @media (max-width: 640px) { .vs-table { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<header class="hero-mini">
+  <a class="back-link" href="../index.html#map">🗺️ マップにもどる</a>
+  <span class="icon">🤝</span>
+  <h1>ほんもののコーチングって？</h1>
+  <p class="sub">「オーセンティック」＝「ほんもの」という意味だよ</p>
+</header>
+
+<section class="reveal">
+  <span class="section-label">まなぶ</span>
+  <h2>コーチは<span class="marker">「答えを教える人」じゃない</span></h2>
+  <p class="lead">
+    「コーチ」って聞くと、スポーツの先生みたいに「ああしなさい、こうしなさい」と教えてくれる人を思いうかべるよね。<br>
+    でも、ほんもののコーチングは<b>ぜんぜんちがう</b>んだ。
+  </p>
+  <div class="points">
+    <div class="point-card">
+      <span class="icon">🏫</span>
+      <h3>先生（ティーチング）</h3>
+      <p>「やり方」や「答え」を教えてくれる人。算数の解き方、サッカーのける方法。これはこれで大事！</p>
+    </div>
+    <div class="point-card">
+      <span class="icon">🤝</span>
+      <h3>コーチ（コーチング）</h3>
+      <p>答えは教えない。きみが<b>「現状の外のゴール」を見つけて、「ぜったいできる」と信じられるように</b>手伝ってくれる人。</p>
+    </div>
+    <div class="point-card">
+      <span class="icon">⚠️</span>
+      <h3>なんで教えちゃダメなの？</h3>
+      <p>コーチが「こうしなさい」と言うと、それは<b>コーチのゴール</b>になっちゃう。ゴールはぜったい、きみ自身の「やりたい！」から生まれないとダメなんだ。</p>
+    </div>
+  </div>
+</section>
+
+<section class="reveal">
+  <span class="section-label">まなぶ</span>
+  <h2>なぐさめる人でも<span class="marker">ない</span>んだ</h2>
+  <p class="lead">
+    「悩みを聞いて、安心させてくれるんでしょ？」——それもちがう。それはカウンセリングのお仕事。<br>
+    ほんもののコーチングは、むしろ<b>新しいドキドキ（不安）を生み出す</b>ものなんだ。だって「現状の外」に行くんだから、ドキドキするのが当たり前！そのドキドキは、きみが成長しているサインだよ。
+  </p>
+  <div class="vs-table">
+    <div class="vs-col fake">
+      <h3>💧 これはコーチングじゃない</h3>
+      <ul>
+        <li>今の悩みを解決して、安心させる（カウンセリング）</li>
+        <li>「答え」や「やり方」を教える（ティーチング）</li>
+        <li>コーチが「きみのゴールはこれだ」と決める</li>
+        <li>今のままでもできそうな目標をすすめる</li>
+      </ul>
+    </div>
+    <div class="vs-col real">
+      <h3>🔥 これがほんもののコーチング</h3>
+      <ul>
+        <li>「現状の外」のゴールを、自分で見つける手伝いをする</li>
+        <li>「きみならぜったいできる」とエフィカシーを上げる</li>
+        <li>コーチ自身も、現状の外のゴールに向かって生きている</li>
+        <li>お金だけじゃなく、人生まるごと豊かにするのが目的</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="reveal">
+  <span class="section-label">まなぶ</span>
+  <h2>コーチ自身が<span class="marker">ぼうけん中</span>であること</h2>
+  <p class="lead">
+    ほんもののコーチの条件、それは<b>コーチ自身が「現状の外のゴール」を持って、ドキドキしながら進んでいる</b>こと。<br>
+    泳いだことがない人に水泳は教われないよね。それと同じで、自分がぼうけんしていない人は、人のぼうけんを手伝えないんだ。
+  </p>
+</section>
+
+<section class="reveal">
+  <span class="section-label">あそぶ</span>
+  <h2>判定ゲーム：<span class="marker">ほんもの？ニセモノ？</span> 🔎</h2>
+  <p class="lead">きみはコーチング鑑定士！ つぎの5人のコーチが「ほんもの」か「ニセモノ」か、判定してみよう。5問ぜんぶ答えるとスタンプGET！</p>
+
+  <div id="judgeArea"></div>
+
+  <div class="stamp-banner" id="stampBanner">
+    <span class="big">🤝</span>
+    スタンプGET！「ほんものコーチ」バッジを手に入れた！<br>
+    <a href="../index.html#map">🗺️ マップで確認する</a>
+  </div>
+</section>
+
+<div class="next-nav">
+  <a class="btn yellow" href="goal.html">つぎのぼうけん → 🎯 ゴール設定のひみつ</a>
+</div>
+
+<footer>
+  このページは苫米地英人氏の著書『オーセンティック・コーチング』の理論を、学習用にやさしく要約したものです。
+</footer>
+
+<script src="../assets/common.js"></script>
+<script>
+  const JUDGES = [
+    {
+      text: 'コーチA「きみのゴールは、わたしが決めてあげよう。プロ野球選手がいいね！」',
+      isReal: false,
+      fb: '❌ ニセモノ！ ゴールは100%自分の「やりたい！」から生まれるもの。人に決めてもらったゴールでは、脳は本気を出さないよ。'
+    },
+    {
+      text: 'コーチB「やり方がわからない？ いいね、それこそ現状の外のゴールの証拠だ。きみならぜったいできるよ」',
+      isReal: true,
+      fb: '⭕ ほんもの！ 「やり方がわからない」は正しい状態。コーチは答えを教えずに、エフィカシー（できる！という気持ち）を上げてくれる。'
+    },
+    {
+      text: 'コーチC「不安なんだね、よしよし。じゃあ無理しないで、今のままでもできる目標に変えようか」',
+      isReal: false,
+      fb: '❌ ニセモノ！ なぐさめて現状にもどすのはコーチングじゃない。現状の外に出るドキドキは、成長のサインなんだ。'
+    },
+    {
+      text: 'コーチD「実はわたし自身も今、やり方のわからない大きなゴールに向かってドキドキしながら挑戦しているんだ」',
+      isReal: true,
+      fb: '⭕ ほんもの！ コーチ自身が現状の外をぼうけん中であることが、ほんもののコーチの条件だよ。'
+    },
+    {
+      text: 'コーチE「コーチングの目的はお金もうけだ。お金がすべてだからね」',
+      isReal: false,
+      fb: '❌ ニセモノ！ コーチングの目的は、お金だけじゃなく人生まるごと（健康も家族も趣味も）豊かにすること。だから次に学ぶ「バランスホイール」が大事になるんだ。'
+    }
+  ];
+
+  const judgeArea = document.getElementById('judgeArea');
+  let judgedCount = 0;
+
+  JUDGES.forEach(function (j, i) {
+    const card = document.createElement('div');
+    card.className = 'judge-card';
+    card.innerHTML =
+      '<div class="statement"><span class="num">' + (i + 1) + '/5</span>' + j.text + '</div>' +
+      '<div class="judge-btns">' +
+      '<button class="btn green" onclick="judge(' + i + ', true, this)">⭕ ほんもの</button>' +
+      '<button class="btn red" onclick="judge(' + i + ', false, this)">❌ ニセモノ</button>' +
+      '</div><div class="fb"></div>';
+    judgeArea.appendChild(card);
+  });
+
+  function judge(i, answer, btn) {
+    const card = btn.closest('.judge-card');
+    if (card.dataset.done) return;
+    card.dataset.done = '1';
+    judgedCount++;
+    const correct = (answer === JUDGES[i].isReal);
+    card.classList.add(correct ? 'done-right' : 'done-wrong');
+    const fb = card.querySelector('.fb');
+    fb.innerHTML = (correct ? '🎉 正解！ ' : 'ざんねん！ ') + JUDGES[i].fb;
+    fb.classList.add('show');
+    card.querySelectorAll('.btn').forEach(function (b) { b.disabled = true; b.style.opacity = 0.45; });
+    btn.style.opacity = 1;
+    if (correct) confetti(20);
+    if (judgedCount === JUDGES.length) {
+      awardStamp('authentic');
+      document.getElementById('stampBanner').classList.add('show');
+      confetti(80);
+    }
+  }
+</script>
+</body>
+</html>

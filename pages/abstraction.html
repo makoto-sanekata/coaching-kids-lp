@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>あたまのメガネと抽象度 — コーチングぼうけん</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/style.css">
+<style>
+  /* メガネかけかえ */
+  .glass-toggle { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
+  .scene-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; }
+  .scene-card {
+    border-radius: 18px; padding: 22px; font-weight: 700; font-size: 14.5px;
+    transition: background 0.4s, color 0.4s, transform 0.3s;
+  }
+  .scene-card .fact { font-weight: 900; font-size: 15px; display: block; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 2px dashed rgba(0,0,0,0.15); }
+  .scene-card.normal { background: #eef0f4; color: #5a617a; }
+  .scene-card.goalview { background: #fff6dc; color: #7a5c00; transform: scale(1.02); }
+
+  /* 抽象度ズーム */
+  .zoom-stage {
+    background: linear-gradient(180deg, #eaf6ff, #fef8ff); border-radius: 22px;
+    padding: 30px 20px; text-align: center; margin: 22px 0; min-height: 220px;
+  }
+  .zoom-emojis { font-size: clamp(26px, 5vw, 40px); line-height: 1.6; letter-spacing: 6px; min-height: 110px; }
+  .zoom-emojis span { display: inline-block; animation: popIn 0.4s both; }
+  .zoom-title { font-size: 22px; font-weight: 900; color: var(--purple); margin-top: 8px; }
+  .zoom-desc { font-weight: 700; font-size: 14.5px; margin-top: 6px; min-height: 56px; }
+  .zoom-scale { display: flex; justify-content: space-between; font-size: 12px; font-weight: 900; color: #9a94c2; margin-top: 6px; }
+  input[type="range"] {
+    -webkit-appearance: none; appearance: none; width: 100%; height: 14px; border-radius: 7px;
+    background: linear-gradient(90deg, var(--green), var(--blue), var(--purple)); outline: none; cursor: pointer;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none; appearance: none; width: 34px; height: 34px; border-radius: 50%;
+    background: #fff; border: 4px solid var(--purple); box-shadow: 0 4px 10px rgba(0,0,0,0.25); cursor: grab;
+  }
+</style>
+</head>
+<body>
+
+<header class="hero-mini">
+  <a class="back-link" href="../index.html#map">🗺️ マップにもどる</a>
+  <span class="icon">🔭</span>
+  <h1>あたまのメガネと抽象度</h1>
+  <p class="sub">世界の見え方は、メガネと高さで決まる！</p>
+</header>
+
+<section class="reveal">
+  <span class="section-label">まなぶ</span>
+  <h2>きみは<span class="marker">「あたまのメガネ」</span>をかけている</h2>
+  <p class="lead">
+    人は「ふつうはこうでしょ」「ぼくはこういう人間だ」という<b>思いこみのメガネ</b>をかけて世界を見ている。これを<b>ブリーフシステム</b>と呼ぶよ。<br>
+    じつは人間の行動の<b>約90%は無意識</b>——つまりこのメガネが自動で決めている。だからメガネを変えないかぎり、現状の外のゴールは「見えない」んだ。<br>
+    下のボタンで、同じできごとがメガネでどう変わるか見てみよう！
+  </p>
+
+  <div class="lab">
+    <div class="lab-title"><span class="badge">実験</span>メガネをかけかえてみよう</div>
+    <div class="glass-toggle">
+      <button class="btn ghost" id="btnNormal" onclick="setGlasses(false)">😮‍💨 いつものメガネ</button>
+      <button class="btn yellow" id="btnGoal" onclick="setGlasses(true)">✨ ゴールのメガネ</button>
+    </div>
+    <div class="scene-grid" id="sceneGrid"></div>
+    <div class="result-msg info show" style="margin-top:20px;">
+      💡 できごとは同じでも、メガネがちがうと<b>見える意味がぜんぜんちがう</b>。ゴールを決めるってことは、「ゴールのメガネ」にかけかえることなんだ。
+    </div>
+  </div>
+</section>
+
+<section class="reveal">
+  <span class="section-label">あそぶ</span>
+  <h2>たいけん：<span class="marker">抽象度エレベーター</span> 🛗</h2>
+  <p class="lead">
+    「抽象度（ちゅうしょうど）」は、ものごとを見る<b>高さ</b>のこと。エレベーターみたいに上がったり下がったりできるよ。<br>
+    上に行くほど、<b>一度にたくさんのものをまとめて考えられる</b>ようになる。スライダーで上がってみよう！
+  </p>
+
+  <div class="lab">
+    <div class="lab-title"><span class="badge">実験</span>どこまで上がれるかな？</div>
+    <div class="zoom-stage">
+      <div class="zoom-emojis" id="zoomEmojis"></div>
+      <div class="zoom-title" id="zoomTitle"></div>
+      <div class="zoom-desc" id="zoomDesc"></div>
+    </div>
+    <input type="range" id="zoomSlider" min="0" max="4" step="1" value="0">
+    <div class="zoom-scale"><span>⬇ ひくい（具体的）</span><span>たかい（抽象的）⬆</span></div>
+    <div class="result-msg good" id="zoomMaxMsg" style="margin-top:18px;">
+      🎉 最上階とうちゃく！ バランスホイールの「🌍せかいへの貢献」みたいな大きなゴールは、こうやって<b>抽象度を上げた高い場所</b>から見つかるんだ。上に行くほど、たくさんの人をハッピーにできる！
+    </div>
+  </div>
+</section>
+
+<section class="reveal">
+  <span class="section-label">そうしあげ</span>
+  <h2>ミニクイズ：<span class="marker">メガネ博士になろう</span> 📝</h2>
+  <p class="lead">3問に答えると、最後のスタンプGET！</p>
+
+  <div class="quiz-q">
+    <h3><span class="qnum">Q1.</span>「ブリーフシステム（あたまのメガネ）」の説明で正しいのは？</h3>
+    <div class="quiz-opts">
+      <button class="quiz-opt" onclick="quizAnswer(this, false)">A. 目が悪い人がかける本物のメガネ</button>
+      <button class="quiz-opt" onclick="quizAnswer(this, true)">B. 「ふつうはこう」という思いこみのセットで、行動の約90%を自動で決めている</button>
+      <button class="quiz-opt" onclick="quizAnswer(this, false)">C. 一度かけたら一生変えられないもの</button>
+    </div>
+    <div class="quiz-fb"></div>
+  </div>
+
+  <div class="quiz-q">
+    <h3><span class="qnum">Q2.</span>「ポチ → いぬ → どうぶつ → いきもの」と上がっていくこの高さをなんと呼ぶ？</h3>
+    <div class="quiz-opts">
+      <button class="quiz-opt" onclick="quizAnswer(this, false)">A. エフィカシー</button>
+      <button class="quiz-opt" onclick="quizAnswer(this, false)">B. ホメオスタシス</button>
+      <button class="quiz-opt" onclick="quizAnswer(this, true)">C. 抽象度</button>
+    </div>
+    <div class="quiz-fb"></div>
+  </div>
+
+  <div class="quiz-q">
+    <h3><span class="qnum">Q3.</span>抽象度を上げると、どんないいことがある？</h3>
+    <div class="quiz-opts">
+      <button class="quiz-opt" onclick="quizAnswer(this, true)">A. 一度にたくさんの人やものをまとめて考えられて、大きなゴールが見つかる</button>
+      <button class="quiz-opt" onclick="quizAnswer(this, false)">B. 背が高くなる</button>
+      <button class="quiz-opt" onclick="quizAnswer(this, false)">C. 細かいことだけに集中できるようになる</button>
+    </div>
+    <div class="quiz-fb"></div>
+  </div>
+
+  <div class="stamp-banner" id="stampBanner">
+    <span class="big">🔭</span>
+    スタンプGET！「メガネ博士」バッジを手に入れた！<br>
+    <a href="../index.html#map">🗺️ マップにもどって、ぜんぶ集まったか確認しよう！</a>
+  </div>
+</section>
+
+<div class="next-nav">
+  <a class="btn yellow" href="../index.html#map">🗺️ ぼうけんマップにもどる</a>
+</div>
+
+<footer>
+  このページは苫米地英人氏の著書『オーセンティック・コーチング』の理論を、学習用にやさしく要約したものです。
+</footer>
+
+<script src="../assets/common.js"></script>
+<script>
+  /* ===== メガネかけかえ ===== */
+  const SCENES = [
+    { fact: '🌧️ 遠足の日に雨がふった',
+      normal: '「さいあく。ついてない一日だ…」',
+      goal: '「室内ならではの遊びを発明するチャンス！」' },
+    { fact: '📉 テストで失敗した',
+      normal: '「やっぱりぼくはダメなんだ…」',
+      goal: '「ぼくらしくないな。どこでつまずいたか分かったから、次はいける！」' },
+    { fact: '🆕 やったことのない仕事をたのまれた',
+      normal: '「できなかったらどうしよう…こわい…」',
+      goal: '「ドキドキする＝現状の外に出てるサイン！成長中！」' }
+  ];
+  let isGoalGlasses = false;
+  function renderScenes() {
+    const grid = document.getElementById('sceneGrid');
+    grid.innerHTML = '';
+    SCENES.forEach(function (s) {
+      const card = document.createElement('div');
+      card.className = 'scene-card ' + (isGoalGlasses ? 'goalview' : 'normal');
+      card.innerHTML = '<span class="fact">' + s.fact + '</span>' + (isGoalGlasses ? s.goal : s.normal);
+      grid.appendChild(card);
+    });
+    document.getElementById('btnNormal').style.opacity = isGoalGlasses ? 0.5 : 1;
+    document.getElementById('btnGoal').style.opacity = isGoalGlasses ? 1 : 0.5;
+  }
+  function setGlasses(goal) { isGoalGlasses = goal; renderScenes(); if (goal) confetti(15); }
+  renderScenes();
+
+  /* ===== 抽象度エレベーター ===== */
+  const ZOOM_LEVELS = [
+    { emojis: ['🐶'], title: 'ポチ', desc: '「うちのポチ」だけ。いちばん具体的で、いちばんせまい世界。' },
+    { emojis: ['🐶', '🐕', '🦮', '🐩'], title: 'いぬ', desc: 'ポチも、シバも、プードルも。「いぬ」と言ったとたん、世界中のいぬをまとめて考えられる！' },
+    { emojis: ['🐶', '🐱', '🐘', '🦁', '🐰', '🐼'], title: 'どうぶつ', desc: 'いぬも、ねこも、ぞうも。さらに高くなって、もっとたくさんをひとことで考えられる。' },
+    { emojis: ['🐶', '🐱', '🐟', '🦋', '🌷', '🌳', '🍄'], title: 'いきもの', desc: 'どうぶつも、魚も、虫も、花も。視界がぐんと広がってきた！' },
+    { emojis: ['🐶', '🐱', '🐟', '🦋', '🌷', '🌳', '👦', '👧', '👨‍🦳', '🌍'], title: 'ちきゅうのいのち', desc: '人間もぜんぶ、まるごと。ここから見ると「世界中のだれかのためのゴール」が見つかる！' }
+  ];
+  const zoomSlider = document.getElementById('zoomSlider');
+  function renderZoom() {
+    const lv = ZOOM_LEVELS[Number(zoomSlider.value)];
+    document.getElementById('zoomEmojis').innerHTML = lv.emojis.map(function (e, i) {
+      return '<span style="animation-delay:' + (i * 0.06) + 's">' + e + '</span>';
+    }).join('');
+    document.getElementById('zoomTitle').textContent = '抽象度レベル' + zoomSlider.value + '：' + lv.title;
+    document.getElementById('zoomDesc').textContent = lv.desc;
+    const maxMsg = document.getElementById('zoomMaxMsg');
+    if (Number(zoomSlider.value) === 4) {
+      maxMsg.classList.add('show');
+      if (!zoomSlider.dataset.maxed) { confetti(40); zoomSlider.dataset.maxed = '1'; }
+    } else {
+      maxMsg.classList.remove('show');
+    }
+  }
+  zoomSlider.addEventListener('input', renderZoom);
+  renderZoom();
+
+  /* ===== クイズ ===== */
+  const QUIZ_TOTAL = 3;
+  let quizAnswered = 0;
+  function quizAnswer(btn, isCorrect) {
+    const q = btn.closest('.quiz-q');
+    if (q.dataset.done) return;
+    q.dataset.done = '1';
+    quizAnswered++;
+    const fb = q.querySelector('.quiz-fb');
+    q.querySelectorAll('.quiz-opt').forEach(function (b) { b.disabled = true; });
+    if (isCorrect) {
+      btn.classList.add('correct');
+      fb.textContent = '⭕ せいかい！';
+      fb.style.color = '#1d8a5c';
+      confetti(15);
+    } else {
+      btn.classList.add('wrong');
+      q.querySelectorAll('.quiz-opt').forEach(function (b) {
+        if (b.getAttribute('onclick').includes('true')) b.classList.add('correct');
+      });
+      fb.textContent = '❌ ざんねん！ 緑のが正解だよ。';
+      fb.style.color = '#c0392b';
+    }
+    fb.classList.add('show');
+    if (quizAnswered === QUIZ_TOTAL) {
+      awardStamp('abstract');
+      document.getElementById('stampBanner').classList.add('show');
+      confetti(80);
+    }
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>バランスホイール — コーチングぼうけん</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/style.css">
+<style>
+  .wheel-wrap { display: grid; grid-template-columns: minmax(280px, 420px) 1fr; gap: 28px; align-items: start; margin-top: 24px; }
+  @media (max-width: 760px) { .wheel-wrap { grid-template-columns: 1fr; } }
+  .wheel-svg { width: 100%; height: auto; user-select: none; }
+  .wheel-svg path { cursor: pointer; transition: transform 0.25s, filter 0.25s, opacity 0.25s; transform-origin: 170px 170px; stroke: #fff; stroke-width: 3; }
+  .wheel-svg path:hover { transform: scale(1.05); filter: brightness(1.08); }
+  .wheel-svg path.active { transform: scale(1.09); filter: drop-shadow(0 6px 14px rgba(0,0,0,0.3)); }
+  .wheel-svg text { pointer-events: none; font-size: 26px; }
+  .wheel-svg .check { font-size: 16px; }
+  .wheel-panel {
+    background: var(--card); border-radius: 24px; padding: 28px;
+    box-shadow: var(--shadow); border: 3px solid #efeafd; min-height: 280px;
+  }
+  .wheel-panel .cat { font-size: 22px; font-weight: 900; color: var(--purple); margin-bottom: 10px; }
+  .wheel-panel .desc { font-size: 15px; font-weight: 700; margin-bottom: 14px; }
+  .wheel-panel .goal-ex {
+    background: #fff6dc; border-radius: 14px; padding: 14px 16px;
+    font-size: 14px; font-weight: 700; color: #7a5c00;
+  }
+  .wheel-panel .goal-ex .tag { display: inline-block; background: var(--yellow); border-radius: 999px; padding: 2px 12px; font-size: 12px; font-weight: 900; margin-bottom: 6px; }
+  .wheel-progress { margin-top: 16px; font-weight: 900; font-size: 15px; text-align: center; background: #f7f5ff; border-radius: 999px; padding: 10px; }
+</style>
+</head>
+<body>
+
+<header class="hero-mini">
+  <a class="back-link" href="../index.html#map">🗺️ マップにもどる</a>
+  <span class="icon">🎡</span>
+  <h1>バランスホイール</h1>
+  <p class="sub">ゴールは「1個」じゃなく、人生ぜんぶに置く！</p>
+</header>
+
+<section class="reveal">
+  <span class="section-label">まなぶ</span>
+  <h2>なんでゴールが<span class="marker">たくさん必要</span>なの？</h2>
+  <p class="lead">
+    たとえばサッカーのゴールだけしかなかったら、ケガをしたとたん人生まっくらになっちゃう。<br>
+    それに、ゴールがある分野だけRASが働くから、<b>ゴールの数だけ見える世界が広がる</b>んだ。<br>
+    そこで使うのが「バランスホイール」。観覧車みたいに、人生を8つの分野に分けて、<b>ぜんぶの分野にゴールを置く</b>道具だよ。
+  </p>
+</section>
+
+<section class="reveal">
+  <span class="section-label">あそぶ</span>
+  <h2>ホイールを<span class="marker">タップして回ろう</span>！</h2>
+  <p class="lead">8つの分野をぜんぶタップして、それぞれのゴールの例を見てみよう。<b>8個ぜんぶ見るとスタンプGET！</b></p>
+
+  <div class="lab">
+    <div class="wheel-wrap">
+      <svg class="wheel-svg" id="wheelSvg" viewBox="0 0 340 340" xmlns="http://www.w3.org/2000/svg"></svg>
+      <div>
+        <div class="wheel-panel" id="wheelPanel">
+          <div class="cat">👆 すきな分野をタップ！</div>
+          <div class="desc">観覧車のゴンドラをえらぶみたいに、気になる色からタップしてみてね。</div>
+        </div>
+        <div class="wheel-progress" id="wheelProgress">見つけた分野：0 / 8</div>
+      </div>
+    </div>
+    <div class="stamp-banner" id="stampBanner">
+      <span class="big">🎡</span>
+      スタンプGET！「バランスマスター」バッジを手に入れた！<br>
+      <a href="../index.html#map">🗺️ マップで確認する</a>
+    </div>
+  </div>
+</section>
+
+<section class="reveal">
+  <span class="section-label">まなぶ</span>
+  <h2>バランスホイールの<span class="marker">だいじなポイント</span></h2>
+  <div class="points">
+    <div class="point-card">
+      <span class="icon">⚖️</span>
+      <h3>かたよりに気づける</h3>
+      <p>「勉強のゴールしかない！」みたいなかたよりが一目でわかる。どれかが0点だと、観覧車はガタガタになっちゃう。</p>
+    </div>
+    <div class="point-card">
+      <span class="icon">🛠️</span>
+      <h3>「しごと」はお金もうけじゃない</h3>
+      <p>苫米地式では、しごと＝「自分の得意なことで、だれかの役に立つこと」。お金は「ファイナンス」という別の分野で考えるんだ。</p>
+    </div>
+    <div class="point-card">
+      <span class="icon">🔭</span>
+      <h3>ぜんぶ「現状の外」＆「want to」</h3>
+      <p>8分野ぜんぶ、ゴール設定のルールは同じ。「やり方がわからないくらい大きく」「100%やりたい！」で決めよう。</p>
+    </div>
+  </div>
+</section>
+
+<div class="next-nav">
+  <a class="btn yellow" href="abstraction.html">つぎのぼうけん → 🔭 あたまのメガネと抽象度</a>
+</div>
+
+<footer>
+  このページは苫米地英人氏の著書『オーセンティック・コーチング』の理論を、学習用にやさしく要約したものです。
+</footer>
+
+<script src="../assets/common.js"></script>
+<script>
+  const SECTORS = [
+    { emoji: '🛠️', name: 'しごと（職業）', color: '#7c5cff',
+      desc: '自分の得意なことで、だれかの役に立つこと。子どもなら「将来どんなふうに人をよろこばせたいか」。',
+      goal: '世界中の子どもが夢中になるゲームを発明して、みんなを笑顔にする！' },
+    { emoji: '💪', name: 'けんこう（健康）', color: '#4dd599',
+      desc: '体も心も元気でいること。ぜんぶのゴールの土台になる、超大事な分野。',
+      goal: '90歳になっても友だちとサッカーできる、ピカピカの体でいる！' },
+    { emoji: '🎨', name: 'しゅみ（趣味）', color: '#ff6fa5',
+      desc: 'だれにも頼まれてないのにやっちゃう、大好きなこと。want toのかたまり！',
+      goal: '自分のマンガを描いて、読んだ人が爆笑する作品をつくる！' },
+    { emoji: '🏠', name: 'かぞく（家族）', color: '#ffa94d',
+      desc: '家族とどんな関係でいたいか。「してもらう」だけじゃなく「何をしてあげたいか」も考えよう。',
+      goal: '家族みんなが毎日笑って「ただいま」と言いたくなる家にする！' },
+    { emoji: '📚', name: 'まなび（生涯教育）', color: '#4db5ff',
+      desc: '学校の勉強だけじゃない。大人になってもずっと、新しいことを学びつづけること。',
+      goal: '宇宙のなぞを解くために、おじいちゃんになっても研究をつづける！' },
+    { emoji: '💰', name: 'おかね（ファイナンス）', color: '#ffd34d',
+      desc: 'ゴールをかなえるために必要なお金のこと。お金は目的じゃなくて、ぼうけんの道具！',
+      goal: 'やりたいことを全部できるくらいのお金を、人をよろこばせて生み出す！' },
+    { emoji: '🏘️', name: 'まちへの貢献', color: '#5fd0c5',
+      desc: '自分の住んでいるまち・地域のためにできること。身近なだれかをハッピーにする分野。',
+      goal: 'まちの公園を、日本一子どもがわくわくする遊び場にする！' },
+    { emoji: '🌍', name: 'せかいへの貢献', color: '#9b7bff',
+      desc: '会ったこともない世界のだれかのためにできること。いちばんスケールの大きい分野！',
+      goal: '世界中の「学校に行けない子」が学べるしくみをつくる！' }
+  ];
+
+  const CX = 170, CY = 170, R = 150;
+  const svg = document.getElementById('wheelSvg');
+  const visited = new Set();
+
+  function polar(angleDeg, r) {
+    const rad = (angleDeg - 90) * Math.PI / 180;
+    return [CX + r * Math.cos(rad), CY + r * Math.sin(rad)];
+  }
+
+  SECTORS.forEach(function (s, i) {
+    const a0 = i * 45, a1 = (i + 1) * 45;
+    const [x0, y0] = polar(a0, R);
+    const [x1, y1] = polar(a1, R);
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('d', 'M ' + CX + ' ' + CY + ' L ' + x0 + ' ' + y0 + ' A ' + R + ' ' + R + ' 0 0 1 ' + x1 + ' ' + y1 + ' Z');
+    path.setAttribute('fill', s.color);
+    path.dataset.index = i;
+    path.addEventListener('click', function () { selectSector(i); });
+    svg.appendChild(path);
+
+    const [tx, ty] = polar(a0 + 22.5, R * 0.66);
+    const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    label.setAttribute('x', tx); label.setAttribute('y', ty + 9);
+    label.setAttribute('text-anchor', 'middle');
+    label.textContent = s.emoji;
+    svg.appendChild(label);
+
+    const [cx2, cy2] = polar(a0 + 22.5, R * 0.9);
+    const check = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    check.setAttribute('x', cx2); check.setAttribute('y', cy2 + 6);
+    check.setAttribute('text-anchor', 'middle');
+    check.setAttribute('class', 'check');
+    check.dataset.checkFor = i;
+    svg.appendChild(check);
+  });
+
+  /* 中心の白い円 */
+  const center = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+  center.setAttribute('cx', CX); center.setAttribute('cy', CY); center.setAttribute('r', 44);
+  center.setAttribute('fill', '#fff');
+  svg.appendChild(center);
+  const centerText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  centerText.setAttribute('x', CX); centerText.setAttribute('y', CY + 11);
+  centerText.setAttribute('text-anchor', 'middle');
+  centerText.textContent = '🎡';
+  centerText.setAttribute('style', 'font-size:32px;');
+  svg.appendChild(centerText);
+
+  function selectSector(i) {
+    const s = SECTORS[i];
+    svg.querySelectorAll('path').forEach(function (p) { p.classList.toggle('active', Number(p.dataset.index) === i); });
+    document.getElementById('wheelPanel').innerHTML =
+      '<div class="cat">' + s.emoji + ' ' + s.name + '</div>' +
+      '<div class="desc">' + s.desc + '</div>' +
+      '<div class="goal-ex"><span class="tag">ゴールの例</span><br>' + s.goal + '</div>';
+    if (!visited.has(i)) {
+      visited.add(i);
+      svg.querySelector('[data-check-for="' + i + '"]').textContent = '⭐';
+      document.getElementById('wheelProgress').textContent = '見つけた分野：' + visited.size + ' / ' + SECTORS.length;
+      confetti(10);
+      if (visited.size === SECTORS.length) {
+        awardStamp('wheel');
+        document.getElementById('stampBanner').classList.add('show');
+        document.getElementById('wheelProgress').textContent = '🎉 8分野コンプリート！';
+        confetti(80);
+      }
+    }
+  }
+</script>
+</body>
+</html>

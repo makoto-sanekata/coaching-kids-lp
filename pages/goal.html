@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ゴール設定のひみつ — コーチングぼうけん</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/style.css">
+<style>
+  .sort-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 16px; margin-top: 24px; }
+  .sort-card {
+    background: var(--card); border-radius: 18px; padding: 20px;
+    box-shadow: var(--shadow); border: 3px solid #efeafd; transition: border-color 0.3s, transform 0.2s;
+  }
+  .sort-card .sentence { font-size: 15px; font-weight: 900; margin-bottom: 12px; min-height: 54px; }
+  .sort-card .sort-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+  .sort-card .sort-btns .btn { font-size: 13.5px; padding: 9px 16px; margin: 0; }
+  .sort-card.right { border-color: var(--green); background: #f3fcf8; }
+  .sort-card.right .sentence::after { content: ' ✔'; color: var(--green); }
+  .sort-card .hint { display: none; margin-top: 10px; font-size: 12.5px; font-weight: 700; color: #c0392b; background: #ffe7e7; border-radius: 10px; padding: 8px 12px; }
+  .sort-card .hint.show { display: block; animation: shake 0.4s; }
+  .score-board {
+    text-align: center; font-size: 17px; font-weight: 900;
+    background: #f7f5ff; border-radius: 999px; padding: 12px 24px;
+    display: inline-block; margin-top: 22px;
+  }
+  .wheel-link-card {
+    display: block; text-decoration: none; color: inherit;
+    background: linear-gradient(150deg, #fff4f9, #f0f7ff);
+    border: 3px dashed var(--pink); border-radius: 24px; padding: 28px;
+    margin-top: 26px; transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .wheel-link-card:hover { transform: translateY(-6px); box-shadow: var(--shadow); }
+  .wheel-link-card h3 { font-size: 18px; font-weight: 900; color: var(--pink); margin-bottom: 6px; }
+  .wheel-link-card p { font-size: 14px; font-weight: 700; }
+  .wheel-link-card .go { color: var(--purple); font-weight: 900; font-size: 14px; }
+</style>
+</head>
+<body>
+
+<header class="hero-mini">
+  <a class="back-link" href="../index.html#map">🗺️ マップにもどる</a>
+  <span class="icon">🎯</span>
+  <h1>ゴール設定のひみつ</h1>
+  <p class="sub">コーチングのすべては、ここに集まっている</p>
+</header>
+
+<section class="reveal">
+  <span class="section-label">まなぶ</span>
+  <h2>ひみつ①：ゴールは<span class="marker">「現状の外」</span>に置く</h2>
+  <p class="lead">
+    「現状」って「今この瞬間」のことじゃないよ。<b>「今のまま進んだら、いつかたどり着けそうな未来ぜんぶ」</b>のこと。<br>
+    たとえば「クラスで1番になる」は、がんばれば届きそうだから現状の中。<br>
+    「世界中の子どもがわくわくする発明をする」みたいに、<b>「えっ、どうやって！？」とやり方がぜんぜんわからないもの</b>——それが現状の外のゴールだよ。
+  </p>
+  <div class="points">
+    <div class="point-card">
+      <span class="icon">🐾</span>
+      <h3>現状の中のゴール</h3>
+      <p>やり方がだいたい想像できる。安心だけど、スコトーマは外れない。見える世界は今のまま。</p>
+    </div>
+    <div class="point-card">
+      <span class="icon">🚀</span>
+      <h3>現状の外のゴール</h3>
+      <p>やり方が想像できない。ドキドキする。でもだからこそ脳がフル回転して、今まで見えなかった方法（スコトーマの外）が見えはじめる！</p>
+    </div>
+    <div class="point-card">
+      <span class="icon">💭</span>
+      <h3>ポイント</h3>
+      <p>「どうやるか」は考えなくていい。先にゴールを決めれば、方法はあとから<b>見えてくる</b>。順番が逆なんだ。</p>
+    </div>
+  </div>
+</section>
+
+<section class="reveal">
+  <span class="section-label">まなぶ</span>
+  <h2>ひみつ②：<span class="marker">100%「やりたい！」</span>（want to）で決める</h2>
+  <p class="lead">
+    ほんもののゴールの条件は、<b>100% want to（やりたい！）</b>であること。<br>
+    「99%やりたいけど、1%はママに言われたから…」——これはもうhave to（やらされ）。1%でもまざったらダメ、というのが苫米地式のきびしくて大事なルール。<br>
+    見分け方はかんたん。<b>「だれにも頼まれてないのに、気づいたらやっちゃってること」</b>。それがきみの本物のwant toだよ。
+  </p>
+</section>
+
+<section class="reveal">
+  <span class="section-label">あそぶ</span>
+  <h2>仕分けゲーム：<span class="marker">want to？ have to？</span> 📦</h2>
+  <p class="lead">8枚のカードを「💖やりたい！（want to）」か「😮‍💨やらされ…（have to）」に仕分けしよう。ぜんぶ正しく仕分けるとスタンプGET！</p>
+
+  <div class="sort-grid" id="sortGrid"></div>
+  <div style="text-align:center;"><span class="score-board" id="scoreBoard">仕分けできた：0 / 8</span></div>
+
+  <div class="stamp-banner" id="stampBanner">
+    <span class="big">🎯</span>
+    スタンプGET！「ゴールハンター」バッジを手に入れた！<br>
+    <a href="../index.html#map">🗺️ マップで確認する</a>
+  </div>
+</section>
+
+<section class="reveal">
+  <span class="section-label">まなぶ</span>
+  <h2>ひみつ③：ゴールは<span class="marker">ひみつにする</span> 🤫</h2>
+  <p class="lead">
+    現状の外のゴールを話すと、まわりの人は「そんなの無理だよ」と言ってくる。これが<b>ドリームキラー</b>。<br>
+    悪気はないんだ。その人の「現状」からは、きみのゴールが見えない（スコトーマ！）だけ。<br>
+    だから大きなゴールは、わかってくれるコーチや仲間以外には<b>むやみに話さない</b>のがルールだよ。
+  </p>
+
+  <a class="wheel-link-card" href="balance-wheel.html">
+    <h3>🎡 ひみつ④：ゴールは「1個」じゃダメ！</h3>
+    <p>しごと・健康・趣味・家族・まなび・おかね・まちへの貢献・せかいへの貢献——人生ぜんぶの分野にゴールを置く道具が「バランスホイール」。</p>
+    <p class="go">▶ バランスホイールのページでくわしく学ぶ</p>
+  </a>
+</section>
+
+<div class="next-nav">
+  <a class="btn yellow" href="balance-wheel.html">つぎのぼうけん → 🎡 バランスホイール</a>
+</div>
+
+<footer>
+  このページは苫米地英人氏の著書『オーセンティック・コーチング』の理論を、学習用にやさしく要約したものです。
+</footer>
+
+<script src="../assets/common.js"></script>
+<script>
+  const SORT_CARDS = [
+    { text: 'だれにも頼まれてないのに、気づいたら虫の図鑑を作っちゃってる', isWant: true,
+      hint: 'これぞwant to！「気づいたらやっちゃう」が合言葉。' },
+    { text: 'ママにしかられるから、しかたなく宿題をやる', isWant: false,
+      hint: '「しかたなく」はhave toのサイン！' },
+    { text: '夜ふかししてでも、ひみつ基地の設計図をかきたい', isWant: true,
+      hint: '止められてもやりたいこと＝want to！' },
+    { text: 'みんなが行くから、なんとなく塾に行っている', isWant: false,
+      hint: '「みんなが行くから」は自分のwant toじゃないよ。' },
+    { text: '明日の発表が楽しみで、練習が止まらない', isWant: true,
+      hint: '楽しみで止まらない！ 完全にwant to。' },
+    { text: 'おこられないように、部屋のそうじをする', isWant: false,
+      hint: '「おこられないように」はhave to。同じそうじでも理由がちがう！' },
+    { text: '大人になったらやりたいことを、ノートにこっそり書いている', isWant: true,
+      hint: 'こっそりでもやっちゃう＝本物のwant to！' },
+    { text: '本当はやめたいけど、先生にほめられたいから続けている', isWant: false,
+      hint: '「本当はやめたい」が答え。ほめられるためだけならhave to。' }
+  ];
+
+  const grid = document.getElementById('sortGrid');
+  let sortedCount = 0;
+
+  /* カードの順番をシャッフルして表示 */
+  const order = SORT_CARDS.map(function (_, i) { return i; });
+  for (let i = order.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [order[i], order[j]] = [order[j], order[i]];
+  }
+  order.forEach(function (idx) {
+    const c = SORT_CARDS[idx];
+    const card = document.createElement('div');
+    card.className = 'sort-card';
+    card.innerHTML =
+      '<div class="sentence">' + c.text + '</div>' +
+      '<div class="sort-btns">' +
+      '<button class="btn green" onclick="sortAnswer(' + idx + ', true, this)">💖 やりたい！</button>' +
+      '<button class="btn ghost" onclick="sortAnswer(' + idx + ', false, this)">😮‍💨 やらされ…</button>' +
+      '</div><div class="hint"></div>';
+    grid.appendChild(card);
+  });
+
+  function sortAnswer(idx, answer, btn) {
+    const card = btn.closest('.sort-card');
+    if (card.classList.contains('right')) return;
+    const c = SORT_CARDS[idx];
+    const hint = card.querySelector('.hint');
+    if (answer === c.isWant) {
+      card.classList.add('right');
+      hint.classList.remove('show');
+      card.querySelectorAll('.btn').forEach(function (b) { b.disabled = true; b.style.opacity = 0.45; });
+      btn.style.opacity = 1;
+      sortedCount++;
+      document.getElementById('scoreBoard').textContent = '仕分けできた：' + sortedCount + ' / ' + SORT_CARDS.length;
+      confetti(12);
+      if (sortedCount === SORT_CARDS.length) {
+        awardStamp('goal');
+        document.getElementById('stampBanner').classList.add('show');
+        confetti(80);
+      }
+    } else {
+      hint.textContent = '🤔 おしい！ ヒント：' + c.hint;
+      hint.classList.add('show');
+    }
+  }
+</script>
+</body>
+</html>
