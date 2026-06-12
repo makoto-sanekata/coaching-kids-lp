@@ -573,7 +573,8 @@
     </div>
     <div class="result-msg good" id="czMagicMsg">
       🎉 コンフォートゾーンがゴール側に引っこしした！<br>
-      ゴールの世界を<b>リアルに想像（臨場感）</b>すると、脳は「そっちが本当の自分だ」と思いこむ。すると今度はホメオスタシスが<b>ゴールに向かって引っぱってくれる</b>ようになるんだ。これがコーチングの最大のヒミツ！
+      ゴールの世界を<b>リアルに想像（臨場感）</b>すると、脳は「そっちが本当の自分だ」と思いこむ。すると今度はホメオスタシスが<b>ゴールに向かって引っぱってくれる</b>ようになるんだ。これがコーチングの最大のヒミツ！<br>
+      実は「ゴール」の正体は<b>未来のコンフォートゾーン</b>——くわしくは <a href="pages/future-cz.html" style="color:#1d8a5c;">⏰ みらいのコンフォートゾーン</a> のステージで！
     </div>
   </div>
 </section>
@@ -690,8 +691,8 @@
   <div class="map-board">
     <span class="section-label" style="background:var(--yellow); color:var(--ink);">NEXT STAGE</span>
     <h2>🗺️ コーチングぼうけんマップ</h2>
-    <p style="font-weight:700; margin-bottom:18px;">ここから先は、もっと深いぼうけん！ 4つのステージをクリアしてスタンプを集めると、<b>「コーチングマスター」認定</b>だ！</p>
-    <div class="stamp-count" id="stampCount">あつめたスタンプ：0 / 4</div>
+    <p style="font-weight:700; margin-bottom:18px;">ここから先は、もっと深いぼうけん！ 5つのステージをクリアしてスタンプを集めると、<b>「コーチングマスター」認定</b>だ！</p>
+    <div class="stamp-count" id="stampCount">あつめたスタンプ：0 / 5</div>
 
     <div class="map-grid">
       <a class="map-card" href="pages/authentic.html">
@@ -722,11 +723,18 @@
         <p>思いこみのメガネ（ブリーフシステム）と、抽象度エレベーターを体験！</p>
         <span class="go-tag">▶ ステージ4へ</span>
       </a>
+      <a class="map-card" href="pages/future-cz.html">
+        <span class="stamp-slot" data-stamp="future"></span>
+        <span class="map-icon">⏰</span>
+        <h3>みらいのコンフォートゾーン</h3>
+        <p>2026年の新理論！ ゴールとゾーンは同じもの？ はしっこパワー実験に挑戦！</p>
+        <span class="go-tag">▶ ステージ5へ（NEW!）</span>
+      </a>
     </div>
 
     <div class="master-cert" id="masterCert">
       <span class="big">🏆</span>
-      おめでとう！ スタンプ4個コンプリート！<br>
+      おめでとう！ スタンプ5個コンプリート！<br>
       きみを「コーチングマスター」に認定します！🎉
     </div>
   </div>
@@ -742,12 +750,13 @@
       <div class="takeaway"><span class="big">📡</span>ゴールを決めると、RASがスコトーマを外して、必要なものが見えはじめる。</div>
       <div class="takeaway"><span class="big">🛋️</span>ゴール側の自分をリアルに想像すれば、ホメオスタシスが味方になる。</div>
       <div class="takeaway"><span class="big">🔥</span>エフィカシーを高く！「自分ならできる」が、ぜんぶの燃料。</div>
+      <div class="takeaway"><span class="big">⏰</span>ゴールの正体は「未来のコンフォートゾーン」。エネルギーが出るのは、ゾーンのはしっこ！</div>
     </div>
   </div>
 </section>
 
 <footer>
-  このページは苫米地英人氏の提唱するコーチング理論（ルー・タイス氏のプログラムが源流）を、学習用にやさしく要約したものです。
+  このページは苫米地英人氏の提唱するコーチング理論（ルー・タイス氏のプログラムが源流。『オーセンティック・コーチング2026』の理論を含む）を、学習用にやさしく要約したものです。
 </footer>
 
 <script>
@@ -987,7 +996,8 @@
   }
 
   /* ===== ぼうけんマップ：スタンプラリー表示 ===== */
-  const STAMP_EMOJI = { authentic: '🤝', goal: '🎯', wheel: '🎡', abstract: '🔭' };
+  const STAMP_EMOJI = { authentic: '🤝', goal: '🎯', wheel: '🎡', abstract: '🔭', future: '⏰' };
+  const STAMP_TOTAL = 5;
   function renderStamps() {
     let stamps = {};
     try { stamps = JSON.parse(localStorage.getItem('coachingStamps') || '{}'); } catch (e) { stamps = {}; }
@@ -1003,8 +1013,8 @@
         slot.classList.remove('got');
       }
     });
-    document.getElementById('stampCount').textContent = 'あつめたスタンプ：' + got + ' / 4';
-    if (got === 4) {
+    document.getElementById('stampCount').textContent = 'あつめたスタンプ：' + got + ' / ' + STAMP_TOTAL;
+    if (got === STAMP_TOTAL) {
       const cert = document.getElementById('masterCert');
       if (!cert.classList.contains('show')) {
         cert.classList.add('show');

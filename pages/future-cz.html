@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>みらいのコンフォートゾーン — コーチングぼうけん</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/style.css">
+<style>
+  /* ゴール＝未来のCZ 図解 */
+  .tcz-diagram {
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    flex-wrap: wrap; background: linear-gradient(90deg, #e8f6ff, #fff3f8);
+    border-radius: 22px; padding: 30px 16px; margin-top: 22px; text-align: center;
+  }
+  .tcz-bubble {
+    border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    font-weight: 900; padding: 10px;
+  }
+  .tcz-bubble.now { width: 130px; height: 130px; background: rgba(77, 213, 153, 0.3); border: 3px dashed var(--green); color: #1d8a5c; font-size: 13px; }
+  .tcz-bubble.future { width: 150px; height: 150px; background: rgba(124, 92, 255, 0.18); border: 3px dashed var(--purple); color: var(--purple); font-size: 13px; }
+  .tcz-bubble .big { font-size: 34px; }
+  .tcz-arrow { font-size: 30px; font-weight: 900; color: var(--pink); animation: arrowSlide 1.4s ease-in-out infinite; }
+  @keyframes arrowSlide { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(8px); } }
+  .tcz-caption { width: 100%; font-weight: 900; font-size: 14px; color: var(--ink); margin-top: 14px; }
+
+  /* はしっこパワー実験 */
+  .temp-stage {
+    position: relative; border-radius: 18px; margin: 26px 0 8px; padding: 24px 16px 18px;
+    background: linear-gradient(90deg, #cfe9ff 0%, #e9fff3 30%, #e9fff3 70%, #ffe3d6 100%);
+    text-align: center; overflow: hidden;
+  }
+  .temp-zone-label { font-size: 12px; font-weight: 900; color: #1d8a5c; }
+  .temp-char { font-size: 64px; transition: transform 0.2s; display: block; }
+  .temp-char.buzz { animation: buzz 0.35s infinite; }
+  @keyframes buzz { 0%, 100% { transform: rotate(-6deg); } 50% { transform: rotate(6deg); } }
+  .temp-read { font-size: 26px; font-weight: 900; margin-top: 4px; }
+  input[type="range"] {
+    -webkit-appearance: none; appearance: none; width: 100%; height: 14px; border-radius: 7px;
+    background: linear-gradient(90deg, #6db9f5, #4dd599 30%, #4dd599 70%, #ff8a5a 100%); outline: none; cursor: pointer;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none; appearance: none; width: 34px; height: 34px; border-radius: 50%;
+    background: #fff; border: 4px solid var(--purple); box-shadow: 0 4px 10px rgba(0,0,0,0.25); cursor: grab;
+  }
+  .energy-wrap { background: #eceaf8; border-radius: 999px; height: 26px; overflow: hidden; margin: 16px 0 6px; }
+  .energy-bar {
+    height: 100%; width: 5%; border-radius: 999px; transition: width 0.25s, background 0.25s;
+    background: var(--green);
+  }
+  .energy-label { font-size: 13px; font-weight: 900; color: #9a94c2; text-align: center; }
+  .temp-status { min-height: 70px; margin-top: 14px; font-weight: 900; font-size: 15px; padding: 14px 18px; border-radius: 14px; background: #f7f5ff; transition: background 0.3s; }
+
+  /* 動物vs人間 */
+  .power-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 24px; }
+  @media (max-width: 640px) { .power-grid { grid-template-columns: 1fr; } }
+  .power-col { border-radius: 22px; padding: 26px 22px; }
+  .power-col h3 { font-size: 17px; font-weight: 900; margin-bottom: 12px; text-align: center; }
+  .power-col p { font-size: 14px; font-weight: 700; }
+  .power-col.animal { background: #f0f0e8; color: #6b6b50; }
+  .power-col.human { background: linear-gradient(150deg, #f3edff, #e7f4ff); color: #4a3f8f; border: 3px solid var(--purple); }
+  .power-col .icon { display: block; text-align: center; font-size: 44px; margin-bottom: 8px; }
+</style>
+</head>
+<body>
+
+<header class="hero-mini">
+  <a class="back-link" href="../index.html#map">🗺️ マップにもどる</a>
+  <span class="icon">⏰</span>
+  <h1>みらいのコンフォートゾーン</h1>
+  <p class="sub">オーセンティックコーチング2026の新しいひみつ！</p>
+</header>
+
+<section class="reveal">
+  <span class="section-label">まなぶ</span>
+  <h2>びっくり！ゴールとコンフォートゾーンは<span class="marker">同じもの</span>だった</h2>
+  <p class="lead">
+    ここまで「ゴール」と「コンフォートゾーン」を別々に学んできたよね。でも2026年の新しい理論で、苫米地さんはこう言ったんだ——<b>「実はこの2つ、同じものなの」</b>。<br>
+    どういうこと？ <b>ゴールとは「未来のコンフォートゾーン」</b>のことなんだ。「将来こうなりたい！」は、「未来のぼくが居心地よくいられる場所」ってことだよね。<br>
+    今のゾーンと未来のゾーンは、時間をこえてつながった<b>1つの大きなゾーン</b>。これを<b>トータルコンフォートゾーン（TCZ）</b>と呼ぶよ。
+  </p>
+  <div class="tcz-diagram">
+    <div class="tcz-bubble now"><span class="big">🛋️</span>今の<br>コンフォートゾーン</div>
+    <div class="tcz-arrow">〰️➡️</div>
+    <div class="tcz-bubble future"><span class="big">🏆</span>未来の<br>コンフォートゾーン<br>＝ゴール！</div>
+    <div class="tcz-caption">⏰ 2つあわせて「トータルコンフォートゾーン（TCZ）」。未来のゾーンをリアルに感じるほど、今のゾーンが勝手にそっちへ動きだす！</div>
+  </div>
+</section>
+
+<section class="reveal">
+  <span class="section-label">あそぶ</span>
+  <h2>たいけん：<span class="marker">はしっこパワー</span>のひみつ 🌡️</h2>
+  <p class="lead">
+    コンフォートゾーンには、もうひとつ大発見がある。<b>エネルギーが出るのは、ゾーンの「ど真ん中」じゃなくて「はしっこ」</b>なんだ！<br>
+    部屋の温度で実験してみよう。きみの快適ゾーンは<b>23℃〜28℃</b>。スライダーで温度を変えて、エネルギーメーターを見てみて！
+  </p>
+
+  <div class="lab">
+    <div class="lab-title"><span class="badge">実験</span>何度のとき、きみは動きだす？</div>
+    <div class="temp-stage">
+      <div class="temp-zone-label">🛋️ 快適ゾーン：23℃〜28℃</div>
+      <span class="temp-char" id="tempChar">😪</span>
+      <div class="temp-read" id="tempRead">25℃</div>
+    </div>
+    <input type="range" id="tempSlider" min="16" max="34" step="1" value="25">
+    <div class="energy-wrap"><div class="energy-bar" id="energyBar"></div></div>
+    <div class="energy-label">⚡ エネルギーメーター</div>
+    <div class="temp-status" id="tempStatus">😪 ど真ん中。快適すぎて、なーんにもおきない…。これがゾーンの真ん中の正体！</div>
+    <div class="result-msg good" id="tempLesson">
+      💡 わかったかな？ <b>ど真ん中＝エネルギーゼロ。はしっこ＝エネルギー全開！</b><br>
+      だからコーチングの作戦はこれ：<b>「上のはしっこ」のギリギリ内側に、自分のゾーンを置きつづける</b>こと。はしっこパワーで、未来がどんどんできあがっていくんだ！
+    </div>
+  </div>
+</section>
+
+<section class="reveal">
+  <span class="section-label">まなぶ</span>
+  <h2>人間だけの<span class="marker">スーパーパワー</span> 🦸</h2>
+  <p class="lead">
+    ホメオスタシス（元にもどす力）は、ぜんぶの生き物が持ってる。でも人間には、人間にしかできないことがあるんだ。
+  </p>
+  <div class="power-grid">
+    <div class="power-col animal">
+      <span class="icon">🐦</span>
+      <h3>動物のホメオスタシス</h3>
+      <p>「体温が上がった→汗をかいてもどす」「寒くなりそう→巣をつくる」。<b>「いつもの状態にもどる」</b>のがとくい。ちょっと先の未来までは考えられる。</p>
+    </div>
+    <div class="power-col human">
+      <span class="icon">🦸</span>
+      <h3>人間のホメオスタシス</h3>
+      <p>脳（前頭前野）が進化したおかげで、<b>「未来のコンフォートゾーンを自分で選べる」</b>！ 選んだ未来をリアルに感じれば、ホメオスタシスが「もどる力」じゃなく<b>「未来へ進む力」</b>になる。これが人類のスーパーパワー！</p>
+    </div>
+  </div>
+  <div class="result-msg info show" style="margin-top:22px;">
+    🍚 だから<b>「努力はいらない」</b>。スポーツ選手の毎朝のトレーニングは、本人にとって呼吸やごはんと同じ「あたりまえ」。ゾーンが未来に向いていれば、体が勝手に動くんだ。「がんばってるのにつらい…」は、ゾーンの向きがちがうサインだよ。
+  </div>
+</section>
+
+<section class="reveal">
+  <span class="section-label">まなぶ</span>
+  <h2>なぞとき：<span class="marker">「見えないのに、どうやってゴールを決めるの？」</span></h2>
+  <p class="lead">
+    するどい人は気づいたかも。「現状の外はスコトーマで見えないんでしょ？ じゃあどうやって現状の外にゴールを決めるの？」——いい質問！<br>
+    答えはこう：現状と現状の外は、本当は<b>つながった1つのゾーン</b>。だから「まったく見えない」んじゃなくて<b>「見づらい」だけ</b>なんだ。<br>
+    コップの水にタオルのはしをつけると、水が勝手にタオルをのぼっていくよね（毛細管現象）。それと同じで、はしっこに近づきつづければ、見えなかった世界が<b>勝手にしみこむように見えてくる</b>。だから安心して、今いちばん「上」だと感じる方へ進めばいいんだよ。
+  </p>
+</section>
+
+<section class="reveal">
+  <span class="section-label">そうしあげ</span>
+  <h2>ミニクイズ：<span class="marker">TCZマスターになろう</span> 📝</h2>
+  <p class="lead">3問に答えると、ステージ5のスタンプGET！</p>
+
+  <div class="quiz-q">
+    <h3><span class="qnum">Q1.</span>「ゴール」の正体は、なんだった？</h3>
+    <div class="quiz-opts">
+      <button class="quiz-opt" onclick="quizAnswer(this, false)">A. がんばって達成するノルマ</button>
+      <button class="quiz-opt" onclick="quizAnswer(this, true)">B. 未来のコンフォートゾーン</button>
+      <button class="quiz-opt" onclick="quizAnswer(this, false)">C. 先生が決めてくれる目標</button>
+    </div>
+    <div class="quiz-fb"></div>
+  </div>
+
+  <div class="quiz-q">
+    <h3><span class="qnum">Q2.</span>エネルギーがいちばん出るのは、コンフォートゾーンのどこ？</h3>
+    <div class="quiz-opts">
+      <button class="quiz-opt" onclick="quizAnswer(this, false)">A. ど真ん中（いちばん快適なところ）</button>
+      <button class="quiz-opt" onclick="quizAnswer(this, true)">B. はしっこ（境界のギリギリ内側）</button>
+      <button class="quiz-opt" onclick="quizAnswer(this, false)">C. ゾーンのはるか外側</button>
+    </div>
+    <div class="quiz-fb"></div>
+  </div>
+
+  <div class="quiz-q">
+    <h3><span class="qnum">Q3.</span>「努力はいらない」の本当の意味はどれ？</h3>
+    <div class="quiz-opts">
+      <button class="quiz-opt" onclick="quizAnswer(this, false)">A. なにもしなくても夢はかなうから、ねていればいい</button>
+      <button class="quiz-opt" onclick="quizAnswer(this, false)">B. 努力できない人はあきらめるしかない</button>
+      <button class="quiz-opt" onclick="quizAnswer(this, true)">C. ゾーンが未来に向いていれば、呼吸やごはんと同じで体が勝手に動くから「ガマンの努力」がいらなくなる</button>
+    </div>
+    <div class="quiz-fb"></div>
+  </div>
+
+  <div class="stamp-banner" id="stampBanner">
+    <span class="big">⏰</span>
+    スタンプGET！「TCZマスター」バッジを手に入れた！<br>
+    <a href="../index.html#map">🗺️ マップにもどって、ぜんぶ集まったか確認しよう！</a>
+  </div>
+</section>
+
+<div class="next-nav">
+  <a class="btn yellow" href="../index.html#map">🗺️ ぼうけんマップにもどる</a>
+</div>
+
+<footer>
+  このページは苫米地英人氏の『オーセンティック・コーチング2026』および2026年公開の講義動画（トータルコンフォートゾーン理論）を、学習用にやさしく要約したものです。
+</footer>
+
+<script src="../assets/common.js"></script>
+<script>
+  /* ===== はしっこパワー実験 ===== */
+  const ZONE_MIN = 23, ZONE_MAX = 28;
+  const tempSlider = document.getElementById('tempSlider');
+  const tempChar = document.getElementById('tempChar');
+  const tempStatus = document.getElementById('tempStatus');
+  const energyBar = document.getElementById('energyBar');
+  let edgeSeen = false, centerSeen = false;
+
+  tempSlider.addEventListener('input', updateTemp);
+
+  function updateTemp() {
+    const t = Number(tempSlider.value);
+    document.getElementById('tempRead').textContent = t + '℃';
+    tempChar.classList.remove('buzz');
+
+    if (t < ZONE_MIN) {
+      tempChar.textContent = '🥶';
+      tempChar.classList.add('buzz');
+      energyBar.style.width = '100%';
+      energyBar.style.background = 'var(--red)';
+      tempStatus.innerHTML = '🥶 <b>ゾーンの外！</b> ホメオスタシスが全力で「もどれー！」。ふるえて熱を作って、必死に引きもどそうとしてる。外に出すぎると生き物はもたないんだ。';
+      tempStatus.style.background = '#e3f0ff';
+    } else if (t > ZONE_MAX) {
+      tempChar.textContent = '🥵';
+      tempChar.classList.add('buzz');
+      energyBar.style.width = '100%';
+      energyBar.style.background = 'var(--red)';
+      tempStatus.innerHTML = '🥵 <b>ゾーンの外！</b> あせが止まらない！ ホメオスタシスが全力で体温を引き下げようとしてる。はしっこを通りこしちゃうと、もどす力に飲みこまれるよ。';
+      tempStatus.style.background = '#ffe7e7';
+    } else if (t <= ZONE_MIN + 1 || t >= ZONE_MAX - 1) {
+      tempChar.textContent = '⚡';
+      energyBar.style.width = '80%';
+      energyBar.style.background = 'var(--yellow)';
+      tempStatus.innerHTML = '⚡ <b>はしっこに来た！</b> 「ちょっと' + (t <= ZONE_MIN + 1 ? '寒いかも→上着を着よう！' : '暑いかも→まどを開けよう！') + '」——急に体が動きだした！ <b>境界のギリギリでこそ、エネルギーが生まれる</b>んだ！';
+      tempStatus.style.background = '#fff6dc';
+      if (!edgeSeen) { edgeSeen = true; confetti(20); checkLesson(); }
+    } else {
+      tempChar.textContent = '😪';
+      energyBar.style.width = '5%';
+      energyBar.style.background = 'var(--green)';
+      tempStatus.innerHTML = '😪 ど真ん中。快適すぎて、なーんにもおきない…。これがゾーンの真ん中の正体！';
+      tempStatus.style.background = '#f7f5ff';
+      if (!centerSeen) { centerSeen = true; checkLesson(); }
+    }
+  }
+
+  function checkLesson() {
+    if (edgeSeen && centerSeen) document.getElementById('tempLesson').classList.add('show');
+  }
+  updateTemp();
+
+  /* ===== クイズ ===== */
+  const QUIZ_TOTAL = 3;
+  let quizAnswered = 0;
+  function quizAnswer(btn, isCorrect) {
+    const q = btn.closest('.quiz-q');
+    if (q.dataset.done) return;
+    q.dataset.done = '1';
+    quizAnswered++;
+    const fb = q.querySelector('.quiz-fb');
+    q.querySelectorAll('.quiz-opt').forEach(function (b) { b.disabled = true; });
+    if (isCorrect) {
+      btn.classList.add('correct');
+      fb.textContent = '⭕ せいかい！';
+      fb.style.color = '#1d8a5c';
+      confetti(15);
+    } else {
+      btn.classList.add('wrong');
+      q.querySelectorAll('.quiz-opt').forEach(function (b) {
+        if (b.getAttribute('onclick').includes('true')) b.classList.add('correct');
+      });
+      fb.textContent = '❌ ざんねん！ 緑のが正解だよ。';
+      fb.style.color = '#c0392b';
+    }
+    fb.classList.add('show');
+    if (quizAnswered === QUIZ_TOTAL) {
+      awardStamp('future');
+      document.getElementById('stampBanner').classList.add('show');
+      confetti(80);
+    }
+  }
+</script>
+</body>
+</html>

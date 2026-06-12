@@ -23,7 +23,7 @@ function awardStamp(key) {
 
 function countStamps() {
   const stamps = getStamps();
-  return ['authentic', 'goal', 'wheel', 'abstract'].filter(function (k) { return stamps[k]; }).length;
+  return ['authentic', 'goal', 'wheel', 'abstract', 'future'].filter(function (k) { return stamps[k]; }).length;
 }
 
 /* ===== 紙吹雪 ===== */
