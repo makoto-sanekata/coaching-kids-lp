@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>あるある事件簿 — コーチングぼうけん</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/style.css">
+<style>
+  /* ===== 事件ボード ===== */
+  .genre-title { font-size: 17px; font-weight: 900; margin: 30px 0 12px; color: var(--ink); }
+  .case-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
+  .case-card {
+    position: relative; text-align: left; font-family: inherit; cursor: pointer;
+    background: #fdf8ec; border: 2px solid #e8ddbe; border-radius: 6px 18px 18px 18px;
+    padding: 18px 16px 14px; box-shadow: 0 6px 14px rgba(45,42,69,0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .case-card::before {
+    content: 'FILE'; position: absolute; top: -2px; left: -2px;
+    background: #e8ddbe; color: #8a7b4d; font-size: 10px; font-weight: 900;
+    padding: 2px 10px; border-radius: 6px 0 10px 0; letter-spacing: 1px;
+  }
+  .case-card:hover { transform: translateY(-6px) rotate(-1deg); box-shadow: 0 14px 26px rgba(45,42,69,0.18); }
+  .case-card .case-emoji { font-size: 34px; display: block; margin-bottom: 4px; }
+  .case-card .case-title { font-size: 14.5px; font-weight: 900; line-height: 1.5; }
+  .case-card .solved-badge {
+    position: absolute; top: 10px; right: 10px; transform: rotate(12deg);
+    border: 3px solid var(--red); color: var(--red); border-radius: 50%;
+    width: 48px; height: 48px; display: none; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 900; background: rgba(255,255,255,0.85);
+  }
+  .case-card.solved .solved-badge { display: flex; }
+  .case-card.active { border-color: var(--purple); background: #f4f0ff; }
+  .case-counter {
+    display: inline-block; background: #2d2a45; color: #fff; border-radius: 999px;
+    padding: 10px 26px; font-weight: 900; font-size: 16px; margin-top: 8px;
+  }
+
+  /* ===== 推理パネル ===== */
+  #casePanel { display: none; margin-top: 40px; }
+  #casePanel.open { display: block; animation: popIn 0.5s both; }
+  .panel-head { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; }
+  .panel-head .case-emoji-big { font-size: 44px; }
+  .panel-head h3 { font-size: 21px; font-weight: 900; }
+  .story-box {
+    background: #fdf8ec; border: 2px dashed #d8c98e; border-radius: 16px;
+    padding: 20px 22px; font-size: 15.5px; font-weight: 700; line-height: 2;
+  }
+  .phase-label {
+    display: inline-block; background: var(--pink); color: #fff; font-weight: 900;
+    font-size: 13px; padding: 5px 16px; border-radius: 999px; margin: 26px 0 10px;
+  }
+  .phase-q { font-size: 16.5px; font-weight: 900; margin-bottom: 14px; }
+  .mech-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; }
+  .mech-chip {
+    text-align: left; font-family: inherit; cursor: pointer;
+    background: #f7f5ff; border: 3px solid transparent; border-radius: 14px;
+    padding: 12px 14px; transition: all 0.2s;
+  }
+  .mech-chip:hover { border-color: var(--purple); transform: translateX(4px); }
+  .mech-chip .mech-name { font-size: 14.5px; font-weight: 900; }
+  .mech-chip .mech-short { font-size: 11.5px; font-weight: 700; color: #8a85ad; }
+  .mech-chip .mech-why { display: none; font-size: 12.5px; font-weight: 700; margin-top: 8px; padding-top: 8px; border-top: 2px dashed rgba(0,0,0,0.1); }
+  .mech-chip.hit { background: #e4f9ef; border-color: var(--green); }
+  .mech-chip.hit .mech-why { display: block; color: #1d8a5c; }
+  .mech-chip.miss { background: #ffe7e7; border-color: var(--red); animation: shake 0.4s; }
+  .mech-chip.miss .mech-why { display: block; color: #c0392b; }
+  .mech-chip:disabled { cursor: default; }
+  .mech-progress { margin-top: 12px; font-weight: 900; font-size: 14px; color: var(--purple); }
+
+  .chain-box {
+    display: none; background: linear-gradient(150deg, #f3edff, #e7f4ff);
+    border-radius: 18px; padding: 22px; margin-top: 20px;
+    font-weight: 700; font-size: 14.5px; line-height: 2;
+  }
+  .chain-box.show { display: block; animation: popIn 0.5s both; }
+  .chain-box .chain-title { font-weight: 900; font-size: 16px; color: var(--purple); margin-bottom: 8px; }
+  .chain-flow {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
+    background: rgba(255,255,255,0.7); border-radius: 12px; padding: 12px 14px; margin-bottom: 10px;
+    font-weight: 900; font-size: 13.5px;
+  }
+  .chain-flow .arrow { color: var(--pink); font-size: 16px; }
+
+  .action-area { display: none; margin-top: 26px; }
+  .action-area.show { display: block; animation: popIn 0.5s both; }
+  .action-opt {
+    display: block; width: 100%; text-align: left; font-family: inherit; cursor: pointer;
+    background: #fff; border: 3px solid #e5e1f5; border-radius: 14px;
+    padding: 14px 18px; margin-bottom: 10px; font-size: 14.5px; font-weight: 700;
+    transition: all 0.2s;
+  }
+  .action-opt:hover { border-color: var(--purple); transform: translateX(6px); }
+  .action-opt .opt-fb { display: none; margin-top: 8px; font-size: 13px; font-weight: 900; }
+  .action-opt.wrong { background: #ffe7e7; border-color: var(--red); animation: shake 0.4s; }
+  .action-opt.wrong .opt-fb { display: block; color: #c0392b; }
+  .action-opt.right { background: #e4f9ef; border-color: var(--green); }
+  .action-opt.right .opt-fb { display: block; color: #1d8a5c; }
+
+  .solve-box { display: none; margin-top: 24px; }
+  .solve-box.show { display: block; animation: popIn 0.6s both; }
+  .oneliner {
+    background: #2d2a45; color: #ffd34d; border-radius: 16px; padding: 20px 22px;
+    text-align: center; font-weight: 900; font-size: 17px; margin-bottom: 14px;
+  }
+  .oneliner .ol-label { display: block; color: #fff; font-size: 12px; margin-bottom: 6px; letter-spacing: 1px; }
+  .aha-box {
+    background: #fff6dc; border: 2px solid var(--yellow); border-radius: 16px;
+    padding: 16px 20px; font-size: 14px; font-weight: 700; color: #7a5c00;
+  }
+  .aha-box .aha-title { font-weight: 900; margin-bottom: 4px; }
+  .pair-btn { margin-top: 12px; }
+</style>
+</head>
+<body>
+
+<header class="hero-mini">
+  <a class="back-link" href="../index.html#map">🗺️ マップにもどる</a>
+  <span class="icon">🔍</span>
+  <h1>あるある事件簿</h1>
+  <p class="sub">大人のナゾ行動、きみが推理せよ！</p>
+</header>
+
+<section class="reveal">
+  <span class="section-label">たんていの心得</span>
+  <h2>事件は<span class="marker">2段階</span>で解決する 🕵️</h2>
+  <p class="lead">
+    ここまで学んだ「脳のしくみ」を使えば、日常のナゾ行動はぜんぶ説明がつく。でも説明して「へぇ」で終わったら、たんてい失格！<br>
+    <b>推理①「どのしくみが動いてる？」をぜんぶ見つける</b>（1つの事件で複数のしくみが連動してるよ）→ <b>推理②「じゃあ、どうする？」を選ぶ</b>——ここまでやって事件解決だ。<br>
+    好きな事件から、好きな順番でどうぞ。<b>5件解決でスタンプ、12件全部で「名探偵」認定！</b>
+  </p>
+  <div style="text-align:center;"><span class="case-counter" id="caseCounter">解決した事件：0 / 12</span></div>
+</section>
+
+<section class="reveal" style="padding-top:0;">
+  <div id="caseBoard"></div>
+
+  <div id="casePanel" class="lab"></div>
+
+  <div class="stamp-banner" id="stampBanner">
+    <span class="big">🔍</span>
+    スタンプGET！「事件簿たんてい」バッジを手に入れた！<br>
+    <a href="../index.html#map">🗺️ マップで確認する</a>（残りの事件もぜひ解決してね）
+  </div>
+  <div class="stamp-banner" id="meitanteiBanner" style="background:linear-gradient(150deg,#2d2a45,#4a3f8f); color:#ffd34d;">
+    <span class="big">🕵️</span>
+    全12事件コンプリート！ きみを<b>「名探偵」</b>に認定します！<br>
+    これからは日常のナゾ行動を見つけたら、自分で推理してみよう。それが本当の卒業試験だ！
+  </div>
+</section>
+
+<div class="next-nav">
+  <a class="btn yellow" href="../index.html#map">🗺️ ぼうけんマップにもどる</a>
+</div>
+
+<footer>
+  このページの事例は、苫米地英人氏のコーチング理論をもとにした学習用の自作事例集です。
+</footer>
+
+<script src="../assets/common.js"></script>
+<script>
+  /* ===== 脳のしくみ図鑑 ===== */
+  const MECHS = {
+    brief:    { emoji: '👓', name: 'ブリーフシステム', short: '「ふつうはこう」という思いこみのメガネ' },
+    scotoma:  { emoji: '🙈', name: 'スコトーマ', short: '大事じゃないと思ったものが見えなくなる' },
+    ras:      { emoji: '📡', name: 'RAS', short: '「大事」と決めたものだけ通すフィルター' },
+    homeo:    { emoji: '⚖️', name: 'ホメオスタシス', short: '「いつもの状態」に引きもどす力' },
+    cz:       { emoji: '🛋️', name: 'コンフォートゾーン', short: '居心地のいい、いつもの場所' },
+    efficacy: { emoji: '🔥', name: 'エフィカシー', short: '「自分ならできる」という自信の点数' },
+    selftalk: { emoji: '🗣️', name: 'セルフトーク', short: '心の中で自分にかけている言葉' },
+    killer:   { emoji: '😈', name: 'ドリームキラー', short: '夢に「無理だよ」と言ってくる人' },
+    haveto:   { emoji: '😮‍💨', name: 'have to', short: '「やらなきゃ」でやらされている状態' },
+    wantto:   { emoji: '💖', name: 'want to', short: '「やりたい！」が100%の状態' },
+    avoid:    { emoji: '🧹', name: 'クリエイティブ・アボイダンス', short: 'やらない理由を脳が発明する「賢い逃げ」' },
+    futurecz: { emoji: '⏰', name: '未来のコンフォートゾーン', short: 'ゴール＝未来の居心地いい場所' },
+    goal:     { emoji: '🎯', name: '現状の外のゴール', short: 'やり方がわからないくらい大きなゴール' }
+  };
+
+  /* ===== 事件データ（ここに足せば事件が増える） ===== */
+  const CASES = [
+    /* ---------- 🏫 がっこう・おうち編 ---------- */
+    {
+      id: 'rule', genre: 'school', emoji: '🏀', title: '体育館の謎ルール事件',
+      story: '体育の時間、ボールはぜったい「右のカゴ」に戻すルールがある。転校生が「なんで右なんですか？」と聞いたら、先生もみんなも、だれも答えられなかった。それなのに、今日もみんな右のカゴに戻し続けている…。',
+      mechs: [
+        { key: 'brief', why: 'あたり！「みんながそうしてるから正しい」と、みんなの脳が学習してしまった。' },
+        { key: 'scotoma', why: 'あたり！「そもそも何のためのルール？」という一番大事な問いが、盲点に隠れて誰にも見えていない。' },
+        { key: 'homeo', why: 'あたり！ルールを破ると気まずい…という「いつも通りに戻す力」が、みんなを右カゴに向かわせ続けている。' }
+      ],
+      decoys: [
+        { key: 'ras', whyNot: 'ちがうかも。RASは「見えるようになる」方の話。今回は思いこみ（メガネ）が主役だよ。' },
+        { key: 'efficacy', whyNot: 'ちがうかも。自信の高い低いの話ではないよね。' },
+        { key: 'killer', whyNot: 'ちがうかも。だれかが夢をこわしているわけではない。もっと静かに起きている事件だ。' }
+      ],
+      chain: ['👓 「前からこうだから」', '🙈 目的が見えなくなる', '⚖️ 破ると気まずくて元どおり'],
+      chainText: 'だれかが始めたルールを、脳が「正しい」と学習（ブリーフシステム）。すると「何のため？」という問いがスコトーマに隠れ、外れると気まずいからホメオスタシスが全員を「いつも通り」に戻す。会社でも国でも、世界中で毎日起きてる事件だよ。',
+      actions: [
+        { text: '「こんなルール意味ない！」とみんなに言って、やめさせる', fb: 'うーん。責められると、人のホメオスタシスはむしろ強く働いて「ルールを守る側」に固まっちゃう。' },
+        { text: '「このルールって、だれのためにあるんだろう？」と先生に聞いてみる', correct: true, fb: '正解！責めずに「目的」を聞く質問は、みんなのスコトーマをそっと外す。エレベーターで「1」を押した新人と同じ、静かでかしこい一手だ。' },
+        { text: '自分もだまって右カゴに戻し続ける', fb: 'うーん。それは事件の「共犯者」になる道。悪いことじゃないけど、ナゾは残ったまま。' }
+      ],
+      oneLiner: '「このルール、だれのため？」',
+      pair: 'ohtani',
+      ahaNote: '大谷選手の事件とくらべてみて。「常識」に縛られる学校と、「常識」の外でプレーした大谷選手——主役はどっちも👓ブリーフシステム！'
+    },
+    {
+      id: 'phone', genre: 'school', emoji: '📱', title: '消えたスマホ事件',
+      story: 'ママが「スマホがない！スマホがない！」と家じゅう大さわぎ。ソファの下、カバンの中、れいぞうこの中まで探した。——でもスマホは、ママの左手ににぎられていた。',
+      mechs: [
+        { key: 'scotoma', why: 'あたり！「なくした」と思った瞬間、「手の中」は探す場所リストから外れて、見えているのに見えなくなった。' },
+        { key: 'brief', why: 'あたり！「スマホはどこかに置き忘れるもの」という思いこみのメガネが、探す場所を最初から決めつけていた。' }
+      ],
+      decoys: [
+        { key: 'ras', whyNot: 'おしい！RASは「見えるようになる」方の力。今回は「見えなくなって」いるから、主役はスコトーマだ。' },
+        { key: 'homeo', whyNot: 'ちがうかも。「いつもに戻す力」は今回は出番なし。' },
+        { key: 'killer', whyNot: 'ちがうかも。夢をこわす人はこの事件には登場しない。' }
+      ],
+      chain: ['👓 「どこかに置き忘れた」と思いこむ', '🙈 「手の中」がスコトーマに隠れる', '👀 見えてるのに見えない！'],
+      chainText: '脳は「目」じゃなく「思いこみ」で見ている。「ない」と確信した場所の情報は、目に映っていても脳が捨ててしまうんだ。大人の脳でも毎日起きる、世界でいちばん身近なスコトーマ事件。',
+      actions: [
+        { text: '「もう、ぼけてるの？」と笑う', fb: 'うーん。これはどんな脳にも起きる現象。笑っても次もまた起きるだけ。' },
+        { text: '「ぜったいあるとしたら、どこ？」と聞いてみる', correct: true, fb: '正解！「ない」という前提を「ぜったいある」に変える質問は、メガネをかけかえさせてスコトーマを外す魔法の一言。探し物のプロも使うテクニックだ。' },
+        { text: 'いっしょに家じゅうを何時間でも探す', fb: 'うーん。同じメガネのまま探しても、見えない場所は見えないまま。先にメガネを変えよう。' }
+      ],
+      oneLiner: '「ぜったいあるとしたら、どこ？」',
+      pair: 'shoes',
+      ahaNote: '「町じゅう同じクツ事件」と対だよ。同じ脳のフィルターが、こっちでは「見えなく」して、あっちでは「見えるように」する。裏表の関係！'
+    },
+    {
+      id: 'cleaning', genre: 'school', emoji: '🧹', title: 'テスト前そうじ事件',
+      story: '「よし、テスト勉強するぞ！」と机に向かったのに、気づいたら部屋のそうじを始めていた。しかも、ふだんは絶対やらないのに、本だなの整理まで超ていねいに…。なんで今なの！？',
+      mechs: [
+        { key: 'avoid', why: 'あたり！「そうじは役に立つことだから」という言い訳を脳が発明した。これがクリエイティブ・アボイダンス（賢い逃げ）！' },
+        { key: 'cz', why: 'あたり！本気の勉強は「いつもの自分」の外側。脳はゾーンの中（=そうじみたいな楽なこと）に居続けたい。' },
+        { key: 'homeo', why: 'あたり！ゾーンから出ようとした瞬間、「いつもの自分」に引き戻す力が働いた。その出口がそうじだったんだ。' }
+      ],
+      decoys: [
+        { key: 'killer', whyNot: 'ちがうかも。じゃまをしてるのは他人じゃなくて、自分の脳のしくみだ。' },
+        { key: 'efficacy', whyNot: 'ちがうかも。自信の話というより「逃げ方」の話。' },
+        { key: 'ras', whyNot: 'ちがうかも。フィルターの話ではないよ。' }
+      ],
+      chain: ['📚 勉強＝ゾーンの外', '⚖️ 脳が引き戻したい', '🧹 「そうじは正しいこと」という言い訳を発明！'],
+      chainText: 'ホメオスタシスは力ずくで引き戻すだけじゃない。「これは役に立つことだから」という、もっともらしい言い訳を発明してくる。頭が良い人ほど言い訳も上手になる——これがクリエイティブ・アボイダンスのこわさであり、面白さ！',
+      actions: [
+        { text: '「自分はなんてだらしないんだ」と反省する', fb: 'うーん。これは意志の問題じゃなくて脳の仕様。反省はセルフトークを下げるだけ損だよ。' },
+        { text: '「お、逃げてるな。ゾーンの外に出ようとしてる証拠だ」とニヤリとして、5分だけ勉強してみる', correct: true, fb: '正解！逃げに名前をつけて見破ると、術が解ける。そして「5分だけ」で境界を越えれば、ホメオスタシスは今度は「勉強してる自分」を続けさせようとしてくれる。' },
+        { text: 'そうじが終わってから勉強することにする', fb: 'うーん。そうじが終わったら、脳は次の言い訳を発明するよ。「先に飲み物を…」ってね。' }
+      ],
+      oneLiner: '「お、逃げてるな（＝成長のチャンス！）」',
+      pair: 'diet',
+      ahaNote: 'パパのダイエット事件と対。同じホメオスタシスでも、あっちは「力ずくの引き戻し」、こっちは「賢い言い訳」。手口がちがう！'
+    },
+    {
+      id: 'brother', genre: 'school', emoji: '😢', title: '「どうせぼくなんか」事件',
+      story: 'サッカーでミスした弟が、「どうせぼくなんか」と言うようになった。すると不思議なことに、前はふつうにできていたパスやドリブルまで、本当に下手になっていった。呪いなの…？',
+      mechs: [
+        { key: 'selftalk', why: 'あたり！「どうせぼくなんか」という言葉が、毎日何十回も自分の脳に注文を出している。' },
+        { key: 'efficacy', why: 'あたり！セルフトークがエフィカシー（できる！の点数）をどんどん下げた。脳は点数どおりの自分を作る。' },
+        { key: 'ras', why: 'あたり！「できない自分」が大事な情報になったから、RASがミスの証拠ばかり集めてくる。できたプレーは目に入らない。' }
+      ],
+      decoys: [
+        { key: 'killer', whyNot: 'おしい！ドリームキラーは「他人」から来る言葉。今回は自分で自分に言っている——つまりセルフトークだ。' },
+        { key: 'homeo', whyNot: 'ちがうかも。引き戻す力というより「言葉」が主役の事件。' },
+        { key: 'haveto', whyNot: 'ちがうかも。やらされてる話ではないよ。' }
+      ],
+      chain: ['🗣️ 「どうせぼくなんか」', '🔥 エフィカシーが下がる', '📡 RASが「できない証拠」ばかり集める', '😢 本当に下手になる'],
+      chainText: '呪いの正体は、言葉→自信→注意のフィルター、という脳のリレー。こわいのは、これが「本当に下手になる」ところまで現実を変えちゃうこと。でも同じリレーは、逆向きにも走らせられる！',
+      actions: [
+        { text: '「もっと練習しろ！」ときびしく言う', fb: 'うーん。エフィカシーが下がったまま練習しても、RASは失敗ばかり拾う。先に直すのは言葉の方。' },
+        { text: 'ミスしたとき「今のは、弟らしくないね」と声をかける', correct: true, fb: '正解！「できる方が本物のキミ」と再設定する一言。これぞコーチの仕事。弟のセルフトークが「ぼくらしくない→ぼくならできる」に変われば、RASが集める証拠も逆転する。' },
+        { text: '「サッカー向いてないんじゃない？」と別の道をすすめる', fb: 'うーん。それ、悪気のないドリームキラーの誕生シーンだよ…。' }
+      ],
+      oneLiner: '「らしくないね」の一言が、人を強くする',
+      pair: 'grandma',
+      ahaNote: '「やめなさい」連発事件と対。外から来る言葉（ドリームキラー）も、中から出る言葉（セルフトーク）も、攻撃する場所は同じ——🔥エフィカシーだ。'
+    },
+
+    /* ---------- 🕴️ 大人のナゾ編 ---------- */
+    {
+      id: 'diet', genre: 'adult', emoji: '🍰', title: '3日ダイエット事件',
+      story: 'パパが「今日からダイエットだ！」と宣言した。3日後の夜、こっそりアイスを食べているところを目撃された。ママは「意志が弱いんだから」とあきれてる。でも、本当に意志の問題なのかな？',
+      mechs: [
+        { key: 'homeo', why: 'あたり！「いつもの食生活」に全力で引き戻す力が働いた。意志vsホメオスタシスは、ほぼ100%ホメオスタシスが勝つ。' },
+        { key: 'haveto', why: 'あたり！「やせなきゃ」はhave to。やらされダイエットに、脳は本気を出さない。' },
+        { key: 'cz', why: 'あたり！今の体型・今の食生活が、パパのコンフォートゾーンのままだった。ゾーンが変わらないかぎり体は戻る。' }
+      ],
+      decoys: [
+        { key: 'killer', whyNot: 'ちがうかも。だれかに夢をこわされたわけじゃない。' },
+        { key: 'ras', whyNot: 'ちがうかも。情報のフィルターより「引き戻す力」が主役。' },
+        { key: 'efficacy', whyNot: 'ちがうかも。自信が足りなかったというより、ゾーンの向きの問題。' }
+      ],
+      chain: ['😮‍💨 「やせなきゃ」(have to)', '🛋️ 今の体型がゾーンのまま', '⚖️ 「いつもの食生活」へ全力で引き戻し', '🍰 夜中のアイス'],
+      chainText: '三日坊主は意志の弱さじゃなくて、脳の安全装置が正常に動いた結果。「今の自分」がゾーンである限り、ホメオスタシスは命を守るのと同じ真剣さでアイスを食べさせる。責めても無駄、ゾーンを動かすが勝ち。',
+      actions: [
+        { text: '「意志が弱い！」と責めて、もっとがんばらせる', fb: 'うーん。意志は必ずホメオスタシスに負ける。これは根性の問題じゃないんだ。' },
+        { text: '「やせたパパと何して遊ぼうかな！」と未来の楽しい話をする', correct: true, fb: '正解！「やせた自分が当たり前」の未来ゾーンがリアルになれば、ホメオスタシスは引き戻す力から「進ませる力」に変わる。want toの未来を先に作るのが正しい順番。' },
+        { text: '家じゅうのおやつを全部かくす', fb: 'うーん。環境だけ変えてもゾーンが変わらなければ、パパはコンビニへ行くだけ…。' }
+      ],
+      oneLiner: '意志を責めるな、ゾーンの向きを変えろ',
+      pair: 'training',
+      ahaNote: '「努力じゃない」事件と対。同じホメオスタシスが、パパには敵、プロ選手には最強の味方。違いはゾーンが「今」にあるか「未来」にあるか、それだけ！'
+    },
+    {
+      id: 'work', genre: 'adult', emoji: '💼', title: '「仕事だから仕方ない」事件',
+      story: '大人に「お仕事たのしい？」と聞いたら、「楽しいとかじゃないの。仕事なんだから仕方ないの」と言われた。でもこの前テレビで見た発明家は、めちゃくちゃ楽しそうに働いてた。何がちがうんだろう？',
+      mechs: [
+        { key: 'haveto', why: 'あたり！「仕方ない」はhave toの合言葉。やらされモードで働くと、脳は力の出し方を忘れていく。' },
+        { key: 'brief', why: 'あたり！「仕事＝ガマンするもの」というメガネを、その大人は子どものころから受けついできた。' },
+        { key: 'scotoma', why: 'あたり！「本当は何がやりたいか」が、長いあいだスコトーマに隠れて本人にも見えなくなっている。' }
+      ],
+      decoys: [
+        { key: 'ras', whyNot: 'ちがうかも。フィルターというより「メガネ」と「やらされ」の事件。' },
+        { key: 'efficacy', whyNot: 'おしいけど主役じゃない。先に「want toが見えない」ことが問題。' },
+        { key: 'killer', whyNot: 'ちがうかも。特定のだれかが夢をこわしたのではなく、メガネが受けつがれてきた。' }
+      ],
+      chain: ['👓 「仕事＝ガマン」のメガネ', '😮‍💨 have toで働く', '🙈 「やりたいこと」がスコトーマに', '💼 「仕方ない」が口ぐせに'],
+      chainText: '楽しそうに働く人と「仕方ない」の人のちがいは、才能じゃなくてメガネ。苫米地理論では、仕事は「自分の得意でだれかをよろこばせること」。そのメガネにかけかえた人から楽しくなっていく。',
+      actions: [
+        { text: '「大人ってかわいそうだな」とあきらめる', fb: 'うーん。それ、きみが同じメガネを受けつぐ第一歩かも。' },
+        { text: '「もし何でも自由にできるなら、何したい？」と聞いてみる', correct: true, fb: '正解！「自由なら？」の質問は、have toのメガネを一瞬外させて、スコトーマの奥のwant toを照らすライトになる。大人がハッとした顔をしたら、推理成功だ。' },
+        { text: '「文句を言わずに働くのがえらい」と覚えておく', fb: 'うーん。それはメガネの受けつぎ式。えらいのは「ガマン」じゃなく「だれかをよろこばせること」の方だよ。' }
+      ],
+      oneLiner: '「なんでも自由なら、何したい？」',
+      pair: null,
+      ahaNote: 'バランスホイールの「🛠️ しごと」を思い出して。仕事はお金もうけの手段じゃなく、得意なことで人をよろこばせる分野——メガネが変わると、同じ仕事でも別物になる。'
+    },
+    {
+      id: 'grandma', genre: 'adult', emoji: '👵', title: '「やめなさい」連発事件',
+      story: '「ユーチューバーになりたい！」と言ったら、おばあちゃんが「危ないからやめなさい。ちゃんとした仕事にしなさい」と言った。おばあちゃんはぼくのことが大好きなはずなのに。敵になっちゃったの…？',
+      mechs: [
+        { key: 'killer', why: 'あたり！これが典型的なドリームキラー。しかも一番多いのは「愛情から」の型なんだ。' },
+        { key: 'brief', why: 'あたり！おばあちゃんの時代は「安定した会社＝幸せ」が常識。その古いメガネで、きみの未来を見ている。' },
+        { key: 'scotoma', why: 'あたり！おばあちゃんの現状からは、きみのゴールの世界が見えない（スコトーマ）。見えないから「危ない」に見える。' }
+      ],
+      decoys: [
+        { key: 'homeo', whyNot: 'おしい！おばあちゃんの心の中では動いてるけど、この事件の主役は「言葉が夢に与える影響」の方。' },
+        { key: 'selftalk', whyNot: 'ちがうかも。自分の中の言葉じゃなくて、他人から来る言葉の事件。' },
+        { key: 'ras', whyNot: 'ちがうかも。フィルターより「メガネと愛情」の話。' }
+      ],
+      chain: ['👓 おばあちゃんの時代のメガネ「安定＝幸せ」', '🙈 その外の世界は見えない', '😈 愛情から「やめなさい」'],
+      chainText: 'ドリームキラーの9割は敵じゃない。自分のメガネの外が見えないだけの、きみを愛してる人。だから戦う必要はない。ただし、ゴールへの臨場感は言葉で削られる——だから守り方を知っておく。',
+      actions: [
+        { text: '「おばあちゃんは古い！」とケンカする', fb: 'うーん。おばあちゃんのメガネは60年もので、ケンカでは外れない。きみのエネルギーがもったいない。' },
+        { text: 'おばあちゃんは大切にする。でも大きなゴールは、わかってくれる人にだけ話す', correct: true, fb: '正解！これが「ゴールは秘密にする」の本当の使い方。愛と夢を両方守る、大人の一手だ。' },
+        { text: '夢をあきらめて「ちゃんとした仕事」にしておく', fb: 'うーん。それは自分のゴールを、他人のメガネに明けわたすということ。おばあちゃんもきっと、本当はきみの笑顔が見たいはず。' }
+      ],
+      oneLiner: 'ドリームキラーに悪気なし。ゴールは話す相手を選ぶ',
+      pair: 'brother',
+      ahaNote: '「どうせぼくなんか」事件と対。外からの言葉も、自分の中の言葉も、削るのは同じエフィカシー。だから防ぎ方もセットで覚えよう。'
+    },
+
+    /* ---------- 📱 スマホのワナ編 ---------- */
+    {
+      id: 'reels', genre: 'sns', emoji: '🌀', title: 'リール無限スクロール事件',
+      story: '「ちょっとだけ」とインスタのリールを開いたら、気づいたら1時間たっていた。べつに見たいものがあったわけでもない。指が勝手に動いてた。なんで止まらないんだろう？',
+      mechs: [
+        { key: 'ras', why: 'あたり！脳には「新しいもの＝大事かも」と反応するクセがある。アプリはそのクセを研究しつくして、次々に新しいものを流してくる（RASハック！）。' },
+        { key: 'cz', why: 'あたり！何も考えずに気持ちいい刺激が流れてくる、超・楽ちんなゾーン。出る理由が見つからない。' },
+        { key: 'avoid', why: 'あたり！宿題や寝る準備からの「賢い逃げ場」にもなっている。「ちょっと休けいだから」って言い訳つきでね。' }
+      ],
+      decoys: [
+        { key: 'killer', whyNot: 'ちがうかも。夢をこわす人は出てこない…けど、時間は溶かされてるね。' },
+        { key: 'efficacy', whyNot: 'ちがうかも。自信の話ではないよ。' },
+        { key: 'selftalk', whyNot: 'ちがうかも。言葉の事件じゃなくて、フィルターと楽ちんゾーンの事件。' }
+      ],
+      chain: ['📡 「新しいもの好き」の脳のクセをアプリが利用', '🛋️ 楽な快のゾーンに入る', '🧹 やるべきことからの「賢い逃げ」にもなる', '🌀 1時間が消える'],
+      chainText: '止まらないのは、きみの意志が弱いからじゃない。世界中の天才たちが「人間の脳のクセ」を研究して作った仕組みと、生身の意志が戦ってるから。勝負の土俵を変えるのが正解。',
+      actions: [
+        { text: '「自分は意志が弱い」と反省して、気合いでガマンする', fb: 'うーん。相手は脳のクセを知りつくしたプロ集団。気合いの勝率はほぼゼロだ。' },
+        { text: '開く前に「閉じたら何をするか」を決めてから開く', correct: true, fb: '正解！脳はゴールがないとき、ヒマな快に流れる仕様。先に「次にやること」をRASにセットしておけば、脳が自分から「そろそろ閉じよう」と言い出す。' },
+        { text: 'スマホを捨てる', fb: 'うーん。道具に罪はないし、ゴールがなければ脳は別のヒマつぶしを見つけるだけ。' }
+      ],
+      oneLiner: '開く前に、閉じたあとを決める',
+      pair: 'shoes',
+      ahaNote: '「町じゅう同じクツ事件」と対。同じRASが、「使われる」とスマホ沼になり、「自分で使う」と夢への検索エンジンになる！'
+    },
+    {
+      id: 'shoes', genre: 'sns', emoji: '👟', title: '町じゅう同じクツ事件',
+      story: '新しいスニーカーを買った。すると次の日から、町じゅうに同じスニーカーをはいた人があふれて見えるようになった。昨日までひとりも見かけなかったのに…！流行りだした？それともぼくの目がおかしい？',
+      mechs: [
+        { key: 'ras', why: 'あたり！「自分のクツ」になった瞬間、RASが「大事な情報」として通すようになった。世界は変わってない、フィルターが変わった。' },
+        { key: 'cz', why: 'あたり！そのスニーカーが「自分ごとゾーン」に入った。ゾーンに入ったものは、勝手に目に飛びこんでくる。' }
+      ],
+      decoys: [
+        { key: 'scotoma', whyNot: 'おしい！スコトーマは「見えなくなる」方。今回は「見えるようになった」——つまり逆向き。主役はRASだ。' },
+        { key: 'homeo', whyNot: 'ちがうかも。引き戻す力の出番はない事件。' },
+        { key: 'brief', whyNot: 'ちがうかも。思いこみのメガネというより、フィルターの設定変更。' }
+      ],
+      chain: ['👟 買った瞬間「自分ごと」になる', '📡 RASが「大事」と判定して通しはじめる', '👀 昨日まで隠れてた情報が見えだす'],
+      chainText: '同じクツの人は、昨日も同じ数だけ町にいた。変わったのはきみの脳のフィルターだけ。——ということは？ フィルターの設定を「自分で」変えれば、見える世界を自分で選べるってことだ！',
+      actions: [
+        { text: '「みんな、ぼくのマネしたな！」と思う', fb: 'うーん。増えたんじゃなくて、見えるようになっただけ。世界は昨日のままだよ。' },
+        { text: 'この力を逆に使う——「なりたい自分」を決めてから、本屋や町を歩いてみる', correct: true, fb: '正解！ゴールを決める＝RASに「探すもの」をセットすること。同じ本屋でも、ゴールがある人には必要な本が光って見える。これがゴール設定の科学的な正体！' },
+        { text: '「おもしろい現象だな」で終わりにする', fb: 'うーん、もったいない！せっかく脳に最強の検索エンジンがついてるのに、遊ばせておくの？' }
+      ],
+      oneLiner: 'ゴールを決めてから、町を歩け',
+      pair: 'phone',
+      ahaNote: '「消えたスマホ事件」と対。スコトーマ（見えなくなる）とRAS（見えるようになる）は同じフィルターの裏表。2つそろえると、脳の「見る仕組み」が完全にわかる！'
+    },
+
+    /* ---------- 🌟 スゴい人のヒミツ編 ---------- */
+    {
+      id: 'routine', genre: 'hero', emoji: '⚾', title: 'イチローの同じ動作事件',
+      story: 'イチロー選手はバッターボックスに入るとき、毎回そっくり同じ動作をしていた。袖をつまんで、バットを立てて…。毎朝のカレーも有名。世界一の選手なのに、なんでそんなに「いつも同じ」にこだわるんだろう？',
+      mechs: [
+        { key: 'cz', why: 'あたり！「いつもの動作」がコンフォートゾーンのスイッチ。どんな大舞台でも「いつもの自分の部屋」を再現できる——ゾーンの持ち運び！' },
+        { key: 'homeo', why: 'あたり！「いつも通りに戻す力」を逆用してる。動作がいつも通りなら、ホメオスタシスが実力も「いつも通り」に戻してくれる。' }
+      ],
+      decoys: [
+        { key: 'avoid', whyNot: 'ちがうかも。逃げてるどころか、世界一戦ってる人の話。' },
+        { key: 'killer', whyNot: 'ちがうかも。夢をこわす人は出てこない。' },
+        { key: 'haveto', whyNot: 'ちがうかも。やらされてこの域には行けない。' }
+      ],
+      chain: ['🏟️ 大舞台＝ゾーンの外になりがち', '⚾ いつもの動作で「いつもの自分」を呼び出す', '⚖️ ホメオスタシスが実力を「いつも通り」に戻してくれる'],
+      chainText: '三日坊主の犯人だったホメオスタシスが、ここでは世界一の味方をしてる。ルーティンとは「コンフォートゾーンの持ち運び装置」。緊張に勝つんじゃなく、緊張する場所を「いつもの場所」に変えちゃう発明だ。',
+      actions: [
+        { text: '緊張したら「緊張するな！」と自分に言い聞かせる', fb: 'うーん。「緊張」と言うたびにRASが緊張を探しはじめる。逆効果！' },
+        { text: '自分の「いつもの準備」をひとつ作る（発表の前は深呼吸3回＋親指をぎゅっ、など）', correct: true, fb: '正解！動作はなんでもいい。「これをやったらいつもの自分」というスイッチを育てれば、テストでも発表でも、きみのゾーンを持ちこめる。' },
+        { text: '緊張する場面をなるべく避けて生きる', fb: 'うーん。それだとゾーンが一生広がらない。ゾーンは持ち運べるのに、もったいない！' }
+      ],
+      oneLiner: 'ゾーンは持ち運べる',
+      pair: 'diet',
+      ahaNote: '3日ダイエット事件と対。同じ⚖️ホメオスタシスが、使い方ひとつで「三日坊主の犯人」にも「世界一の相棒」にもなる！'
+    },
+    {
+      id: 'training', genre: 'hero', emoji: '🌅', title: '「努力じゃない」事件',
+      story: '毎朝5時から練習するプロ選手が、インタビューで言った。「努力してるつもりはないんです。歯みがきと同じです」。——ウソでしょ？ あんなにキツい練習が、歯みがき！？',
+      mechs: [
+        { key: 'wantto', why: 'あたり！だれにも頼まれなくてもやっちゃう100%のwant to。「やめろ」と言われてもやるのがこのレベル。' },
+        { key: 'futurecz', why: 'あたり！未来のコンフォートゾーン（チャンピオンの自分）がリアルだから、そこに向かう練習が「あたりまえ」になってる。' },
+        { key: 'cz', why: 'あたり！練習がすでに「ゾーンの中」。やらない日のほうが気持ち悪い——歯みがきと同じってそういう意味！' }
+      ],
+      decoys: [
+        { key: 'haveto', whyNot: 'おしい、逆だ！have toの「やらなきゃ」だったら、とっくに三日坊主になってる。' },
+        { key: 'killer', whyNot: 'ちがうかも。夢をこわす人は登場しない。' },
+        { key: 'scotoma', whyNot: 'ちがうかも。見えない話ではないよ。' }
+      ],
+      chain: ['💖 100% want toのゴール', '⏰ 未来のゾーンがリアル', '🛋️ 練習が「ゾーンの中のあたりまえ」になる', '🌅 本人の感覚では「努力ゼロ」'],
+      chainText: '「努力家に見える人」の正体は、「努力が要らなくなる仕組みを作った人」。ゾーンが未来に向くと、行動は呼吸やごはんと同じ「ホメオスタシスの仕事」になる。苫米地さんが「努力はいらない」と言うのは、サボれという意味じゃなくて、この状態を作れという意味なんだ。',
+      actions: [
+        { text: '「自分もガマンして毎日練習しなきゃ」と決意する', fb: 'うーん。ガマン（have to）で始めた習慣は、ホメオスタシスに引き戻されて終わる。順番が逆！' },
+        { text: '先に「ワクワクする未来」をリアルに描く。行動はあとから勝手についてくる', correct: true, fb: '正解！ゴール→臨場感→ゾーンが未来へ→行動が「あたりまえ」になる。これがコーチングの正しい順番。決意より先に、ワクワクをセットしよう。' },
+        { text: '「あの人は特別な人だから」で終わりにする', fb: 'うーん。しくみは全人類共通。特別なのは才能じゃなくて、ゾーンの向きだよ。' }
+      ],
+      oneLiner: 'がんばる前に、ワクワクをセット',
+      pair: 'diet',
+      ahaNote: '3日ダイエット事件と対。パパとプロ選手のちがいは意志の強さじゃない。ゾーンが「今」にあるか「未来」にあるか——それだけ！'
+    },
+    {
+      id: 'ohtani', genre: 'hero', emoji: '💫', title: '二刀流「無理」のはずだった事件',
+      story: '大谷選手がプロに入るとき、ほとんどの大人が言った。「ピッチャーとバッターの二刀流なんて無理。プロをなめるな。どちらかにしぼれ」。でも大谷選手はやった。世界一にもなった。なんで「常識」をこえられたんだろう？',
+      mechs: [
+        { key: 'brief', why: 'あたり！「二刀流は無理」は、世間みんなの👓ブリーフシステム。「常識」の正体は、だれかの古いメガネの集合体だった。' },
+        { key: 'goal', why: 'あたり！「世界一の二刀流」は、当時だれもやり方を知らない完全な「現状の外」のゴールだった。' },
+        { key: 'efficacy', why: 'あたり！まわり中に「無理」と言われても、「できるに決まってる」の自己評価がゆらがなかった。根拠は不要、それがエフィカシー。' }
+      ],
+      decoys: [
+        { key: 'avoid', whyNot: 'ちがうかも。逃げの要素はゼロの事件。' },
+        { key: 'haveto', whyNot: 'ちがうかも。やらされ二刀流では1年ももたないはず。' },
+        { key: 'scotoma', whyNot: 'おしい！スコトーマがあったのは大谷選手じゃなく「世間」の側。大谷選手の脳の中の主役は別にいる。' }
+      ],
+      chain: ['👓 世間の「常識」＝古いメガネの集合体', '🎯 現状の外にゴールを置く', '🔥 「できるに決まってる」のエフィカシー', '💫 メガネの外でプレーする'],
+      chainText: '常識をこえる人は、ケンカで常識を倒したんじゃない。「それはあなたのメガネですよね」と知っていて、自分のゴール側で静かにプレーし続けただけ。そして結果が出ると、世間のメガネのほうが書き変わる——常識は、あとから追いかけてくる。',
+      actions: [
+        { text: '「常識だから無理」と言われたら、すなおにあきらめる', fb: 'うーん。その常識、10年後には変わってるかもよ？ 二刀流が証明ずみだ。' },
+        { text: '「それって本当？ だれが決めた？」と一回だけ疑ってみる', correct: true, fb: '正解！常識＝だれかのブリーフシステム。たしかめてみると、意外と根拠がないことが多い。疑う練習をした人だけが、メガネの外でプレーできる。' },
+        { text: '常識を言ってくる大人と、とことん戦う', fb: 'うーん。戦わなくていい。大谷選手も論破はしてない。自分のゴール側で、静かに練習してただけ。' }
+      ],
+      oneLiner: '「それって本当？ だれが決めた？」',
+      pair: 'rule',
+      ahaNote: '体育館の謎ルール事件と対。「常識」に縛られたみんなと、「常識」の外でプレーした大谷選手。主役はどっちも👓ブリーフシステム——縛られるか、見破るかのちがいだけ！'
+    }
+  ];
+
+  const GENRES = [
+    { key: 'school', label: '🏫 がっこう・おうち編' },
+    { key: 'adult',  label: '🕴️ 大人のナゾ編' },
+    { key: 'sns',    label: '📱 スマホのワナ編' },
+    { key: 'hero',   label: '🌟 スゴい人のヒミツ編' }
+  ];
+  const STAMP_AT = 5;
+
+  /* ===== 解決状態（localStorage） ===== */
+  function getSolved() {
+    try { return JSON.parse(localStorage.getItem('caseSolved') || '{}'); } catch (e) { return {}; }
+  }
+  function markSolved(id) {
+    const s = getSolved();
+    s[id] = true;
+    try { localStorage.setItem('caseSolved', JSON.stringify(s)); } catch (e) {}
+  }
+  function solvedCount() {
+    const s = getSolved();
+    return CASES.filter(function (c) { return s[c.id]; }).length;
+  }
+
+  /* ===== 事件ボード描画 ===== */
+  const board = document.getElementById('caseBoard');
+  function renderBoard() {
+    board.innerHTML = '';
+    const solved = getSolved();
+    GENRES.forEach(function (g) {
+      const title = document.createElement('div');
+      title.className = 'genre-title';
+      title.textContent = g.label;
+      board.appendChild(title);
+      const grid = document.createElement('div');
+      grid.className = 'case-grid';
+      CASES.filter(function (c) { return c.genre === g.key; }).forEach(function (c) {
+        const card = document.createElement('button');
+        card.className = 'case-card' + (solved[c.id] ? ' solved' : '');
+        card.dataset.caseId = c.id;
+        card.innerHTML =
+          '<span class="case-emoji">' + c.emoji + '</span>' +
+          '<span class="case-title">' + c.title + '</span>' +
+          '<span class="solved-badge">解決!</span>';
+        card.addEventListener('click', function () { openCase(c.id); });
+        grid.appendChild(card);
+      });
+      board.appendChild(grid);
+    });
+    updateCounter(false);
+  }
+
+  function updateCounter(celebrate) {
+    const n = solvedCount();
+    document.getElementById('caseCounter').textContent = '解決した事件：' + n + ' / ' + CASES.length;
+    if (n >= STAMP_AT) {
+      const isNew = awardStamp('cases');
+      document.getElementById('stampBanner').classList.add('show');
+      if (isNew && celebrate) confetti(80);
+    }
+    if (n === CASES.length) {
+      document.getElementById('meitanteiBanner').classList.add('show');
+      if (celebrate) confetti(120);
+    }
+  }
+
+  /* ===== 推理パネル ===== */
+  const panel = document.getElementById('casePanel');
+  let current = null;       /* 現在の事件 */
+  let foundCount = 0;       /* 推理①で見つけた正解数 */
+
+  function shuffle(arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  function openCase(id) {
+    current = CASES.find(function (c) { return c.id === id; });
+    foundCount = 0;
+    document.querySelectorAll('.case-card').forEach(function (card) {
+      card.classList.toggle('active', card.dataset.caseId === id);
+    });
+
+    const options = shuffle(
+      current.mechs.map(function (m) { return { key: m.key, correct: true, note: m.why }; })
+        .concat(current.decoys.map(function (d) { return { key: d.key, correct: false, note: d.whyNot }; }))
+    );
+
+    panel.innerHTML =
+      '<div class="panel-head"><span class="case-emoji-big">' + current.emoji + '</span><h3>' + current.title + '</h3></div>' +
+      '<div class="story-box">' + current.story + '</div>' +
+      '<div class="phase-label">推理①</div>' +
+      '<div class="phase-q">この事件のウラで動いている脳のしくみを、<b>ぜんぶ</b>見つけよう！（' + current.mechs.length + 'つあるよ）</div>' +
+      '<div class="mech-grid" id="mechGrid"></div>' +
+      '<div class="mech-progress" id="mechProgress">見つけたしくみ：0 / ' + current.mechs.length + '</div>' +
+      '<div class="chain-box" id="chainBox"></div>' +
+      '<div class="action-area" id="actionArea"></div>' +
+      '<div class="solve-box" id="solveBox"></div>';
+
+    const grid = panel.querySelector('#mechGrid');
+    options.forEach(function (opt) {
+      const m = MECHS[opt.key];
+      const chip = document.createElement('button');
+      chip.className = 'mech-chip';
+      chip.innerHTML =
+        '<span class="mech-name">' + m.emoji + ' ' + m.name + '</span><br>' +
+        '<span class="mech-short">' + m.short + '</span>' +
+        '<span class="mech-why">' + opt.note + '</span>';
+      chip.addEventListener('click', function () { pickMech(chip, opt); });
+      grid.appendChild(chip);
+    });
+
+    panel.classList.add('open');
+    panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function pickMech(chip, opt) {
+    if (chip.disabled) return;
+    chip.disabled = true;
+    if (opt.correct) {
+      chip.classList.add('hit');
+      foundCount++;
+      panel.querySelector('#mechProgress').textContent = '見つけたしくみ：' + foundCount + ' / ' + current.mechs.length;
+      confetti(8);
+      if (foundCount === current.mechs.length) revealChain();
+    } else {
+      chip.classList.add('miss');
+    }
+  }
+
+  function revealChain() {
+    panel.querySelector('#mechProgress').textContent = '🎉 ぜんぶ見つけた！しくみの連動を見てみよう👇';
+    const chainBox = panel.querySelector('#chainBox');
+    chainBox.innerHTML =
+      '<div class="chain-title">🧩 しくみはこう連動していた！</div>' +
+      '<div class="chain-flow">' + current.chain.map(function (step) { return '<span>' + step + '</span>'; }).join('<span class="arrow">→</span>') + '</div>' +
+      current.chainText;
+    chainBox.classList.add('show');
+
+    const area = panel.querySelector('#actionArea');
+    area.innerHTML =
+      '<div class="phase-label" style="background:var(--purple);">推理②</div>' +
+      '<div class="phase-q">しくみがわかったところで——<b>きみなら、どうする？</b></div>';
+    current.actions.forEach(function (a, i) {
+      const btn = document.createElement('button');
+      btn.className = 'action-opt';
+      btn.innerHTML = a.text + '<span class="opt-fb">' + a.fb + '</span>';
+      btn.addEventListener('click', function () { pickAction(btn, a); });
+      area.appendChild(btn);
+    });
+    area.classList.add('show');
+    area.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  function pickAction(btn, a) {
+    if (btn.disabled) return;
+    if (a.correct) {
+      btn.classList.add('right');
+      panel.querySelectorAll('.action-opt').forEach(function (b) { b.disabled = true; });
+      solveCase();
+    } else {
+      btn.classList.add('wrong');
+      btn.disabled = true;
+    }
+  }
+
+  function solveCase() {
+    const wasNew = !getSolved()[current.id];
+    markSolved(current.id);
+
+    const box = panel.querySelector('#solveBox');
+    let html =
+      '<div class="oneliner"><span class="ol-label">🗝️ あしたから使えるひとこと</span>' + current.oneLiner + '</div>' +
+      '<div class="aha-box"><div class="aha-title">💡 たんていメモ（アハ！）</div>' + current.ahaNote + '</div>';
+    if (current.pair) {
+      const pairCase = CASES.find(function (c) { return c.id === current.pair; });
+      html += '<button class="btn ghost pair-btn" onclick="openCase(\'' + current.pair + '\')">🔎 にた事件をしらべる → ' + pairCase.emoji + ' ' + pairCase.title + '</button>';
+    }
+    html += '<a class="btn yellow pair-btn" href="#caseBoard" onclick="panelClose()">📁 事件ボードにもどる</a>';
+    box.innerHTML = html;
+    box.classList.add('show');
+    box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+    renderBoardSolvedMarks();
+    confetti(wasNew ? 50 : 15);
+    updateCounter(true);
+  }
+
+  function renderBoardSolvedMarks() {
+    const solved = getSolved();
+    document.querySelectorAll('.case-card').forEach(function (card) {
+      card.classList.toggle('solved', !!solved[card.dataset.caseId]);
+    });
+  }
+
+  function panelClose() {
+    panel.classList.remove('open');
+    document.querySelectorAll('.case-card').forEach(function (c) { c.classList.remove('active'); });
+    document.getElementById('caseBoard').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  renderBoard();
+</script>
+</body>
+</html>

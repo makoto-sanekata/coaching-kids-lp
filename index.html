@@ -691,8 +691,8 @@
   <div class="map-board">
     <span class="section-label" style="background:var(--yellow); color:var(--ink);">NEXT STAGE</span>
     <h2>🗺️ コーチングぼうけんマップ</h2>
-    <p style="font-weight:700; margin-bottom:18px;">ここから先は、もっと深いぼうけん！ 5つのステージをクリアしてスタンプを集めると、<b>「コーチングマスター」認定</b>だ！</p>
-    <div class="stamp-count" id="stampCount">あつめたスタンプ：0 / 5</div>
+    <p style="font-weight:700; margin-bottom:18px;">ここから先は、もっと深いぼうけん！ 6つのステージをクリアしてスタンプを集めると、<b>「コーチングマスター」認定</b>だ！</p>
+    <div class="stamp-count" id="stampCount">あつめたスタンプ：0 / 6</div>
 
     <div class="map-grid">
       <a class="map-card" href="pages/authentic.html">
@@ -728,13 +728,20 @@
         <span class="map-icon">⏰</span>
         <h3>みらいのコンフォートゾーン</h3>
         <p>2026年の新理論！ ゴールとゾーンは同じもの？ はしっこパワー実験に挑戦！</p>
-        <span class="go-tag">▶ ステージ5へ（NEW!）</span>
+        <span class="go-tag">▶ ステージ5へ</span>
+      </a>
+      <a class="map-card" href="pages/case-files.html">
+        <span class="stamp-slot" data-stamp="cases"></span>
+        <span class="map-icon">🔍</span>
+        <h3>あるある事件簿</h3>
+        <p>大人のナゾ行動を推理せよ！ 12の事件を「しくみ→どうする？」の2段階で解決！</p>
+        <span class="go-tag">▶ ステージ6へ（NEW!）</span>
       </a>
     </div>
 
     <div class="master-cert" id="masterCert">
       <span class="big">🏆</span>
-      おめでとう！ スタンプ5個コンプリート！<br>
+      おめでとう！ スタンプ6個コンプリート！<br>
       きみを「コーチングマスター」に認定します！🎉
     </div>
   </div>
@@ -996,8 +1003,8 @@
   }
 
   /* ===== ぼうけんマップ：スタンプラリー表示 ===== */
-  const STAMP_EMOJI = { authentic: '🤝', goal: '🎯', wheel: '🎡', abstract: '🔭', future: '⏰' };
-  const STAMP_TOTAL = 5;
+  const STAMP_EMOJI = { authentic: '🤝', goal: '🎯', wheel: '🎡', abstract: '🔭', future: '⏰', cases: '🔍' };
+  const STAMP_TOTAL = 6;
   function renderStamps() {
     let stamps = {};
     try { stamps = JSON.parse(localStorage.getItem('coachingStamps') || '{}'); } catch (e) { stamps = {}; }
