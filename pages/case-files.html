@@ -619,7 +619,7 @@
     area.innerHTML =
       '<div class="phase-label" style="background:var(--purple);">推理②</div>' +
       '<div class="phase-q">しくみがわかったところで——<b>きみなら、どうする？</b></div>';
-    current.actions.forEach(function (a, i) {
+    shuffle(current.actions).forEach(function (a) {
       const btn = document.createElement('button');
       btn.className = 'action-opt';
       btn.innerHTML = a.text + '<span class="opt-fb">' + a.fb + '</span>';

@@ -230,6 +230,14 @@
   }
 
   /* ===== 道場の描画 ===== */
+  function shuffle(arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
   const dojo = document.getElementById('dojoArea');
   SCENES.forEach(function (sc) {
     const box = document.createElement('div');
@@ -240,7 +248,7 @@
       '<div class="scene-text">' + sc.scene + '</div>' +
       '<div class="voice-q">💬 コーチなら、どの声をかける？</div>';
     box.innerHTML = html;
-    sc.options.forEach(function (opt) {
+    shuffle(sc.options).forEach(function (opt) {
       const btn = document.createElement('button');
       btn.className = 'voice-opt';
       btn.innerHTML = opt.text + '<span class="opt-fb">' + opt.fb + '</span>';
