@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>まほうの声かけ道場 — コーチングぼうけん</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/style.css">
+<style>
+  /* コーチの心得 */
+  .rule-chips { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; margin-top: 20px; }
+  .rule-chip { background: var(--card); border-radius: 18px; padding: 20px; box-shadow: var(--shadow); border-top: 6px solid var(--purple); }
+  .rule-chip:nth-child(2) { border-top-color: var(--pink); }
+  .rule-chip:nth-child(3) { border-top-color: var(--green); }
+  .rule-chip h3 { font-size: 15.5px; font-weight: 900; margin-bottom: 6px; }
+  .rule-chip p { font-size: 13px; font-weight: 700; }
+
+  /* シチュエーション道場 */
+  .scene-quiz { background: var(--card); border-radius: 22px; padding: 28px; box-shadow: var(--shadow); margin-bottom: 26px; border: 3px solid transparent; }
+  .scene-quiz.cleared { border-color: var(--green); }
+  .scene-quiz .scene-head { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
+  .scene-quiz .scene-emoji { font-size: 38px; }
+  .scene-quiz h3 { font-size: 17px; font-weight: 900; }
+  .scene-quiz .cleared-mark { display: none; margin-left: auto; color: var(--green); font-weight: 900; font-size: 14px; }
+  .scene-quiz.cleared .cleared-mark { display: block; }
+  .scene-text {
+    background: #f7f5ff; border-radius: 14px; padding: 16px 18px;
+    font-size: 14.5px; font-weight: 700; line-height: 1.9; margin-bottom: 16px;
+  }
+  .voice-q { font-weight: 900; font-size: 15px; margin-bottom: 12px; }
+  .voice-opt {
+    display: block; width: 100%; text-align: left; font-family: inherit; cursor: pointer;
+    background: #fff; border: 3px solid #e5e1f5; border-radius: 14px;
+    padding: 13px 18px; margin-bottom: 10px; font-size: 14.5px; font-weight: 700;
+    transition: all 0.2s;
+  }
+  .voice-opt:hover { border-color: var(--purple); transform: translateX(6px); }
+  .voice-opt .opt-fb { display: none; margin-top: 8px; font-size: 13px; font-weight: 900; }
+  .voice-opt.wrong { background: #ffe7e7; border-color: var(--red); animation: shake 0.4s; }
+  .voice-opt.wrong .opt-fb { display: block; color: #c0392b; }
+  .voice-opt.right { background: #e4f9ef; border-color: var(--green); }
+  .voice-opt.right .opt-fb { display: block; color: #1d8a5c; }
+
+  .phrase-card {
+    display: none; margin-top: 14px;
+    background: #2d2a45; color: #ffd34d; border-radius: 16px; padding: 18px 20px;
+    text-align: center; font-weight: 900; font-size: 17px;
+    box-shadow: 0 8px 20px rgba(45,42,69,0.35);
+  }
+  .phrase-card.show { display: block; animation: popIn 0.6s both; }
+  .phrase-card .pc-label { display: block; color: #fff; font-size: 11.5px; letter-spacing: 1px; margin-bottom: 6px; }
+  .safety-note {
+    display: none; margin-top: 10px; background: #e3f0ff; border: 2px solid #4db5ff;
+    border-radius: 12px; padding: 12px 16px; font-size: 13px; font-weight: 700; color: #1565a8;
+  }
+  .safety-note.show { display: block; }
+
+  /* ことば手帳 */
+  .notebook {
+    background: linear-gradient(160deg, #2d2a45, #4a3f8f); border-radius: 28px;
+    padding: 36px 28px; color: #fff;
+  }
+  .notebook h3 { font-size: 19px; font-weight: 900; margin-bottom: 6px; }
+  .notebook .nb-count { font-weight: 900; font-size: 14px; opacity: 0.85; margin-bottom: 18px; }
+  .nb-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+  .nb-slot {
+    border: 2px dashed rgba(255,255,255,0.35); border-radius: 14px; padding: 14px;
+    font-weight: 900; font-size: 13.5px; text-align: center; min-height: 64px;
+    display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.4);
+  }
+  .nb-slot.earned { border: 2px solid var(--yellow); color: #ffd34d; background: rgba(255,211,77,0.12); animation: popIn 0.5s both; }
+</style>
+</head>
+<body>
+
+<header class="hero-mini">
+  <a class="back-link" href="../index.html#map">🗺️ マップにもどる</a>
+  <span class="icon">💬</span>
+  <h1>まほうの声かけ道場</h1>
+  <p class="sub">あしたから、きみが だれかのコーチ</p>
+</header>
+
+<section class="reveal">
+  <span class="section-label">さいごのステージ</span>
+  <h2>学んだことを、<span class="marker">人を元気にする一言</span>に変えよう</h2>
+  <p class="lead">
+    ここまでで、きみは脳のしくみをぜんぶ知った。最後のステージは——<b>その知識で、となりの人を強くすること</b>。<br>
+    なぜなら、コーチングの正体は「となりに100%の味方がいると、人はなぜか強くなる」というシンプルな現象だから。<br>
+    むずかしい技はいらない。コーチの心得は、たったの3つ。
+  </p>
+  <div class="rule-chips">
+    <div class="rule-chip">
+      <h3>① 教えない。質問する</h3>
+      <p>アドバイスは相手のゴールをうばう。答えは相手の中。質問でスコトーマを外す手伝いをするだけ。</p>
+    </div>
+    <div class="rule-chip">
+      <h3>② エフィカシーを削らない</h3>
+      <p>説教・ダメ出し・「現実を見ろ」は禁止。失敗には「らしくないね」——できる方が本物、という前提で話す。</p>
+    </div>
+    <div class="rule-chip">
+      <h3>③ want toを探す</h3>
+      <p>文句にも「やらなきゃ」にも、ぜんぶ裏側にwant toが隠れてる。「ほんとはどうしたい？」を一緒に探す。</p>
+    </div>
+  </div>
+</section>
+
+<section class="reveal" style="padding-top:0;">
+  <span class="section-label">道場</span>
+  <h2>こんな友達がいたら、<span class="marker">どっちの声をかける？</span></h2>
+  <p class="lead">あるあるな7つの場面で「コーチの一言」を選ぼう。正解すると<b>「まほうのことばカード」</b>がもらえる。7枚集めたら最後のスタンプだ！</p>
+
+  <div id="dojoArea"></div>
+
+  <div class="stamp-banner" id="stampBanner">
+    <span class="big">💬</span>
+    スタンプGET！ ことばカード7枚コンプリート——きみを<b>「ことばのコーチ」</b>に認定します！<br>
+    <a href="../index.html#map">🗺️ マップで7個そろったか確認しよう！</a>
+  </div>
+</section>
+
+<section class="reveal" style="padding-top:0;">
+  <div class="notebook">
+    <h3>📖 きみのことば手帳</h3>
+    <div class="nb-count" id="nbCount">あつめたことば：0 / 7</div>
+    <div class="nb-grid" id="nbGrid"></div>
+    <p style="margin-top:18px; font-size:13px; font-weight:700; opacity:0.9;">
+      💡 使い方のコツ：カードのことばは「セリフ」じゃなくて「向き」。丸暗記じゃなく、心得3つ（教えない・削らない・want toを探す）を思い出して、きみの言葉で言えたら本物のコーチだ。
+    </p>
+  </div>
+</section>
+
+<div class="next-nav">
+  <a class="btn yellow" href="../index.html#map">🗺️ ぼうけんマップにもどる（卒業式へ！）</a>
+</div>
+
+<footer>
+  このページは苫米地英人氏のコーチング理論をもとにした、学習用の声かけ練習集です。
+</footer>
+
+<script src="../assets/common.js"></script>
+<script>
+  /* ===== 声かけシチュエーション（ここに足せば場面が増える） ===== */
+  const SCENES = [
+    {
+      id: 'grumble', emoji: '😤', title: '文句ばっかりの友達',
+      scene: '「先生さあ、マジでひどくない？」「このゲーム、アプデで最悪になった」——会うたび文句ばっかり。正直、聞いてるこっちも疲れてきた…。',
+      options: [
+        { text: '「文句ばっかり言うなよ」と注意する', fb: 'うーん。説教されると人は守りに入って、文句のセルフトークがさらに固まる。正しいことを言っても、人は動かないんだ。' },
+        { text: '「ほんとは、どうなってたら最高だった？」と聞く', correct: true, fb: '正解！文句の正体は「こうだったらいいのに」が裏返った姿＝かくれたwant to。理想を語らせると、RASが「最悪の証拠あつめ」から「最高の探しもの」に切りかわる。' },
+        { text: '「わかる〜最悪だよね」と一緒に文句大会をする', fb: 'うーん。共感はやさしいけど、それだと2人ぶんのRASが「最悪な証拠」を集め続けちゃう。沼が深くなるだけ…。' }
+      ],
+      phrase: '「ほんとは、どうなったら最高？」'
+    },
+    {
+      id: 'hardtime', emoji: '😢', title: 'つらそうな友達',
+      scene: '最近ずっと元気がない友達。「だいじょうぶ？」と聞いても「…だいじょうぶ」としか言わない。どうしたらいいんだろう。',
+      options: [
+        { text: '「元気出せよ！がんばれ！」と背中をたたく', fb: 'うーん。「がんばれ」はhave toの上乗せ。ゾーンの外でふるえてる人に「もっと外へ行け」と言ってるのと同じになっちゃう。' },
+        { text: 'むりに聞き出さず、「なにがあっても味方だよ」とだけ伝えて、そばにいる', correct: true, fb: '正解！となりに100%の味方がいると、人はなぜか強くなる——これがコーチングの正体だったよね。アドバイスゼロでも、それだけで相手のエフィカシーは守られる。' },
+        { text: '気をつかって、そっと距離を置く', fb: 'うーん。「一人にしてあげる」が優しさのときもあるけど、味方の気配が消えるのは一番こわい。距離は置いても、味方宣言は置いていこう。' }
+      ],
+      phrase: '「なにがあっても、味方だよ」',
+      safety: '⚠️ だいじな注意：友達が本当に苦しそうなとき・あぶないなと感じたときは、一人で抱えこまずに先生や家族など大人につなごう。「大人を呼ぶ」も、最高の味方の仕事だよ。'
+    },
+    {
+      id: 'haveto', emoji: '😮‍💨', title: '「やらなきゃ…」と固まってる人',
+      scene: '「やらなきゃ…やらなきゃ…」と宿題の前でつぶやき続ける友達。でも手は1ミリも動いてない。',
+      options: [
+        { text: '「早くやっちゃいなよ」とせかす', fb: 'うーん。have toの上にhave toを重ねても、脳はますます動かない。' },
+        { text: '「それ終わったら、何して遊ぶ？」と聞く', correct: true, fb: '正解！先に「終わったあとの楽しみ」をセットすると、脳にゴールができて体が動き出す。リール事件の「閉じたあとを決める」と同じ技だ。' },
+        { text: '「いやならやらなくていいんじゃない？」と言う', fb: 'うーん。投げ出させるのはコーチングじゃない。want toへの橋をかけるのがコーチ。' }
+      ],
+      phrase: '「終わったら、何して遊ぶ？」'
+    },
+    {
+      id: 'douse', emoji: '😞', title: '「どうせ無理」が口ぐせの友達',
+      scene: '「どうせオレなんか」「どうせ無理だし」——何かに挑戦する前から、いつもこれ。本当はうまいのに。',
+      options: [
+        { text: '「そんなことないって！すごいって！」とほめまくる', fb: 'おしい。その場しのぎのほめ言葉は、本人の「どうせ」のメガネにはじき返されちゃう。土台のエフィカシーから直そう。' },
+        { text: '「それ、きみらしくないよ。もしできるとしたら、どうやる？」と聞く', correct: true, fb: '正解！「らしくない」で基準を「できる側」に戻して、「もしできるとしたら？」でスコトーマの外をのぞかせる。脳は質問されると勝手に答えを探しはじめるんだ。' },
+        { text: '「じゃあ、やめとけば？」と言う', fb: 'うーん。それは静かなるドリームキラー。本人の「どうせ」に一票入れちゃってる。' }
+      ],
+      phrase: '「もし、できるとしたら？」'
+    },
+    {
+      id: 'fail', emoji: '🥲', title: '失敗して落ちこんでる友達',
+      scene: '発表で思いっきりまちがえた友達。休み時間になっても、ずっと下を向いている。',
+      options: [
+        { text: '「気にすんなって！忘れろ忘れろ！」と言う', fb: 'うーん。気にしてる人に「気にするな」は無理ゲー。RASはもう失敗にロックオンしてるから、向きを変えてあげないと。' },
+        { text: '「あのミスは、きみらしくなかったね。次はどうする？」と聞く', correct: true, fb: '正解！「らしくない」で失敗と本人を切りはなし、「次は？」でRASの検索先を過去から未来に切りかえる。コーチの一言の見本だ。' },
+        { text: '「ドンマイ。でもあそこは、こうすべきだったね」と教えてあげる', fb: 'うーん。それは「アドバイス」という名の追い打ち…。落ちてる人に必要なのは解説じゃなくて、エフィカシーの回復だ。' }
+      ],
+      phrase: '「らしくなかったね。次、どうする？」'
+    },
+    {
+      id: 'dream', emoji: '🌟', title: '夢を話してくれた友達',
+      scene: '「おれ、宇宙飛行士になる」と真顔で言ってきた友達。正直、心の中で「むずかしそう…」と思っちゃった。さて、口から出すのは——？',
+      options: [
+        { text: '「現実的に考えたほうがいいよ」と教えてあげる', fb: 'うーん、それ、本日のドリームキラー誕生の瞬間！ 心配のつもりでも、出てくるのは自分のメガネの中の「現実」だけだよ。' },
+        { text: '「いいじゃん！なったら最初に何する？」と聞く', correct: true, fb: '正解！臨場感を上げる質問は、ゴールへの最高のプレゼント。きみが可能性の側に立つだけで、友達のエフィカシーは上がる。話してくれたのは信頼の証だしね。' },
+        { text: '「ふーん」と流す', fb: 'うーん。無関心も小さなドリームキラー。せっかく現状の外の話をしてくれたのに、もったいない！' }
+      ],
+      phrase: '「なったら、最初に何する？」'
+    },
+    {
+      id: 'nervous', emoji: '😰', title: '本番前にガチガチの友達',
+      scene: '発表の直前。友達の顔がまっ白で、「無理かも…」とつぶやいてる。出番まであと5分。',
+      options: [
+        { text: '「緊張するなって！」と言う', fb: 'うーん。「緊張」という言葉を聞いた瞬間、RASが緊張を検索しはじめる。逆効果！' },
+        { text: '「いつもの準備、いっしょにやろう。まず深呼吸3回ね」と言う', correct: true, fb: '正解！イチロー事件で学んだ「ゾーンの持ち運び」だ。いつもの動作が「いつもの自分」を呼び出す。となりで一緒にやってあげれば、味方効果もダブルで効く。' },
+        { text: '「失敗してもだれも見てないって」となぐさめる', fb: 'うーん。気休めはゾーンを動かせない。それに本人は「見られてる」モードだから、ことばが届かないんだ。' }
+      ],
+      phrase: '「いつもの準備、いっしょにやろう」'
+    }
+  ];
+
+  /* ===== 進行状態 ===== */
+  function getCleared() {
+    try { return JSON.parse(localStorage.getItem('voiceCleared') || '{}'); } catch (e) { return {}; }
+  }
+  function markCleared(id) {
+    const s = getCleared();
+    s[id] = true;
+    try { localStorage.setItem('voiceCleared', JSON.stringify(s)); } catch (e) {}
+  }
+  function clearedCount() {
+    const s = getCleared();
+    return SCENES.filter(function (sc) { return s[sc.id]; }).length;
+  }
+
+  /* ===== 道場の描画 ===== */
+  const dojo = document.getElementById('dojoArea');
+  SCENES.forEach(function (sc) {
+    const box = document.createElement('div');
+    box.className = 'scene-quiz';
+    box.dataset.sceneId = sc.id;
+    let html =
+      '<div class="scene-head"><span class="scene-emoji">' + sc.emoji + '</span><h3>' + sc.title + '</h3><span class="cleared-mark">✓ カードGET</span></div>' +
+      '<div class="scene-text">' + sc.scene + '</div>' +
+      '<div class="voice-q">💬 コーチなら、どの声をかける？</div>';
+    box.innerHTML = html;
+    sc.options.forEach(function (opt) {
+      const btn = document.createElement('button');
+      btn.className = 'voice-opt';
+      btn.innerHTML = opt.text + '<span class="opt-fb">' + opt.fb + '</span>';
+      btn.addEventListener('click', function () { pickVoice(box, sc, btn, opt); });
+      box.appendChild(btn);
+    });
+    const card = document.createElement('div');
+    card.className = 'phrase-card';
+    card.innerHTML = '<span class="pc-label">🗝️ まほうのことばカード</span>' + sc.phrase;
+    box.appendChild(card);
+    if (sc.safety) {
+      const note = document.createElement('div');
+      note.className = 'safety-note';
+      note.textContent = sc.safety;
+      box.appendChild(note);
+    }
+    dojo.appendChild(box);
+  });
+
+  function pickVoice(box, sc, btn, opt) {
+    if (btn.disabled) return;
+    if (opt.correct) {
+      btn.classList.add('right');
+      box.classList.add('cleared');
+      box.querySelectorAll('.voice-opt').forEach(function (b) { b.disabled = true; });
+      box.querySelector('.phrase-card').classList.add('show');
+      const note = box.querySelector('.safety-note');
+      if (note) note.classList.add('show');
+      const wasNew = !getCleared()[sc.id];
+      markCleared(sc.id);
+      confetti(wasNew ? 30 : 10);
+      renderNotebook(true);
+    } else {
+      btn.classList.add('wrong');
+      btn.disabled = true;
+    }
+  }
+
+  /* ===== ことば手帳 ===== */
+  function renderNotebook(celebrate) {
+    const grid = document.getElementById('nbGrid');
+    grid.innerHTML = '';
+    const cleared = getCleared();
+    SCENES.forEach(function (sc) {
+      const slot = document.createElement('div');
+      if (cleared[sc.id]) {
+        slot.className = 'nb-slot earned';
+        slot.textContent = sc.phrase;
+      } else {
+        slot.className = 'nb-slot';
+        slot.textContent = '？？？';
+      }
+      grid.appendChild(slot);
+    });
+    const n = clearedCount();
+    document.getElementById('nbCount').textContent = 'あつめたことば：' + n + ' / ' + SCENES.length;
+    if (n === SCENES.length) {
+      const isNew = awardStamp('voice');
+      document.getElementById('stampBanner').classList.add('show');
+      if (isNew && celebrate) confetti(100);
+    }
+  }
+
+  /* ===== クリア済みの復元（再訪時） ===== */
+  (function restore() {
+    const cleared = getCleared();
+    SCENES.forEach(function (sc) {
+      if (!cleared[sc.id]) return;
+      const box = document.querySelector('[data-scene-id="' + sc.id + '"]');
+      box.classList.add('cleared');
+      box.querySelectorAll('.voice-opt').forEach(function (b) { b.disabled = true; });
+      box.querySelector('.phrase-card').classList.add('show');
+      const note = box.querySelector('.safety-note');
+      if (note) note.classList.add('show');
+    });
+    renderNotebook(false);
+  })();
+</script>
+</body>
+</html>

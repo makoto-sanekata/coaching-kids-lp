@@ -691,8 +691,8 @@
   <div class="map-board">
     <span class="section-label" style="background:var(--yellow); color:var(--ink);">NEXT STAGE</span>
     <h2>🗺️ コーチングぼうけんマップ</h2>
-    <p style="font-weight:700; margin-bottom:18px;">ここから先は、もっと深いぼうけん！ 6つのステージをクリアしてスタンプを集めると、<b>「コーチングマスター」認定</b>だ！</p>
-    <div class="stamp-count" id="stampCount">あつめたスタンプ：0 / 6</div>
+    <p style="font-weight:700; margin-bottom:18px;">ここから先は、もっと深いぼうけん！ 7つのステージをクリアしてスタンプを集めると、<b>「コーチングマスター」認定</b>だ！</p>
+    <div class="stamp-count" id="stampCount">あつめたスタンプ：0 / 7</div>
 
     <div class="map-grid">
       <a class="map-card" href="pages/authentic.html">
@@ -735,13 +735,20 @@
         <span class="map-icon">🔍</span>
         <h3>あるある事件簿</h3>
         <p>大人のナゾ行動を推理せよ！ 12の事件を「しくみ→どうする？」の2段階で解決！</p>
-        <span class="go-tag">▶ ステージ6へ（NEW!）</span>
+        <span class="go-tag">▶ ステージ6へ</span>
+      </a>
+      <a class="map-card" href="pages/voice.html">
+        <span class="stamp-slot" data-stamp="voice"></span>
+        <span class="map-icon">💬</span>
+        <h3>まほうの声かけ道場</h3>
+        <p>最終ステージ！ 学んだ知識で、あしたから友達を元気にする「コーチの一言」を身につけよう！</p>
+        <span class="go-tag">▶ ステージ7へ（NEW!）</span>
       </a>
     </div>
 
     <div class="master-cert" id="masterCert">
       <span class="big">🏆</span>
-      おめでとう！ スタンプ6個コンプリート！<br>
+      おめでとう！ スタンプ7個コンプリート！<br>
       きみを「コーチングマスター」に認定します！🎉
     </div>
   </div>
@@ -1003,8 +1010,8 @@
   }
 
   /* ===== ぼうけんマップ：スタンプラリー表示 ===== */
-  const STAMP_EMOJI = { authentic: '🤝', goal: '🎯', wheel: '🎡', abstract: '🔭', future: '⏰', cases: '🔍' };
-  const STAMP_TOTAL = 6;
+  const STAMP_EMOJI = { authentic: '🤝', goal: '🎯', wheel: '🎡', abstract: '🔭', future: '⏰', cases: '🔍', voice: '💬' };
+  const STAMP_TOTAL = 7;
   function renderStamps() {
     let stamps = {};
     try { stamps = JSON.parse(localStorage.getItem('coachingStamps') || '{}'); } catch (e) { stamps = {}; }
