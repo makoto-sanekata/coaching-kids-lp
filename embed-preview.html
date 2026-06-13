@@ -7,233 +7,339 @@
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Sans', sans-serif;
-    background: #f0f2f8;
+    font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Sans', 'Yu Gothic', sans-serif;
+    background: #f5f6fa;
     min-height: 100vh;
-    padding: 2rem 1rem;
+    padding: 2.5rem 1rem 3rem;
     color: #333;
   }
-  .page-title {
-    text-align: center;
-    margin-bottom: 2.5rem;
-  }
-  .page-title h1 { font-size: 1.4rem; margin-bottom: .4rem; }
-  .page-title p  { font-size: .9rem; color: #666; }
+  h1 { text-align:center; font-size:1.3rem; margin-bottom:.4rem; color:#222; }
+  .subtitle { text-align:center; font-size:.85rem; color:#888; margin-bottom:3rem; }
 
-  /* ===== プレビューカード ===== */
-  .widget-card {
-    display: block;
-    text-decoration: none;
-    max-width: 540px;
-    margin: 0 auto 2.5rem;
-    border-radius: 20px;
-    overflow: hidden;
-    box-shadow: 0 8px 32px rgba(124,92,255,.3);
-    font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Sans', sans-serif;
-    transition: transform .18s, box-shadow .18s;
-  }
-  .widget-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 14px 40px rgba(124,92,255,.4);
-  }
-  .widget-header {
-    background: linear-gradient(135deg, #7c5cff 0%, #4db5ff 100%);
-    padding: 2.4rem 2rem 1.6rem;
-    text-align: center;
-  }
-  .widget-header .big-icon { font-size: 2.6rem; margin-bottom: .7rem; }
-  .widget-header h2 {
-    font-size: 1.35rem;
-    font-weight: 800;
-    color: #fff;
-    text-shadow: 0 2px 8px rgba(0,0,0,.2);
-    margin-bottom: 1rem;
-  }
-  .tag-row {
-    display: flex;
-    justify-content: center;
-    gap: .4rem;
-    flex-wrap: wrap;
-  }
-  .tag {
-    background: rgba(255,255,255,.22);
-    color: #fff;
-    font-size: .72rem;
-    padding: .22rem .6rem;
-    border-radius: 999px;
-  }
-  .widget-footer {
-    background: #fff;
-    padding: 1.1rem 1.6rem 1.3rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-  }
-  .widget-footer .desc { flex: 1; }
-  .widget-footer .desc .label {
-    font-size: .7rem;
-    color: #7c5cff;
-    font-weight: 700;
-    letter-spacing: .05em;
-    margin-bottom: .25rem;
-  }
-  .widget-footer .desc .body {
-    font-size: .82rem;
-    color: #555;
-    line-height: 1.55;
-  }
-  .widget-footer .cta-btn {
-    flex-shrink: 0;
-    background: linear-gradient(135deg, #7c5cff, #4db5ff);
-    color: #fff;
-    font-size: .78rem;
-    font-weight: 700;
-    padding: .5rem 1.1rem;
-    border-radius: 999px;
-    white-space: nowrap;
+  /* ===== セクション ===== */
+  .section { max-width:640px; margin:0 auto 3.5rem; }
+  .section-label {
+    font-size:.72rem;
+    font-weight:700;
+    letter-spacing:.08em;
+    color:#888;
+    text-transform:uppercase;
+    margin-bottom:.8rem;
+    padding-bottom:.4rem;
+    border-bottom:1px solid #e0e0e0;
   }
 
-  /* ===== コードブロック ===== */
-  .code-section {
-    max-width: 640px;
-    margin: 0 auto;
+  /* ===== 共通コードブロック ===== */
+  .code-wrap {
+    background:#1e1e2e;
+    border-radius:10px;
+    padding:1rem 1.2rem;
+    position:relative;
+    overflow:auto;
+    margin-top:1.2rem;
   }
-  .code-section h3 {
-    font-size: .95rem;
-    margin-bottom: .7rem;
-    color: #444;
-  }
-  .code-section p {
-    font-size: .82rem;
-    color: #666;
-    margin-bottom: 1rem;
-    line-height: 1.6;
-  }
-  .code-block {
-    background: #1e1e2e;
-    border-radius: 12px;
-    padding: 1.2rem 1.4rem;
-    position: relative;
-    overflow: auto;
-  }
-  .code-block pre {
-    font-family: 'SF Mono', 'Fira Code', monospace;
-    font-size: .72rem;
-    color: #cdd6f4;
-    white-space: pre-wrap;
-    word-break: break-all;
-    line-height: 1.7;
+  .code-wrap pre {
+    font-family:'SF Mono','Fira Code',monospace;
+    font-size:.68rem;
+    color:#cdd6f4;
+    white-space:pre-wrap;
+    word-break:break-all;
+    line-height:1.75;
   }
   .copy-btn {
-    position: absolute;
-    top: .7rem;
-    right: .7rem;
-    background: #7c5cff;
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    padding: .35rem .8rem;
-    font-size: .72rem;
-    font-weight: 700;
-    cursor: pointer;
-    transition: background .15s;
+    position:absolute;
+    top:.65rem;
+    right:.65rem;
+    background:#1565C0;
+    color:#fff;
+    border:none;
+    border-radius:6px;
+    padding:.3rem .75rem;
+    font-size:.7rem;
+    font-weight:700;
+    cursor:pointer;
   }
-  .copy-btn:hover { background: #5a3fd6; }
-  .copy-btn.copied { background: #4dd599; }
+  .copy-btn.ok { background:#2e7d32; }
 
-  .platform-note {
-    max-width: 640px;
-    margin: 1.5rem auto 0;
-    background: #fff;
-    border-radius: 12px;
-    padding: 1.2rem 1.4rem;
-    font-size: .82rem;
-    color: #555;
-    line-height: 1.7;
+  /* ===== バリアント A — ブログ向け（青・シンプル） ===== */
+  .card-a {
+    display:block;
+    text-decoration:none;
+    background:#fff;
+    border:1px solid #e0e4ef;
+    border-top:4px solid #1565C0;
+    border-radius:8px;
+    padding:1.3rem 1.5rem 1.1rem;
+    box-shadow:0 2px 10px rgba(0,0,0,.07);
+    transition:box-shadow .18s, transform .18s;
   }
-  .platform-note strong { color: #7c5cff; }
+  .card-a:hover { box-shadow:0 6px 20px rgba(21,101,192,.2); transform:translateY(-2px); }
+  .card-a .head {
+    display:flex;
+    align-items:center;
+    gap:.7rem;
+    margin-bottom:.6rem;
+  }
+  .card-a .head .icon-box {
+    width:38px; height:38px;
+    border-radius:8px;
+    background:linear-gradient(135deg,#1565C0,#42a5f5);
+    display:flex; align-items:center; justify-content:center;
+    font-size:1.2rem;
+    flex-shrink:0;
+  }
+  .card-a .head .ttl {
+    font-size:1rem;
+    font-weight:700;
+    color:#1a1a2e;
+    line-height:1.35;
+  }
+  .card-a .desc {
+    font-size:.8rem;
+    color:#666;
+    line-height:1.6;
+    margin-bottom:.7rem;
+  }
+  .card-a .tags {
+    display:flex;
+    flex-wrap:wrap;
+    gap:.3rem;
+    margin-bottom:.9rem;
+  }
+  .card-a .tags span {
+    font-size:.67rem;
+    background:#e8f0fe;
+    color:#1565C0;
+    padding:.15rem .5rem;
+    border-radius:4px;
+    font-weight:600;
+  }
+  .card-a .footer-row {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:.5rem;
+  }
+  .card-a .footer-row .domain {
+    font-size:.68rem;
+    color:#aaa;
+  }
+  .card-a .btn-a {
+    background:#1565C0;
+    color:#fff;
+    font-size:.78rem;
+    font-weight:700;
+    padding:.45rem 1.1rem;
+    border-radius:6px;
+    white-space:nowrap;
+  }
+
+  /* ===== バリアント B — SNS・LINE向け（カラフル） ===== */
+  .card-b {
+    display:block;
+    text-decoration:none;
+    max-width:540px;
+    margin:0 auto;
+    border-radius:18px;
+    overflow:hidden;
+    box-shadow:0 6px 28px rgba(124,92,255,.28);
+    transition:transform .18s, box-shadow .18s;
+  }
+  .card-b:hover { transform:translateY(-3px); box-shadow:0 12px 36px rgba(124,92,255,.38); }
+  .card-b .bh {
+    background:linear-gradient(135deg,#7c5cff 0%,#4db5ff 100%);
+    padding:2rem 1.8rem 1.4rem;
+    text-align:center;
+  }
+  .card-b .bh .big { font-size:2.4rem; margin-bottom:.6rem; }
+  .card-b .bh .btitle {
+    font-size:1.3rem;
+    font-weight:800;
+    color:#fff;
+    text-shadow:0 2px 8px rgba(0,0,0,.18);
+    margin-bottom:.9rem;
+  }
+  .card-b .bh .btags {
+    display:flex; justify-content:center; flex-wrap:wrap; gap:.35rem;
+  }
+  .card-b .bh .btags span {
+    background:rgba(255,255,255,.22);
+    color:#fff;
+    font-size:.7rem;
+    padding:.2rem .55rem;
+    border-radius:999px;
+  }
+  .card-b .bf {
+    background:#fff;
+    padding:1rem 1.4rem 1.2rem;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:1rem;
+  }
+  .card-b .bf .bd { flex:1; }
+  .card-b .bf .bd .bl { font-size:.68rem; color:#7c5cff; font-weight:700; margin-bottom:.2rem; }
+  .card-b .bf .bd .bb { font-size:.8rem; color:#555; line-height:1.5; }
+  .card-b .bf .btn-b {
+    flex-shrink:0;
+    background:linear-gradient(135deg,#7c5cff,#4db5ff);
+    color:#fff;
+    font-size:.76rem;
+    font-weight:700;
+    padding:.45rem 1rem;
+    border-radius:999px;
+    white-space:nowrap;
+  }
+
+  .note-box {
+    max-width:640px;
+    margin:0 auto;
+    background:#fff;
+    border:1px solid #e0e4ef;
+    border-radius:8px;
+    padding:1rem 1.3rem;
+    font-size:.8rem;
+    color:#555;
+    line-height:1.75;
+  }
+  .note-box strong { color:#1565C0; }
 </style>
 </head>
 <body>
 
-<div class="page-title">
-  <h1>🖼️ ブログ埋め込みウィジェット</h1>
-  <p>プレビューを確認して、コードをコピーしてください</p>
-</div>
+<h1>🖼️ ブログ埋め込みウィジェット</h1>
+<p class="subtitle">コードをコピーして、ブログのHTML編集画面に貼り付けてください</p>
 
-<!-- ===== プレビュー ===== -->
-<a class="widget-card"
-   href="https://makoto-sanekata.github.io/coaching-kids-lp/"
-   target="_blank" rel="noopener noreferrer">
-  <div class="widget-header">
-    <div class="big-icon">🧠✨</div>
-    <h2>コーチングをあそびながら学ぼう！</h2>
-    <div class="tag-row">
-      <span class="tag">🤝 オーセンティック</span>
-      <span class="tag">🎯 ゴール設定</span>
-      <span class="tag">🎡 バランスホイール</span>
-      <span class="tag">🔍 推理ゲーム</span>
-      <span class="tag">💬 声かけ道場</span>
-    </div>
-  </div>
-  <div class="widget-footer">
-    <div class="desc">
-      <div class="label">🧠 コーチング体験サイト（全7ステージ・無料）</div>
-      <div class="body">スタンプラリー・推理ゲームで脳のしくみが体験できる学習サイト</div>
-    </div>
-    <div class="cta-btn">▶ 開く</div>
-  </div>
-</a>
+<!-- ======================================================
+     バリアント A — ブログ向け（青・シンプル）
+     ====================================================== -->
+<div class="section">
+  <div class="section-label">🔵 パターン A ― WordPressなどブログ向け（シンプル）</div>
 
-<!-- ===== コードブロック ===== -->
-<div class="code-section">
-  <h3>📋 貼り付けコード（上のカードそのもの）</h3>
-  <p>WordPress・Wix・Ameba・はてなブログなど「HTMLを貼れる場所」にそのまま貼り付けてください。</p>
-  <div class="code-block">
-    <button class="copy-btn" onclick="copyCode(this)">コピー</button>
-    <pre id="snippet">&lt;!-- コーチング体験サイト 埋め込みウィジェット --&gt;
+  <a class="card-a"
+     href="https://makoto-sanekata.github.io/coaching-kids-lp/"
+     target="_blank" rel="noopener noreferrer">
+    <div class="head">
+      <div class="icon-box">🧠</div>
+      <div class="ttl">コーチングをあそびながら学ぼう！</div>
+    </div>
+    <div class="desc">脳のしくみを7つのステージで体験できる学習サイト。推理ゲーム・スタンプラリーつき。無料。</div>
+    <div class="tags">
+      <span>🤝 オーセンティック</span>
+      <span>🎯 ゴール</span>
+      <span>🎡 バランスホイール</span>
+      <span>🔍 推理ゲーム</span>
+      <span>💬 声かけ道場</span>
+    </div>
+    <div class="footer-row">
+      <span class="domain">makoto-sanekata.github.io</span>
+      <span class="btn-a">▶ 開く</span>
+    </div>
+  </a>
+
+  <div class="code-wrap">
+    <button class="copy-btn" onclick="copyCode('codeA',this)">コピー</button>
+    <pre id="codeA">&lt;!-- コーチング体験サイト 埋め込みリンクカード --&gt;
 &lt;a href="https://makoto-sanekata.github.io/coaching-kids-lp/"
    target="_blank" rel="noopener noreferrer"
-   style="display:block;text-decoration:none;max-width:540px;margin:2rem auto;border-radius:20px;overflow:hidden;box-shadow:0 8px 32px rgba(124,92,255,.3);font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans',sans-serif;transition:transform .18s;"
-   onmouseover="this.style.transform='translateY(-4px)'"
-   onmouseout="this.style.transform='none'"&gt;
-  &lt;div style="background:linear-gradient(135deg,#7c5cff 0%,#4db5ff 100%);padding:2.4rem 2rem 1.6rem;text-align:center;"&gt;
-    &lt;div style="font-size:2.6rem;margin-bottom:.7rem;"&gt;🧠✨&lt;/div&gt;
-    &lt;div style="font-size:1.35rem;font-weight:800;color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.2);margin-bottom:1rem;"&gt;コーチングをあそびながら学ぼう！&lt;/div&gt;
-    &lt;div style="display:flex;justify-content:center;gap:.4rem;flex-wrap:wrap;"&gt;
-      &lt;span style="background:rgba(255,255,255,.22);color:#fff;font-size:.72rem;padding:.22rem .6rem;border-radius:999px;"&gt;🤝 オーセンティック&lt;/span&gt;
-      &lt;span style="background:rgba(255,255,255,.22);color:#fff;font-size:.72rem;padding:.22rem .6rem;border-radius:999px;"&gt;🎯 ゴール設定&lt;/span&gt;
-      &lt;span style="background:rgba(255,255,255,.22);color:#fff;font-size:.72rem;padding:.22rem .6rem;border-radius:999px;"&gt;🎡 バランスホイール&lt;/span&gt;
-      &lt;span style="background:rgba(255,255,255,.22);color:#fff;font-size:.72rem;padding:.22rem .6rem;border-radius:999px;"&gt;🔍 推理ゲーム&lt;/span&gt;
-      &lt;span style="background:rgba(255,255,255,.22);color:#fff;font-size:.72rem;padding:.22rem .6rem;border-radius:999px;"&gt;💬 声かけ道場&lt;/span&gt;
-    &lt;/div&gt;
+   style="display:block;text-decoration:none;background:#fff;border:1px solid #e0e4ef;border-top:4px solid #1565C0;border-radius:8px;padding:1.3rem 1.5rem 1.1rem;box-shadow:0 2px 10px rgba(0,0,0,.07);font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans',sans-serif;max-width:640px;margin:1.5rem auto;transition:box-shadow .18s,transform .18s;"
+   onmouseover="this.style.boxShadow='0 6px 20px rgba(21,101,192,.2)';this.style.transform='translateY(-2px)'"
+   onmouseout="this.style.boxShadow='0 2px 10px rgba(0,0,0,.07)';this.style.transform='none'"&gt;
+  &lt;div style="display:flex;align-items:center;gap:.7rem;margin-bottom:.6rem;"&gt;
+    &lt;div style="width:38px;height:38px;border-radius:8px;background:linear-gradient(135deg,#1565C0,#42a5f5);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;"&gt;🧠&lt;/div&gt;
+    &lt;div style="font-size:1rem;font-weight:700;color:#1a1a2e;line-height:1.35;"&gt;コーチングをあそびながら学ぼう！&lt;/div&gt;
   &lt;/div&gt;
-  &lt;div style="background:#fff;padding:1.1rem 1.6rem 1.3rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;"&gt;
-    &lt;div style="flex:1;"&gt;
-      &lt;div style="font-size:.7rem;color:#7c5cff;font-weight:700;letter-spacing:.05em;margin-bottom:.25rem;"&gt;🧠 コーチング体験サイト（全7ステージ・無料）&lt;/div&gt;
-      &lt;div style="font-size:.82rem;color:#555;line-height:1.55;"&gt;スタンプラリー・推理ゲームで脳のしくみが体験できる学習サイト&lt;/div&gt;
-    &lt;/div&gt;
-    &lt;div style="flex-shrink:0;background:linear-gradient(135deg,#7c5cff,#4db5ff);color:#fff;font-size:.78rem;font-weight:700;padding:.5rem 1.1rem;border-radius:999px;"&gt;▶ 開く&lt;/div&gt;
+  &lt;div style="font-size:.8rem;color:#666;line-height:1.6;margin-bottom:.7rem;"&gt;脳のしくみを7つのステージで体験できる学習サイト。推理ゲーム・スタンプラリーつき。無料。&lt;/div&gt;
+  &lt;div style="display:flex;flex-wrap:wrap;gap:.3rem;margin-bottom:.9rem;"&gt;
+    &lt;span style="font-size:.67rem;background:#e8f0fe;color:#1565C0;padding:.15rem .5rem;border-radius:4px;font-weight:600;"&gt;🤝 オーセンティック&lt;/span&gt;
+    &lt;span style="font-size:.67rem;background:#e8f0fe;color:#1565C0;padding:.15rem .5rem;border-radius:4px;font-weight:600;"&gt;🎯 ゴール&lt;/span&gt;
+    &lt;span style="font-size:.67rem;background:#e8f0fe;color:#1565C0;padding:.15rem .5rem;border-radius:4px;font-weight:600;"&gt;🎡 バランスホイール&lt;/span&gt;
+    &lt;span style="font-size:.67rem;background:#e8f0fe;color:#1565C0;padding:.15rem .5rem;border-radius:4px;font-weight:600;"&gt;🔍 推理ゲーム&lt;/span&gt;
+    &lt;span style="font-size:.67rem;background:#e8f0fe;color:#1565C0;padding:.15rem .5rem;border-radius:4px;font-weight:600;"&gt;💬 声かけ道場&lt;/span&gt;
+  &lt;/div&gt;
+  &lt;div style="display:flex;align-items:center;justify-content:space-between;gap:.5rem;"&gt;
+    &lt;span style="font-size:.68rem;color:#aaa;"&gt;makoto-sanekata.github.io&lt;/span&gt;
+    &lt;span style="background:#1565C0;color:#fff;font-size:.78rem;font-weight:700;padding:.45rem 1.1rem;border-radius:6px;white-space:nowrap;"&gt;▶ 開く&lt;/span&gt;
   &lt;/div&gt;
 &lt;/a&gt;</pre>
   </div>
+</div>
 
-  <div class="platform-note">
-    <strong>note.com の場合：</strong>リンクのURLをそのまま貼るとnoteのリンクカードになります（HTMLは使えません）。HTMLが使えるブログ（WordPress・Wixなど）では上のコードをそのままHTMLブロックへ貼り付けてください。<br><br>
-    <strong>LINE で共有する場合：</strong> URLを貼るだけで自動的にOGPカード（タイトル＋説明）が表示されます。
+<!-- ======================================================
+     バリアント B — SNS・LINE向け（カラフル）
+     ====================================================== -->
+<div class="section">
+  <div class="section-label">🌈 パターン B ― SNS・LINEでシェアするとき（カラフル）</div>
+
+  <a class="card-b"
+     href="https://makoto-sanekata.github.io/coaching-kids-lp/"
+     target="_blank" rel="noopener noreferrer">
+    <div class="bh">
+      <div class="big">🧠✨</div>
+      <div class="btitle">コーチングをあそびながら学ぼう！</div>
+      <div class="btags">
+        <span>🤝 オーセンティック</span>
+        <span>🎯 ゴール設定</span>
+        <span>🎡 バランスホイール</span>
+        <span>🔍 推理ゲーム</span>
+        <span>💬 声かけ道場</span>
+      </div>
+    </div>
+    <div class="bf">
+      <div class="bd">
+        <div class="bl">🧠 コーチング体験サイト（全7ステージ・無料）</div>
+        <div class="bb">スタンプラリー・推理ゲームで脳のしくみが体験できる学習サイト</div>
+      </div>
+      <div class="btn-b">▶ 開く</div>
+    </div>
+  </a>
+
+  <div class="code-wrap">
+    <button class="copy-btn" onclick="copyCode('codeB',this)">コピー</button>
+    <pre id="codeB">&lt;!-- コーチング体験サイト 埋め込みウィジェット（カラフル版） --&gt;
+&lt;a href="https://makoto-sanekata.github.io/coaching-kids-lp/"
+   target="_blank" rel="noopener noreferrer"
+   style="display:block;text-decoration:none;max-width:540px;margin:2rem auto;border-radius:18px;overflow:hidden;box-shadow:0 6px 28px rgba(124,92,255,.28);font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans',sans-serif;"
+   onmouseover="this.style.transform='translateY(-3px)'"
+   onmouseout="this.style.transform='none'"&gt;
+  &lt;div style="background:linear-gradient(135deg,#7c5cff 0%,#4db5ff 100%);padding:2rem 1.8rem 1.4rem;text-align:center;"&gt;
+    &lt;div style="font-size:2.4rem;margin-bottom:.6rem;"&gt;🧠✨&lt;/div&gt;
+    &lt;div style="font-size:1.3rem;font-weight:800;color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.18);margin-bottom:.9rem;"&gt;コーチングをあそびながら学ぼう！&lt;/div&gt;
+    &lt;div style="display:flex;justify-content:center;flex-wrap:wrap;gap:.35rem;"&gt;
+      &lt;span style="background:rgba(255,255,255,.22);color:#fff;font-size:.7rem;padding:.2rem .55rem;border-radius:999px;"&gt;🤝 オーセンティック&lt;/span&gt;
+      &lt;span style="background:rgba(255,255,255,.22);color:#fff;font-size:.7rem;padding:.2rem .55rem;border-radius:999px;"&gt;🎯 ゴール設定&lt;/span&gt;
+      &lt;span style="background:rgba(255,255,255,.22);color:#fff;font-size:.7rem;padding:.2rem .55rem;border-radius:999px;"&gt;🎡 バランスホイール&lt;/span&gt;
+      &lt;span style="background:rgba(255,255,255,.22);color:#fff;font-size:.7rem;padding:.2rem .55rem;border-radius:999px;"&gt;🔍 推理ゲーム&lt;/span&gt;
+      &lt;span style="background:rgba(255,255,255,.22);color:#fff;font-size:.7rem;padding:.2rem .55rem;border-radius:999px;"&gt;💬 声かけ道場&lt;/span&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div style="background:#fff;padding:1rem 1.4rem 1.2rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;"&gt;
+    &lt;div style="flex:1;"&gt;
+      &lt;div style="font-size:.68rem;color:#7c5cff;font-weight:700;margin-bottom:.2rem;"&gt;🧠 コーチング体験サイト（全7ステージ・無料）&lt;/div&gt;
+      &lt;div style="font-size:.8rem;color:#555;line-height:1.5;"&gt;スタンプラリー・推理ゲームで脳のしくみが体験できる学習サイト&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div style="flex-shrink:0;background:linear-gradient(135deg,#7c5cff,#4db5ff);color:#fff;font-size:.76rem;font-weight:700;padding:.45rem 1rem;border-radius:999px;white-space:nowrap;"&gt;▶ 開く&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/a&gt;</pre>
   </div>
 </div>
 
+<!-- ===== プラットフォームメモ ===== -->
+<div class="note-box">
+  <strong>WordPress（AFFINGERなど）：</strong>記事編集→「カスタムHTML」ブロック→パターンAを貼る<br>
+  <strong>note.com：</strong>URLをそのまま貼るとリンクカード化（HTMLは使えません）<br>
+  <strong>LINE・SNSでシェア：</strong>URLを貼るだけ。OGPカード（タイトル＋説明）が自動表示
+</div>
+
 <script>
-function copyCode(btn) {
-  const text = document.getElementById('snippet').innerText;
+function copyCode(id, btn) {
+  const text = document.getElementById(id).innerText;
   navigator.clipboard.writeText(text).then(function() {
-    btn.textContent = 'コピー完了！';
-    btn.classList.add('copied');
+    btn.textContent = '完了！';
+    btn.classList.add('ok');
     setTimeout(function() {
       btn.textContent = 'コピー';
-      btn.classList.remove('copied');
+      btn.classList.remove('ok');
     }, 2000);
   });
 }
