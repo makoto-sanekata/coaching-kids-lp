@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>埋め込みウィジェット — プレビュー＆コード</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Sans', sans-serif;
+    background: #f0f2f8;
+    min-height: 100vh;
+    padding: 2rem 1rem;
+    color: #333;
+  }
+  .page-title {
+    text-align: center;
+    margin-bottom: 2.5rem;
+  }
+  .page-title h1 { font-size: 1.4rem; margin-bottom: .4rem; }
+  .page-title p  { font-size: .9rem; color: #666; }
+
+  /* ===== プレビューカード ===== */
+  .widget-card {
+    display: block;
+    text-decoration: none;
+    max-width: 540px;
+    margin: 0 auto 2.5rem;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(124,92,255,.3);
+    font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Sans', sans-serif;
+    transition: transform .18s, box-shadow .18s;
+  }
+  .widget-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 40px rgba(124,92,255,.4);
+  }
+  .widget-header {
+    background: linear-gradient(135deg, #7c5cff 0%, #4db5ff 100%);
+    padding: 2.4rem 2rem 1.6rem;
+    text-align: center;
+  }
+  .widget-header .big-icon { font-size: 2.6rem; margin-bottom: .7rem; }
+  .widget-header h2 {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: #fff;
+    text-shadow: 0 2px 8px rgba(0,0,0,.2);
+    margin-bottom: 1rem;
+  }
+  .tag-row {
+    display: flex;
+    justify-content: center;
+    gap: .4rem;
+    flex-wrap: wrap;
+  }
+  .tag {
+    background: rgba(255,255,255,.22);
+    color: #fff;
+    font-size: .72rem;
+    padding: .22rem .6rem;
+    border-radius: 999px;
+  }
+  .widget-footer {
+    background: #fff;
+    padding: 1.1rem 1.6rem 1.3rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .widget-footer .desc { flex: 1; }
+  .widget-footer .desc .label {
+    font-size: .7rem;
+    color: #7c5cff;
+    font-weight: 700;
+    letter-spacing: .05em;
+    margin-bottom: .25rem;
+  }
+  .widget-footer .desc .body {
+    font-size: .82rem;
+    color: #555;
+    line-height: 1.55;
+  }
+  .widget-footer .cta-btn {
+    flex-shrink: 0;
+    background: linear-gradient(135deg, #7c5cff, #4db5ff);
+    color: #fff;
+    font-size: .78rem;
+    font-weight: 700;
+    padding: .5rem 1.1rem;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+
+  /* ===== コードブロック ===== */
+  .code-section {
+    max-width: 640px;
+    margin: 0 auto;
+  }
+  .code-section h3 {
+    font-size: .95rem;
+    margin-bottom: .7rem;
+    color: #444;
+  }
+  .code-section p {
+    font-size: .82rem;
+    color: #666;
+    margin-bottom: 1rem;
+    line-height: 1.6;
+  }
+  .code-block {
+    background: #1e1e2e;
+    border-radius: 12px;
+    padding: 1.2rem 1.4rem;
+    position: relative;
+    overflow: auto;
+  }
+  .code-block pre {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: .72rem;
+    color: #cdd6f4;
+    white-space: pre-wrap;
+    word-break: break-all;
+    line-height: 1.7;
+  }
+  .copy-btn {
+    position: absolute;
+    top: .7rem;
+    right: .7rem;
+    background: #7c5cff;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: .35rem .8rem;
+    font-size: .72rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background .15s;
+  }
+  .copy-btn:hover { background: #5a3fd6; }
+  .copy-btn.copied { background: #4dd599; }
+
+  .platform-note {
+    max-width: 640px;
+    margin: 1.5rem auto 0;
+    background: #fff;
+    border-radius: 12px;
+    padding: 1.2rem 1.4rem;
+    font-size: .82rem;
+    color: #555;
+    line-height: 1.7;
+  }
+  .platform-note strong { color: #7c5cff; }
+</style>
+</head>
+<body>
+
+<div class="page-title">
+  <h1>🖼️ ブログ埋め込みウィジェット</h1>
+  <p>プレビューを確認して、コードをコピーしてください</p>
+</div>
+
+<!-- ===== プレビュー ===== -->
+<a class="widget-card"
+   href="https://makoto-sanekata.github.io/coaching-kids-lp/"
+   target="_blank" rel="noopener noreferrer">
+  <div class="widget-header">
+    <div class="big-icon">🧠✨</div>
+    <h2>コーチングをあそびながら学ぼう！</h2>
+    <div class="tag-row">
+      <span class="tag">🤝 オーセンティック</span>
+      <span class="tag">🎯 ゴール設定</span>
+      <span class="tag">🎡 バランスホイール</span>
+      <span class="tag">🔍 推理ゲーム</span>
+      <span class="tag">💬 声かけ道場</span>
+    </div>
+  </div>
+  <div class="widget-footer">
+    <div class="desc">
+      <div class="label">🧠 コーチング体験サイト（全7ステージ・無料）</div>
+      <div class="body">スタンプラリー・推理ゲームで脳のしくみが体験できる学習サイト</div>
+    </div>
+    <div class="cta-btn">▶ 開く</div>
+  </div>
+</a>
+
+<!-- ===== コードブロック ===== -->
+<div class="code-section">
+  <h3>📋 貼り付けコード（上のカードそのもの）</h3>
+  <p>WordPress・Wix・Ameba・はてなブログなど「HTMLを貼れる場所」にそのまま貼り付けてください。</p>
+  <div class="code-block">
+    <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+    <pre id="snippet">&lt;!-- コーチング体験サイト 埋め込みウィジェット --&gt;
+&lt;a href="https://makoto-sanekata.github.io/coaching-kids-lp/"
+   target="_blank" rel="noopener noreferrer"
+   style="display:block;text-decoration:none;max-width:540px;margin:2rem auto;border-radius:20px;overflow:hidden;box-shadow:0 8px 32px rgba(124,92,255,.3);font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans',sans-serif;transition:transform .18s;"
+   onmouseover="this.style.transform='translateY(-4px)'"
+   onmouseout="this.style.transform='none'"&gt;
+  &lt;div style="background:linear-gradient(135deg,#7c5cff 0%,#4db5ff 100%);padding:2.4rem 2rem 1.6rem;text-align:center;"&gt;
+    &lt;div style="font-size:2.6rem;margin-bottom:.7rem;"&gt;🧠✨&lt;/div&gt;
+    &lt;div style="font-size:1.35rem;font-weight:800;color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.2);margin-bottom:1rem;"&gt;コーチングをあそびながら学ぼう！&lt;/div&gt;
+    &lt;div style="display:flex;justify-content:center;gap:.4rem;flex-wrap:wrap;"&gt;
+      &lt;span style="background:rgba(255,255,255,.22);color:#fff;font-size:.72rem;padding:.22rem .6rem;border-radius:999px;"&gt;🤝 オーセンティック&lt;/span&gt;
+      &lt;span style="background:rgba(255,255,255,.22);color:#fff;font-size:.72rem;padding:.22rem .6rem;border-radius:999px;"&gt;🎯 ゴール設定&lt;/span&gt;
+      &lt;span style="background:rgba(255,255,255,.22);color:#fff;font-size:.72rem;padding:.22rem .6rem;border-radius:999px;"&gt;🎡 バランスホイール&lt;/span&gt;
+      &lt;span style="background:rgba(255,255,255,.22);color:#fff;font-size:.72rem;padding:.22rem .6rem;border-radius:999px;"&gt;🔍 推理ゲーム&lt;/span&gt;
+      &lt;span style="background:rgba(255,255,255,.22);color:#fff;font-size:.72rem;padding:.22rem .6rem;border-radius:999px;"&gt;💬 声かけ道場&lt;/span&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div style="background:#fff;padding:1.1rem 1.6rem 1.3rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;"&gt;
+    &lt;div style="flex:1;"&gt;
+      &lt;div style="font-size:.7rem;color:#7c5cff;font-weight:700;letter-spacing:.05em;margin-bottom:.25rem;"&gt;🧠 コーチング体験サイト（全7ステージ・無料）&lt;/div&gt;
+      &lt;div style="font-size:.82rem;color:#555;line-height:1.55;"&gt;スタンプラリー・推理ゲームで脳のしくみが体験できる学習サイト&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div style="flex-shrink:0;background:linear-gradient(135deg,#7c5cff,#4db5ff);color:#fff;font-size:.78rem;font-weight:700;padding:.5rem 1.1rem;border-radius:999px;"&gt;▶ 開く&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/a&gt;</pre>
+  </div>
+
+  <div class="platform-note">
+    <strong>note.com の場合：</strong>リンクのURLをそのまま貼るとnoteのリンクカードになります（HTMLは使えません）。HTMLが使えるブログ（WordPress・Wixなど）では上のコードをそのままHTMLブロックへ貼り付けてください。<br><br>
+    <strong>LINE で共有する場合：</strong> URLを貼るだけで自動的にOGPカード（タイトル＋説明）が表示されます。
+  </div>
+</div>
+
+<script>
+function copyCode(btn) {
+  const text = document.getElementById('snippet').innerText;
+  navigator.clipboard.writeText(text).then(function() {
+    btn.textContent = 'コピー完了！';
+    btn.classList.add('copied');
+    setTimeout(function() {
+      btn.textContent = 'コピー';
+      btn.classList.remove('copied');
+    }, 2000);
+  });
+}
+</script>
+</body>
+</html>
